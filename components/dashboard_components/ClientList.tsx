@@ -1,11 +1,60 @@
+import { useEffect, useState } from "react";
+
+interface Client {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    status: string;
+}
+
 export const ClientListComponent = () => {
-    // Dummy data for demonstration
-    const data = [
-        { id: 1, nom: 'Doe', prenom: 'John', email: 'john.doe@example.com', telephone: '123-456-7890', status: 'Actif' },
-        { id: 2, nom: 'Cristiano Ronaldo', prenom: 'Jane', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Inactif' },
-        { id: 2, nom: 'BATCHO', prenom: 'Harold', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Actif' },
-        // Add more data as needed
-    ];
+
+    // // Dummy data for demonstration
+    // const data = [
+    //     { id: 1, nom: 'Doe', prenom: 'John', email: 'john.doe@example.com', telephone: '123-456-7890', status: 'Actif' },
+    //     { id: 2, nom: 'Cristiano Ronaldo', prenom: 'Jane', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Inactif' },
+    //     { id: 2, nom: 'BATCHO', prenom: 'Harold', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Actif' },
+    //     // Add more data as needed
+    // ];
+
+    const [loaded, setLoaded] = useState(false);
+
+    const [clientsData, setClientsData] = useState<Client[]>([]);
+
+
+    useEffect(() => {
+        if (!loaded) {
+            fetchClientsData()
+        }
+    }, [])
+
+
+
+    // Function to fetch clients data
+    const fetchClientsData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/clients", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: Client[] = await response.json();
+            // Set the fetched data into state
+            setClientsData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
 
     return (
         <div className="bg-gray-50 flex flex-col justify-center text-black">
@@ -34,14 +83,14 @@ export const ClientListComponent = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((item) => (
-                                            <tr key={item.id}>
-                                                <td className="py-2 px-4 border-b">{item.nom}</td>
-                                                <td className="py-2 px-4 border-b">{item.prenom}</td>
+                                        {clientsData.map((item) => (
+                                            <tr key={item._id}>
+                                                <td className="py-2 px-4 border-b">{item.lastName}</td>
+                                                <td className="py-2 px-4 border-b">{item.firstName}</td>
                                                 <td className="py-2 px-4 border-b">{item.email}</td>
-                                                <td className="py-2 px-4 border-b">{item.telephone}</td>
+                                                <td className="py-2 px-4 border-b">{item.phone}</td>
                                                 <td className="py-2 px-4 border-b">
-                                                    <div className={`px-4 py-2 rounded-3xl ${item.status === "Actif" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status === "Actif" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
+                                                    <div className={`px-4 py-2 rounded-3xl ${item.status.toLocaleLowerCase() === "actif" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status.toLocaleLowerCase() === "actif" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
                                                 </td>
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}

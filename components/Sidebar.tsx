@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState } from 'react';
 import { useRouter } from "next/router";
 // import { Link } from "react-router-dom";
 import Image from "next/image";
+import { SidebarContext } from '@/context/sidebar-context';
 
 export interface SidebarItem {
     label: string;
@@ -12,9 +13,11 @@ export interface SidebarItem {
 interface Props {
     items: SidebarItem[];
     onShowPopup: () => void;
+    handleChangeItem: (val: any) => void;
 }
 
-const Sidebar: React.FC<Props> = ({ items, onShowPopup }) => {
+const Sidebar: React.FC<Props> = ({ items, onShowPopup, handleChangeItem }) => {
+    const sidebarSectionContext = useContext(SidebarContext);
 
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -29,12 +32,14 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup }) => {
         setIsOpen(!isOpen);
     };
 
-    // const handleClickSidebarItem = (item: any) => {
-    //     console.log(item);
-    //     // console.log(sidebarSectionContext?.selectedSidebarItem);
-    //     sidebarSectionContext?.changeSidebarItem(item);
-    //     router.push(item.url)
-    // }
+    const handleClickSidebarItem = (item: any) => {
+        console.log(item);
+        // console.log(sidebarSectionContext?.selectedSidebarItem);
+        sidebarSectionContext?.changeSidebarItem(item);
+        console.log(sidebarSectionContext?.selectedSidebarItem, "omo");
+        handleChangeItem(item);
+        // router.push(item.url)
+    }
 
     return (
         <>
@@ -71,7 +76,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup }) => {
                         {items.map((item, index) => (
                             <Fragment key={index}>
                                 <li className={`mb-6 ml-8 text-gray-500 hover:text-gray-700 transition duration-300 ${isActive(item.url) ? 'blue-gray' : 'blue-gray'
-                                    } ${item === item ? 'font-semibold' : ''} hover:cursor-pointer`} onClick={() => { }}>
+                                    } ${item === item ? 'font-semibold' : ''} hover:cursor-pointer`} onClick={() => { handleClickSidebarItem(item) }}>
                                     {item.label}
                                 </li>
                             </Fragment>
