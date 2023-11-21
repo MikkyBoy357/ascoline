@@ -1,12 +1,12 @@
 import Layout, { SIDEBAR_ITEMS } from "@/components/Layout";
 import React, { useContext, useEffect, useState } from "react";
-import { renderInputField } from "./auth/login";
 import { ADD_ORDER_INPUTS, USER_CONFIG_INPUTS } from "@/constants/templates";
 import { AddOrderModal } from "@/components/dashboard_components/AddOrderModal";
 import { OrderListComponent } from "@/components/dashboard_components/OrderList";
 import { PricingListComponent } from "@/components/dashboard_components/PricingList";
 import { ClientListComponent } from "@/components/dashboard_components/ClientList";
 import { SidebarContext, SidebarContextProvider } from "@/context/sidebar-context";
+import { EmployeeListComponent } from "@/components/dashboard_components/EmployeeList";
 
 function Dashboard() {
     const [item, setItem] = useState(SIDEBAR_ITEMS[0]);
@@ -36,7 +36,7 @@ function Dashboard() {
                             case SIDEBAR_ITEMS[2]:
                                 return <OrderListComponent />
                             case SIDEBAR_ITEMS[3]:
-                                return <div>hello</div>
+                                return <EmployeeListComponent />
                             case SIDEBAR_ITEMS[4]:
                                 return <PricingListComponent />
                             case SIDEBAR_ITEMS[5]:

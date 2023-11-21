@@ -22,6 +22,60 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, tex
     const [description, setDescription] = useState("");
     const [quantity, setQuantity] = useState("");
 
+    // Function to add pricing
+    const addPricing = async () => {
+        try {
+            const newPricing = {
+                price: Number(price),
+                typeColis: typeColis,
+                transportType: transportType,
+                unit: unit,
+                description: description,
+                quantity: Number(quantity),
+                status: 'test',
+            };
+
+            // Perform validation to check if all variables are not empty
+            if (
+                price.trim() === '' ||
+                typeColis.trim() === '' ||
+                transportType.trim() === '' ||
+                unit.trim() === '' ||
+                description.trim() === '' ||
+                quantity.trim() === ''
+            ) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/pricings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPricing),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add pricing');
+            }
+
+            console.log('Pricing added successfully!');
+            alert('Pricing added successfully!'); // Show alert dialog
+
+            // Clear form fields after successful addition
+            setPrice('');
+            setTypeColis('');
+            setTransportType('');
+            setUnit('');
+            setDescription('');
+            setQuantity('');
+        } catch (error) {
+            console.error('Error adding pricing:', error);
+            // Handle errors
+        }
+    };
+
     return (
         <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center'
             id='wrapper' onClick={handleClose}>
@@ -81,7 +135,7 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, tex
                                 </div>
                             </div>
                             <div className="mt-5 flex flex-row">
-                                <div className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
+                                <div onClick={addPricing} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
                                     <div className="text-white text-lg font-normal font-['Inter']">Enregistrer</div>
                                 </div>
                                 <div onClick={onClose} className="ml-4 w-48 h-12 p-4 rounded-lg border border-zinc-300 justify-center items-center gap-2 inline-flex">

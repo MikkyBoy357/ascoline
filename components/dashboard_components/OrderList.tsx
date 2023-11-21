@@ -1,45 +1,75 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddOrderModal } from "./AddOrderModal";
 
 interface Commande {
     _id: string;
     client: string;
     pays: string;
-    villes: string;
+    ville: string;
     typeColis: string;
     description: string;
     trackingId: string;
-    poids: string;
+    poids: number;
     transportType: string;
     status: string;
 }
 
-export const OrderListComponent = () => {
+export const OrderListComponent = () => {    
+
+    // // Dummy data for demonstration
+    // const data = [
+    //     { id: 1, clients: 'Doe', pays: "Cameroun", villes: 'John', typeColis: 'john.doe@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 3.33, transportType: "avion", status: 'Réceptionné en Chine' },
+    //     { id: 2, clients: 'Cristiano Ronaldo', pays: "Eget", villes: 'Jane', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "bateau", status: 'Commande Arrivée' },
+    //     { id: 3, clients: 'BATCHO Martin', pays: "Benin", villes: 'Harold', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "voiture", status: 'Commande Arrivée' },
+    //     // Add more data as needed
+    // ];
+
+    const [loaded, setLoaded] = useState(false);
+
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
         setShowModal(!showModal);
     }
 
-    // Dummy data for demonstration
-    const data = [
-        { id: 1, clients: 'Doe', pays: "Cameroun", villes: 'John', typeColis: 'john.doe@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 3.33, transportType: "avion", status: 'Réceptionné en Chine' },
-        { id: 2, clients: 'Cristiano Ronaldo', pays: "Eget", villes: 'Jane', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "bateau", status: 'Commande Arrivée' },
-        { id: 3, clients: 'BATCHO Martin', pays: "Benin", villes: 'Harold', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "voiture", status: 'Commande Arrivée' },
-        // Add more data as needed
-    ];
+    useEffect(() => {
+        if (!loaded) {
+            fetchCommandesData()
+        }
+    }, [])
+
+    const [commandesData, setCommandesData] = useState<Commande[]>([]);
+
+    // Function to fetch commandes data
+    const fetchCommandesData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/commandes", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: Commande[] = await response.json();
+            // Set the fetched data into state
+            setCommandesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
 
     return (
-        <div className="bg-gray-50 flex flex-col justify-center text-black">
+        <div className="flex flex-col justify-center text-black">
             <div className="pl-4 pt-4">
                 <p className="mb-3 font-semibold text-2xl">Commandes</p>
-                <div className="absolute h-[498px] top-[151px] bg-[#ffffff] rounded-[12px]">
-                    <div className="h-px top-[415px] bg-gray-50" />
-                    <p className="mb-3 font-semibold text-2xl">Commandes</p>
-
-                    {/* Card */}
-                    <div className="flex flex-col py-2 w-[1104px] h-[498px] bg-gray-50 rounded-[12px] border-blue-600">
-                        <div className="w-[1104px] h-px top-[415px] bg-gray-50" />
+                <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
+                    <div className="rounded-[12px] border-blue-600">
                         <div className="mb-3 flex justify-between top-[31px] [font-family:'Inter-Regular',Helvetica] font-normal text-gray-800 text-[18px] tracking-[0] leading-[normal]">
                             Liste des commandes
                             <div onClick={toggleShowModal} className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl">
@@ -71,11 +101,11 @@ export const OrderListComponent = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((item) => (
-                                            <tr key={item.id} className="text-sm">
-                                                <td className="py-2 px-4 border-b">{item.clients}</td>
+                                        {commandesData.map((item) => (
+                                            <tr key={item._id} className="text-sm">
+                                                <td className="py-2 px-4 border-b">{item.client}</td>
                                                 <td className="py-2 px-4 border-b">{item.pays}</td>
-                                                <td className="py-2 px-4 border-b">{item.villes}</td>
+                                                <td className="py-2 px-4 border-b">{item.ville}</td>
                                                 <td className="py-2 px-4 border-b">{item.typeColis}</td>
                                                 <td className="py-2 px-4 border-b">{item.description}</td>
                                                 <td className="py-2 px-4 border-b">{item.trackingId}</td>

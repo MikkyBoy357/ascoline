@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-interface Client {
+interface Employee {
     _id: string;
     firstName: string;
     lastName: string;
@@ -9,7 +9,7 @@ interface Client {
     status: string;
 }
 
-export const ClientListComponent = () => {
+export const EmployeeListComponent = () => {
 
     // // Dummy data for demonstration
     // const data = [
@@ -21,21 +21,21 @@ export const ClientListComponent = () => {
 
     const [loaded, setLoaded] = useState(false);
 
-    const [clientsData, setClientsData] = useState<Client[]>([]);
+    const [employeesData, setEmployeesData] = useState<Employee[]>([]);
 
 
     useEffect(() => {
         if (!loaded) {
-            fetchClientsData()
+            fetchEmployeesData()
         }
     }, [])
 
 
 
-    // Function to fetch clients data
-    const fetchClientsData = async () => {
+    // Function to fetch employees data
+    const fetchEmployeesData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/clients", {
+            const response = await fetch("http://localhost:3000/employees", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -46,9 +46,9 @@ export const ClientListComponent = () => {
                 throw new Error("Failed to fetch data");
             }
 
-            const data: Client[] = await response.json();
+            const data: Employee[] = await response.json();
             // Set the fetched data into state
-            setClientsData(data);
+            setEmployeesData(data);
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -59,7 +59,7 @@ export const ClientListComponent = () => {
     return (
         <div className="bg-gray-50 flex flex-col justify-center text-black">
             <div className="pl-4 pt-4">
-                <p className="mb-3 font-semibold text-2xl">Clients</p>
+                <p className="mb-3 font-semibold text-2xl">Collaborateurs</p>
                 <div className="mb-4 flex w-[1104px] items-start gap-[8px] px-[20px] py-[16px] relative bg-white rounded-[10px] border border-solid border-[#4763e4]">
                     <i className="fa-solid fa-magnifying-glass"></i>
                     <p className="relative w-fit [font-family:'Inter-Regular',Helvetica] font-normal text-gray-400 text-[14px] tracking-[0] leading-[normal]">
@@ -88,7 +88,7 @@ export const ClientListComponent = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {clientsData.map((item) => (
+                                        {employeesData.map((item) => (
                                             <tr key={item._id}>
                                                 <td className="py-2 px-4 border-b">{item.lastName}</td>
                                                 <td className="py-2 px-4 border-b">{item.firstName}</td>

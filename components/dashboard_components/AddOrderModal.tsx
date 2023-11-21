@@ -1,6 +1,6 @@
 import { ADD_ORDER_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/auth/login';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 export interface AddOrderModalProps {
     isVisible: Boolean,
@@ -20,12 +20,80 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
     const [transportType, setTransportType] = useState("");
     const [client, setClient] = useState("");
     const [description, setDescription] = useState("");
-    const [unit, setUnit] = useState("");
+    const [poids, setPoids] = useState("");
     const [pays, setPays] = useState("");
     const [quantity, setQuantity] = useState("");
     const [ville, setVille] = useState("");
     const [status, setStatus] = useState("");
     const [specialNote, setSpecialNote] = useState("");
+
+    // Function to add pricing
+    const addOrder = async () => {
+        try {
+            const newPricing = {
+                trackingId: trackingId,
+                typeColis: typeColis,
+                transportType: transportType,
+                client: client,
+                description: description,
+                poids: Number(poids),
+                pays: pays,
+                quantity: Number(quantity),
+                ville: ville,
+                status: 'test',
+                specialNote: specialNote,
+            };
+
+            // Perform validation to check if all variables are not empty
+            if (
+                trackingId.trim() === '' ||
+                typeColis.trim() === '' ||
+                transportType.trim() === '' ||
+                client.trim() === '' ||
+                description.trim() === '' ||
+                poids.trim() === '' ||
+                pays.trim() === '' ||
+                quantity.trim() === '' ||
+                ville.trim() === '' ||
+                status.trim() === '' ||
+                specialNote.trim() === ''
+            ) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/commandes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPricing),
+            });
+
+            if (!response.ok) {
+                console.log(response)
+                throw new Error('Failed to add order');
+            }
+
+            console.log('Pricing added successfully!');
+            alert('Pricing added successfully!'); // Show alert dialog
+
+            // Clear form fields after successful addition
+            // setTrackingId('');
+            // setTypeColis('');
+            // setTransportType('');
+            // setDescription('');
+            // setUnit('');
+            // setPays('')
+            // setQuantity('');
+            // setVille('')
+            // setStatus('')
+            // setSpecialNote('')
+        } catch (error) {
+            console.error('Error adding pricing:', error);
+            // Handle errors
+        }
+    };
 
     return (
         <div className='fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center'
@@ -51,7 +119,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                                     </div>
                                     <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
                                         <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Numéro de téléphone
+                                            Type de colis
                                         </div>
                                         {renderInputField(ADD_ORDER_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
                                     </div>
@@ -79,9 +147,9 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                                     </div>
                                     <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
                                         <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Unité
+                                            {"Poids (kg)"}
                                         </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[5], unit, (e) => setUnit(e.target.value))}
+                                        {renderInputField(ADD_ORDER_INPUTS[5], poids, (e) => setPoids(e.target.value))}
                                     </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
@@ -128,7 +196,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                                 </div>
                             </div>
                             <div className="mt-5 flex flex-row">
-                                <div className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
+                                <div onClick={addOrder} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
                                     <div className="text-white text-lg font-normal font-['Inter']">Enregistrer</div>
                                 </div>
                                 <div onClick={onClose} className="ml-4 w-48 h-12 p-4 rounded-lg border border-zinc-300 justify-center items-center gap-2 inline-flex">

@@ -75,7 +75,7 @@ const Layout: React.FC<Props> = ({ children, title, handleChangeItem }) => {
                 <div className="hidden md:block md:relative ">
                     <Sidebar onShowPopup={handlePopup} items={SIDEBAR_ITEMS} handleChangeItem={handleChangeItem} />
                 </div>
-                <main className="w-full md:flex-grow">
+                <main className="w-full md:flex-grow bg-gray-50">
                     {title && <h1 className="text-black text-2xl font-bold mb-4 mt-10 pr-4 pl-4 pt-4">{title}</h1>}
                     {children}
                 </main>

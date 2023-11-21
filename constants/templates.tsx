@@ -6,7 +6,7 @@ export type TemplateInput = {
     options?: string[];
 };
 
-export const AUTH_INPUTS: TemplateInput[] = [
+export const LOGIN_INPUTS: TemplateInput[] = [
     {
         id: "email",
         label: "Email",
@@ -16,6 +16,33 @@ export const AUTH_INPUTS: TemplateInput[] = [
     {
         id: "password",
         label: "Mot de passe",
+        placeholder: "*******",
+        type: "text",
+    },
+]
+
+export const SIGN_UP_INPUTS: TemplateInput[] = [
+    {
+        id: "email",
+        label: "Email",
+        placeholder: "johndoe@gmail.com",
+        type: "text",
+    },
+    {
+        id: "phone",
+        label: "Numero de Télephone",
+        placeholder: "12345678",
+        type: "text",
+    },
+    {
+        id: "password",
+        label: "Mot de passe",
+        placeholder: "*******",
+        type: "text",
+    },
+    {
+        id: "cpassword",
+        label: "Confirmer votre mot de passe",
         placeholder: "*******",
         type: "text",
     },
@@ -92,9 +119,9 @@ export const ADD_ORDER_INPUTS: TemplateInput[] = [
         type: "text",
     },
     {
-        id: "unit",
-        label: "Unité",
-        placeholder: "KG",
+        id: "poids",
+        label: "Poids (kg)",
+        placeholder: "13",
         type: "text",
     },
     {
@@ -139,13 +166,13 @@ export const ADD_PRICING_INPUTS: TemplateInput[] = [
     {
         id: "typeColis",
         label: "Type de colis",
-        placeholder: "200",
+        placeholder: "Batterie",
         type: "text",
     },
     {
         id: "transportType",
         label: "Type de colis",
-        placeholder: "200",
+        placeholder: "avion",
         type: "text",
     },
     {
