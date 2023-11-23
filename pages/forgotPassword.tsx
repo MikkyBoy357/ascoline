@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { LOGIN_INPUTS } from "@/constants/templates";
+import { FORGOT_PASSWORD_INPUTS, LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
-import { renderInputField } from "../signup";
+import { renderInputField } from "./signup";
 
-export const Login = () => {
+export default function ForgotPassword() {
+    return (
+        <ForgotPasswordComponent />
+    )
+}
+
+export const ForgotPasswordComponent = () => {
     const [email, setEmail] = useState("");
-    const [pass, setPass] = useState("");
-
-    const handleClick = () => {
-        router.push('/dashboard');
-    };
 
     const handleCreateAccount = () => {
         router.push('/signup')
-    }
-
-    const handleForgotPassword = () => {
-        router.push('/forgotPassword')
     }
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +27,7 @@ export const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password: pass }),
+                body: JSON.stringify({ email }),
             });
 
             if (response.ok) {
@@ -61,32 +58,15 @@ export const Login = () => {
                 <div className="bg-[#ffffff] w-[1440px] h-[1024px] relative">
                     <div className="inline-flex flex-col items-center gap-[40px] absolute top-[270px] left-[460px]">
                         <div className="inline-flex flex-col items-center gap-[8px] relative flex-[0_0_auto]">
-                            <div className="relative w-[230px] h-[70px]">
-                                <img
-                                    className="absolute w-[54px] h-[54px] top-[5px] left-0"
-                                    height={54}
-                                    width={54}
-                                    alt="Save care box"
-                                    src="logo.svg"
-                                />
-                                <div className="absolute w-[144px] h-[40px] top-[24px] left-[60px] [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[32px] tracking-[-0.96px] leading-[normal]">
-                                    Ascoline
-                                </div>
-                            </div>
-                            {/* <FullDark className="!h-[44.76px]" /> */}
                             <p className="relative w-fit [font-family:'Inter-Medium',Helvetica] font-medium text-black text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                Merci d&#39;entrer vos informations de connexion
+                                Mot de passe oublié
                             </p>
                         </div>
                         <div className="inline-flex flex-col items-start gap-[16px] relative flex-[0_0_auto]">
                             <div className="inline-flex flex-col items-start gap-[12px] relative flex-[0_0_auto]">
-                                {renderInputField(LOGIN_INPUTS[0], email, (e) => setEmail(e.target.value))}
-                                {renderInputField(LOGIN_INPUTS[1], pass, (e) => setPass(e.target.value))}
+                                {renderInputField(FORGOT_PASSWORD_INPUTS[0], email, (e) => setEmail(e.target.value))}
                             </div>
                             <div className="inline-flex flex-col items-center gap-[16px] relative flex-[0_0_auto]">
-                                <div onClick={handleForgotPassword} className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] underline tracking-[0] leading-[normal] whitespace-nowrap">
-                                    Mot de passe oublié ?
-                                </div>
                                 <div className="inline-flex flex-col items-center justify-center gap-[8px] flex-[0_0_auto]">
                                     <button type="submit" className="flex w-[520px] items-center justify-center gap-[8px] p-[20px] bg-[#4763e4] rounded-[12px]">
                                         <div className="w-fit mt-[-28.00px] mb-[-26.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
@@ -95,8 +75,7 @@ export const Login = () => {
                                         <i className="fa-solid fa-arrow-right-long"></i>
                                     </button>
                                     <p className="relative w-fit [font-family:'Inter-Regular',Helvetica] font-normal text-transparent text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                        <span className="text-[#000000]">Vous n'avez pas de compte ? </span>
-                                        <span onClick={handleCreateAccount} className="text-[#5c73db] underline">Créer un compte</span>
+                                        <span onClick={() => { router.back() }} className="text-[#5c73db] underline">Retour à la page connexion</span>
                                     </p>
                                 </div>
                             </div>

@@ -48,6 +48,15 @@ export const SIGN_UP_INPUTS: TemplateInput[] = [
     },
 ]
 
+export const FORGOT_PASSWORD_INPUTS: TemplateInput[] = [
+    {
+        id: "email",
+        label: "Address e-mail",
+        placeholder: "johndoe@gmail.com",
+        type: "text",
+    },
+]
+
 export const USER_CONFIG_INPUTS: TemplateInput[] = [
     {
         id: "email",
@@ -171,7 +180,7 @@ export const ADD_PRICING_INPUTS: TemplateInput[] = [
     },
     {
         id: "transportType",
-        label: "Type de colis",
+        label: "Type de transport",
         placeholder: "avion",
         type: "text",
     },
@@ -191,6 +200,21 @@ export const ADD_PRICING_INPUTS: TemplateInput[] = [
         id: "quantity",
         label: "Quantité(Kg)",
         placeholder: "2",
+        type: "text",
+    },
+];
+
+export const ADD_TRANSPORT_INPUTS: TemplateInput[] = [
+    {
+        id: "label",
+        label: "Label",
+        placeholder: "",
+        type: "text",
+    },
+    {
+        id: "description",
+        label: "Description",
+        placeholder: "",
         type: "text",
     },
 ];

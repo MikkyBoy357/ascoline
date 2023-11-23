@@ -7,6 +7,7 @@ import { PricingListComponent } from "@/components/dashboard_components/PricingL
 import { ClientListComponent } from "@/components/dashboard_components/ClientList";
 import { SidebarContext, SidebarContextProvider } from "@/context/sidebar-context";
 import { EmployeeListComponent } from "@/components/dashboard_components/EmployeeList";
+import { SettingScreen } from "@/components/dashboard_components/SettingScreen";
 
 function Dashboard() {
     const [item, setItem] = useState(SIDEBAR_ITEMS[0]);
@@ -42,9 +43,9 @@ function Dashboard() {
                             case SIDEBAR_ITEMS[5]:
                                 return <div>Profile</div>
                             case SIDEBAR_ITEMS[6]:
-                                return <div>Setting</div>
+                                return <SettingScreen />
                             default:
-                                return <PricingListComponent />
+                                return <div>NO SCREEN</div>
                         }
                     })()}
                 </div>

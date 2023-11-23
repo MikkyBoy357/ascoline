@@ -1,79 +1,80 @@
-import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS } from '@/constants/templates';
+import { USER_CONFIG_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
-import { PackageType } from './SettingComponents/PackageCard';
 
-export interface AddPricingModalProps {
+export interface AddClientModalProps {
     isVisible: Boolean,
     text: string,
     onClose: () => void,
-    packageTypesData: PackageType[],
 }
 
-export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, text, onClose, packageTypesData }) => {
+export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text, onClose }) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
         if (e.target.id === "wrapper") { onClose(); }
     }
 
-    const [price, setPrice] = useState("");
-    const [typeColis, setTypeColis] = useState("");
-    const [transportType, setTransportType] = useState("");
-    const [unit, setUnit] = useState("");
-    const [description, setDescription] = useState("");
-    const [quantity, setQuantity] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [address, setAddress] = useState("");
+    const [password, setPassword] = useState("");
 
-    // Function to add pricing
-    const addPricing = async () => {
+    // Function to add client
+    const addClient = async () => {
         try {
-            const newPricing = {
-                price: Number(price),
-                typeColis: typeColis,
-                transportType: transportType,
-                unit: unit,
-                description: description,
-                quantity: Number(quantity),
-                status: 'test',
+            const newClient = {
+                email: email,
+                phone: phone,
+                lastName: lastName,
+                firstName: firstName,
+                address: address,
+                password: password,
+                status: 'actif',
+                type: 'client'
             };
 
             // Perform validation to check if all variables are not empty
             if (
-                price.trim() === '' ||
-                typeColis.trim() === '' ||
-                transportType.trim() === '' ||
-                unit.trim() === '' ||
-                description.trim() === '' ||
-                quantity.trim() === ''
+                email.trim() === '' ||
+                phone.trim() === '' ||
+                lastName.trim() === '' ||
+                firstName.trim() === '' ||
+                address.trim() === '' ||
+                password.trim() === ''
             ) {
                 alert('Please fill in all fields.');
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/pricings', {
+            const response = await fetch('http://localhost:3000/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newPricing),
+                body: JSON.stringify(newClient),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add pricing');
+                const errorData = await response.json();
+                alert(`Error => ${errorData.message}`)
+                throw new Error('Failed to add client');
             }
 
-            console.log('Pricing added successfully!');
-            alert('Pricing added successfully!'); // Show alert dialog
+            console.log('Client added successfully!');
+            alert('Clienr added successfully!'); // Show alert dialog
 
             // Clear form fields after successful addition
-            setPrice('');
-            setTypeColis('');
-            setTransportType('');
-            setUnit('');
-            setDescription('');
-            setQuantity('');
+            // setEmail('');
+            // setPhone('');
+            // setLastName('');
+            // setFirstName('');
+            // setAddress('');
+            // setPassword('');
         } catch (error) {
-            console.error('Error adding pricing:', error);
+            console.error('Error adding client:', error);
             // Handle errors
         }
     };
@@ -90,25 +91,25 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, tex
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                Enregistrement d'une tarification
+                                Enregistrement d'une client
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
-                                    {renderInputField(ADD_PRICING_INPUTS[0], price, (e) => setPrice(e.target.value))}
-                                    {renderInputField(ADD_PRICING_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
+                                    {renderInputField(USER_CONFIG_INPUTS[0], email, (e) => setEmail(e.target.value))}
+                                    {renderInputField(USER_CONFIG_INPUTS[1], phone, (e) => setPhone(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(ADD_PRICING_INPUTS[2], transportType, (e) => setTransportType(e.target.value))}
-                                    {renderInputField(ADD_PRICING_INPUTS[3], unit, (e) => setUnit(e.target.value))}
+                                    {renderInputField(USER_CONFIG_INPUTS[2], lastName, (e) => setLastName(e.target.value))}
+                                    {renderInputField(USER_CONFIG_INPUTS[3], firstName, (e) => setFirstName(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     <div className="flex flex-row items-start gap-[8px] relative flex-1 grow">
-                                        {renderInputField(ADD_PRICING_INPUTS[4], description, (e) => setDescription(e.target.value))}
-                                        {renderInputField(ADD_PRICING_INPUTS[5], quantity, (e) => setQuantity(e.target.value))}
+                                        {renderInputField(USER_CONFIG_INPUTS[4], address, (e) => setAddress(e.target.value))}
+                                        {renderInputField(USER_CONFIG_INPUTS[5], password, (e) => setPassword(e.target.value))}
                                     </div>
                                 </div>
                                 <div className="mt-5 flex flex-row">
-                                    <div onClick={addPricing} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
+                                    <div onClick={addClient} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
                                         <div className="text-white text-lg font-normal font-['Inter']">Enregistrer</div>
                                     </div>
                                     <div onClick={onClose} className="ml-4 w-48 h-12 p-4 rounded-lg border border-zinc-300 justify-center items-center gap-2 inline-flex">

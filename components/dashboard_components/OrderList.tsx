@@ -14,15 +14,7 @@ interface Commande {
     status: string;
 }
 
-export const OrderListComponent = () => {    
-
-    // // Dummy data for demonstration
-    // const data = [
-    //     { id: 1, clients: 'Doe', pays: "Cameroun", villes: 'John', typeColis: 'john.doe@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 3.33, transportType: "avion", status: 'Réceptionné en Chine' },
-    //     { id: 2, clients: 'Cristiano Ronaldo', pays: "Eget", villes: 'Jane', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "bateau", status: 'Commande Arrivée' },
-    //     { id: 3, clients: 'BATCHO Martin', pays: "Benin", villes: 'Harold', typeColis: 'jane.smith@example.com', description: 'contact@sit.cm', trackingId: "233-333-333", poids: 6.21, transportType: "voiture", status: 'Commande Arrivée' },
-    //     // Add more data as needed
-    // ];
+export const OrderListComponent = () => {
 
     const [loaded, setLoaded] = useState(false);
 

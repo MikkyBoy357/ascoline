@@ -1,5 +1,5 @@
 import { ADD_ORDER_INPUTS } from '@/constants/templates';
-import { renderInputField } from '@/pages/auth/login';
+import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 
 export interface AddOrderModalProps {
@@ -111,82 +111,27 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] flex-1 grow">
-                                        <div className="w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Tracking Id
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[0], trackingId, (e) => setTrackingId(e.target.value))}
-                                    </div>
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Type de colis
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[0], trackingId, (e) => setTrackingId(e.target.value))}
+                                    {renderInputField(ADD_ORDER_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Type de transport
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[2], transportType, (e) => setTransportType(e.target.value))}
-                                    </div>
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Client
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[3], client, (e) => setClient(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[2], transportType, (e) => setTransportType(e.target.value))}
+                                    {renderInputField(ADD_ORDER_INPUTS[3], client, (e) => setClient(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Description
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[4], description, (e) => setDescription(e.target.value))}
-                                    </div>
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            {"Poids (kg)"}
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[5], poids, (e) => setPoids(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[4], description, (e) => setDescription(e.target.value))}
+                                    {renderInputField(ADD_ORDER_INPUTS[5], poids, (e) => setPoids(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Pays de destination
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[6], pays, (e) => setPays(e.target.value))}
-                                    </div>
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Quantité
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[7], quantity, (e) => setQuantity(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[6], pays, (e) => setPays(e.target.value))}
+                                    {renderInputField(ADD_ORDER_INPUTS[7], quantity, (e) => setQuantity(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Ville
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[8], ville, (e) => setVille(e.target.value))}
-                                    </div>
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Statut
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[9], status, (e) => setStatus(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[8], ville, (e) => setVille(e.target.value))}
+                                    {renderInputField(ADD_ORDER_INPUTS[9], status, (e) => setStatus(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
-                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                            Note Spéciale
-                                        </div>
-                                        {renderInputField(ADD_ORDER_INPUTS[10], specialNote, (e) => setSpecialNote(e.target.value))}
-                                    </div>
+                                    {renderInputField(ADD_ORDER_INPUTS[10], specialNote, (e) => setSpecialNote(e.target.value))}
                                     {/* <div className="flex flex-col items-start gap-[8px] relative flex-1 grow">
                                         <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
                                             Statut
