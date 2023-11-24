@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { AddOrderModal } from "./AddOrderModal";
+import { MeasureUnit } from "./SettingComponents/UnitCard";
+import { TransportType } from "./SettingComponents/TransportCard";
+import { PackageType } from "./SettingComponents/PackageCard";
+import { Country } from "./SettingComponents/CountryCard";
+import { Client } from "./ClientList";
 
 interface Commande {
     _id: string;
@@ -9,14 +14,14 @@ interface Commande {
     typeColis: string;
     description: string;
     trackingId: string;
-    poids: number;
+    unit: string;
     transportType: string;
     status: string;
 }
 
 export const OrderListComponent = () => {
 
-    const [loaded, setLoaded] = useState(false);
+    const [modify, setModify] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
 
@@ -24,13 +29,24 @@ export const OrderListComponent = () => {
         setShowModal(!showModal);
     }
 
+    const handleModify = () => {}
+
     useEffect(() => {
-        if (!loaded) {
-            fetchCommandesData()
-        }
+        fetchCommandesData()
+        fetchPackageData()
+        fetchTransportData()
+        fetchUnitData()
+        fetchCountryData()
+        fetchClientsData()
     }, [])
 
     const [commandesData, setCommandesData] = useState<Commande[]>([]);
+
+    const [packageTypesData, setPackageTypesData] = useState<PackageType[]>([]);
+    const [transportTypesData, setTransportTypesData] = useState<TransportType[]>([]);
+    const [measureUnitsData, setMeasureUnitsData] = useState<MeasureUnit[]>([]);
+    const [countryData, setCountryData] = useState<Country[]>([]);
+    const [clientsData, setClientsData] = useState<Client[]>([]);
 
     // Function to fetch commandes data
     const fetchCommandesData = async () => {
@@ -49,6 +65,126 @@ export const OrderListComponent = () => {
             const data: Commande[] = await response.json();
             // Set the fetched data into state
             setCommandesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch package types data
+    const fetchPackageData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/packageTypes", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: PackageType[] = await response.json();
+            // Set the fetched data into state
+            setPackageTypesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch transport types data
+    const fetchTransportData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/transportTypes", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: TransportType[] = await response.json();
+            // Set the fetched data into state
+            setTransportTypesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch measure units data
+    const fetchUnitData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/measureUnits", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: MeasureUnit[] = await response.json();
+            // Set the fetched data into state
+            setMeasureUnitsData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch country data
+    const fetchCountryData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/countries", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: Country[] = await response.json();
+            // Set the fetched data into state
+            setCountryData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch clients data
+    const fetchClientsData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/clients", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: Client[] = await response.json();
+            // Set the fetched data into state
+            setClientsData(data);
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -86,7 +222,7 @@ export const OrderListComponent = () => {
                                             <th className="py-2 px-4 border-b">Type colis</th>
                                             <th className="py-2 px-4 border-b">Description</th>
                                             <th className="py-2 px-4 border-b">Tracking id</th>
-                                            <th className="py-2 px-4 border-b">Poids(Kg)</th>
+                                            <th className="py-2 px-4 border-b">Unité</th>
                                             <th className="py-2 px-4 border-b">Type de transport.</th>
                                             <th className="py-2 px-4 border-b">Statut</th>
                                             <th className="py-2 px-4 border-b">Actions</th>
@@ -101,7 +237,7 @@ export const OrderListComponent = () => {
                                                 <td className="py-2 px-4 border-b">{item.typeColis}</td>
                                                 <td className="py-2 px-4 border-b">{item.description}</td>
                                                 <td className="py-2 px-4 border-b">{item.trackingId}</td>
-                                                <td className="py-2 px-4 border-b">{item.poids}</td>
+                                                <td className="py-2 px-4 border-b">{item.unit}</td>
                                                 <td className="py-2 px-4 border-b">{item.transportType}</td>
                                                 <td className="py-2 px-4 border-b">
                                                     <div className={`px-4 py-2 rounded-3xl ${item.status === "Commande Arrivée" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status === "Commande Arrivée" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
@@ -109,7 +245,7 @@ export const OrderListComponent = () => {
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
                                                     <i className="fa-regular fa-trash-can text-red-600"></i>
-                                                    <i className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
+                                                    <i onClick={handleModify} className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
                                                 </td>
                                             </tr>
                                         ))}
@@ -121,8 +257,17 @@ export const OrderListComponent = () => {
                     </div>
                 </div>
             </div>
-            <AddOrderModal isVisible={showModal} onClose={toggleShowModal} text='Loading Content Summary' />
 
+            <AddOrderModal
+                isVisible={showModal}
+                onClose={toggleShowModal}
+                text='Loading Content Summary'
+                packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
+                transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
+                measureUnitsData={measureUnitsData.map((measureUnit: MeasureUnit) => measureUnit.label)}
+                countryData={countryData.map((country: Country) => country.label)}
+                clientsData={clientsData.map((client: Client) => `${client.lastName} ${client.firstName}`)}
+            />
 
         </div>
     );

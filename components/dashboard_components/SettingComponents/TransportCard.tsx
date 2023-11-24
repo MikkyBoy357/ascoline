@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface TransportType {
+export interface TransportType {
     _id: string;
     label: string;
     description: string;

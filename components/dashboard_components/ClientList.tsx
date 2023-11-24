@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AddClientModal } from "./AddClientModal";
 
-interface Client {
+export interface Client {
     _id: string;
     firstName: string;
     lastName: string;
@@ -20,8 +20,6 @@ export const ClientListComponent = () => {
     //     // Add more data as needed
     // ];
 
-    const [loaded, setLoaded] = useState(false);
-
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
@@ -32,11 +30,8 @@ export const ClientListComponent = () => {
 
 
     useEffect(() => {
-        if (!loaded) {
-            fetchClientsData()
-        }
+        fetchClientsData()
     }, [])
-
 
 
     // Function to fetch clients data
@@ -73,8 +68,8 @@ export const ClientListComponent = () => {
                         Vous cherchez quel client ...
                     </p>
                 </div>
-                <div className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
-                    <div onClick={toggleShowModal} className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
+                <div onClick={toggleShowModal} className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
+                    <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
                         Ajouter un client
                     </div>
                     <i className="fa-solid fa-plus ml-1 text-white"></i>
@@ -121,8 +116,8 @@ export const ClientListComponent = () => {
                     </div>
                 </div>
             </div>
-            <AddClientModal isVisible={showModal} onClose={toggleShowModal} text='Loading Content Summary' />
 
+            <AddClientModal isVisible={showModal} onClose={toggleShowModal} type='client' />
 
         </div>
     );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AddClientModal } from "./AddClientModal";
 
 interface Employee {
     _id: string;
@@ -19,15 +20,16 @@ export const EmployeeListComponent = () => {
     //     // Add more data as needed
     // ];
 
-    const [loaded, setLoaded] = useState(false);
-
     const [employeesData, setEmployeesData] = useState<Employee[]>([]);
 
+    const [showModal, setShowModal] = useState(false);
+
+    const toggleShowModal = () => {
+        setShowModal(!showModal);
+    }
 
     useEffect(() => {
-        if (!loaded) {
-            fetchEmployeesData()
-        }
+        fetchEmployeesData()
     }, [])
 
 
@@ -66,7 +68,7 @@ export const EmployeeListComponent = () => {
                         Vous cherchez quel client ...
                     </p>
                 </div>
-                <div className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
+                <div onClick={toggleShowModal} className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
                     <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
                         Ajouter un client
                     </div>
@@ -115,6 +117,7 @@ export const EmployeeListComponent = () => {
                 </div>
             </div>
 
+            <AddClientModal isVisible={showModal} onClose={toggleShowModal} type='employee' />
 
         </div>
     );

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AddOrderModal } from "./AddOrderModal";
 import { AddPricingModal } from "./AddPricingModal";
 import { PackageType } from "./SettingComponents/PackageCard";
+import { TransportType } from "./SettingComponents/TransportCard";
+import { MeasureUnit } from "./SettingComponents/UnitCard";
 
 interface Pricing {
     _id: string;
@@ -27,10 +29,15 @@ export const PricingListComponent = () => {
     useEffect(() => {
         fetchPricingsData()
         fetchPackageData()
+        fetchTransportData()
+        fetchUnitData()
     }, [])
 
     const [pricingsData, setPricingsData] = useState<Pricing[]>([]);
+
     const [packageTypesData, setPackageTypesData] = useState<PackageType[]>([]);
+    const [transportTypesData, setTransportTypesData] = useState<TransportType[]>([]);
+    const [measureUnitsData, setMeasureUnitsData] = useState<MeasureUnit[]>([]);
 
     // Function to fetch pricings data
     const fetchPricingsData = async () => {
@@ -73,6 +80,54 @@ export const PricingListComponent = () => {
             const data: PackageType[] = await response.json();
             // Set the fetched data into state
             setPackageTypesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch transport types data
+    const fetchTransportData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/transportTypes", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: TransportType[] = await response.json();
+            // Set the fetched data into state
+            setTransportTypesData(data);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle errors
+        }
+    };
+
+    // Function to fetch measure units data
+    const fetchUnitData = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/measureUnits", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data: MeasureUnit[] = await response.json();
+            // Set the fetched data into state
+            setMeasureUnitsData(data);
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -136,8 +191,15 @@ export const PricingListComponent = () => {
                     </div>
                 </div>
             </div>
-            <AddPricingModal isVisible={showModal} onClose={toggleShowModal} text='Loading Content Summary' packageTypesData={packageTypesData} />
 
+            <AddPricingModal
+                isVisible={showModal}
+                onClose={toggleShowModal}
+                text='Loading Content Summary'
+                packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
+                transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
+                measureUnitsData={measureUnitsData.map((measureUnit: MeasureUnit) => measureUnit.label)}
+            />
 
         </div>
     );

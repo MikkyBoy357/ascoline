@@ -6,9 +6,23 @@ export interface AddOrderModalProps {
     isVisible: Boolean,
     text: string,
     onClose: () => void,
+    packageTypesData: string[],
+    transportTypesData: string[],
+    measureUnitsData: string[],
+    countryData: string[],
+    clientsData: string[],
 }
 
-export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, onClose }) => {
+export const AddOrderModal: React.FC<AddOrderModalProps> = ({
+    isVisible,
+    text,
+    onClose,
+    packageTypesData,
+    transportTypesData,
+    measureUnitsData,
+    countryData,
+    clientsData
+}) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
@@ -20,7 +34,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
     const [transportType, setTransportType] = useState("");
     const [client, setClient] = useState("");
     const [description, setDescription] = useState("");
-    const [poids, setPoids] = useState("");
+    const [unit, setUnit] = useState("");
     const [pays, setPays] = useState("");
     const [quantity, setQuantity] = useState("");
     const [ville, setVille] = useState("");
@@ -36,7 +50,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                 transportType: transportType,
                 client: client,
                 description: description,
-                poids: Number(poids),
+                unit: unit,
                 pays: pays,
                 quantity: Number(quantity),
                 ville: ville,
@@ -51,7 +65,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                 transportType.trim() === '' ||
                 client.trim() === '' ||
                 description.trim() === '' ||
-                poids.trim() === '' ||
+                unit.trim() === '' ||
                 pays.trim() === '' ||
                 quantity.trim() === '' ||
                 ville.trim() === '' ||
@@ -112,18 +126,48 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isVisible, text, o
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
                                     {renderInputField(ADD_ORDER_INPUTS[0], trackingId, (e) => setTrackingId(e.target.value))}
-                                    {renderInputField(ADD_ORDER_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
+                                    {renderInputField(
+                                        ADD_ORDER_INPUTS[1],
+                                        typeColis,
+                                        (e) => setTypeColis(e.target.value),
+                                        (e: any) => setTypeColis(e.target.value),
+                                        packageTypesData
+                                    )}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(ADD_ORDER_INPUTS[2], transportType, (e) => setTransportType(e.target.value))}
-                                    {renderInputField(ADD_ORDER_INPUTS[3], client, (e) => setClient(e.target.value))}
+                                    {renderInputField(
+                                        ADD_ORDER_INPUTS[2],
+                                        transportType,
+                                        (e) => setTransportType(e.target.value),
+                                        (e: any) => setTransportType(e.target.value),
+                                        transportTypesData
+                                    )}
+                                    {renderInputField(
+                                        ADD_ORDER_INPUTS[3],
+                                        client,
+                                        (e) => setClient(e.target.value),
+                                        (e: any) => setClient(e.target.value),
+                                        clientsData
+                                    )}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     {renderInputField(ADD_ORDER_INPUTS[4], description, (e) => setDescription(e.target.value))}
-                                    {renderInputField(ADD_ORDER_INPUTS[5], poids, (e) => setPoids(e.target.value))}
+                                    {renderInputField(
+                                        ADD_ORDER_INPUTS[5],
+                                        unit,
+                                        (e) => setUnit(e.target.value),
+                                        (e: any) => setUnit(e.target.value),
+                                        measureUnitsData
+                                    )}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(ADD_ORDER_INPUTS[6], pays, (e) => setPays(e.target.value))}
+                                    {renderInputField(
+                                        ADD_ORDER_INPUTS[6],
+                                        pays,
+                                        (e) => setPays(e.target.value),
+                                        (e: any) => setPays(e.target.value),
+                                        countryData
+                                    )}
                                     {renderInputField(ADD_ORDER_INPUTS[7], quantity, (e) => setQuantity(e.target.value))}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">

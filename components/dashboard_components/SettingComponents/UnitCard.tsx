@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface MeasureUnit {
+export interface MeasureUnit {
     _id: string;
     label: string;
     description: string;
@@ -13,13 +13,13 @@ interface UnitCardProps {
 export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal }) => {
 
     useEffect(() => {
-        fetchPackageData()
+        fetchUnitData()
     }, [])
 
     const [measureUnitsData, setMeasureUnitsData] = useState<MeasureUnit[]>([]);
 
     // Function to fetch measure units data
-    const fetchPackageData = async () => {
+    const fetchUnitData = async () => {
         try {
             const response = await fetch("http://localhost:3000/measureUnits", {
                 method: "GET",

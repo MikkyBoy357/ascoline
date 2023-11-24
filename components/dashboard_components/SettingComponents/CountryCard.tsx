@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface Country {
+export interface Country {
     _id: string;
     label: string;
     description: string;

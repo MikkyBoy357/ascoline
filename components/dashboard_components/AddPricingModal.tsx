@@ -7,10 +7,19 @@ export interface AddPricingModalProps {
     isVisible: Boolean,
     text: string,
     onClose: () => void,
-    packageTypesData: PackageType[],
+    packageTypesData: string[],
+    transportTypesData: string[],
+    measureUnitsData: string[],
 }
 
-export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, text, onClose, packageTypesData }) => {
+export const AddPricingModal: React.FC<AddPricingModalProps> = ({
+    isVisible,
+    text,
+    onClose,
+    packageTypesData,
+    transportTypesData,
+    measureUnitsData
+}) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
@@ -95,11 +104,29 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({ isVisible, tex
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
                                     {renderInputField(ADD_PRICING_INPUTS[0], price, (e) => setPrice(e.target.value))}
-                                    {renderInputField(ADD_PRICING_INPUTS[1], typeColis, (e) => setTypeColis(e.target.value))}
+                                    {renderInputField(
+                                        ADD_PRICING_INPUTS[1],
+                                        typeColis,
+                                        (e) => setTypeColis(e.target.value),
+                                        (e: any) => setTypeColis(e.target.value),
+                                        packageTypesData
+                                    )}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(ADD_PRICING_INPUTS[2], transportType, (e) => setTransportType(e.target.value))}
-                                    {renderInputField(ADD_PRICING_INPUTS[3], unit, (e) => setUnit(e.target.value))}
+                                    {renderInputField(
+                                        ADD_PRICING_INPUTS[2],
+                                        transportType,
+                                        (e) => setTransportType(e.target.value),
+                                        (e: any) => setTransportType(e.target.value),
+                                        transportTypesData
+                                    )}
+                                    {renderInputField(
+                                        ADD_PRICING_INPUTS[3],
+                                        unit,
+                                        (e) => setUnit(e.target.value),
+                                        (e: any) => setUnit(e.target.value),
+                                        measureUnitsData
+                                    )}
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     <div className="flex flex-row items-start gap-[8px] relative flex-1 grow">

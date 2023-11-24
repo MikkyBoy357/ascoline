@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 
 export interface AddClientModalProps {
     isVisible: Boolean,
-    text: string,
+    type: string,
     onClose: () => void,
 }
 
-export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text, onClose }) => {
+export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type, onClose }) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
@@ -33,7 +33,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text,
                 address: address,
                 password: password,
                 status: 'actif',
-                type: 'client'
+                type: type
             };
 
             // Perform validation to check if all variables are not empty
@@ -60,11 +60,11 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text,
             if (!response.ok) {
                 const errorData = await response.json();
                 alert(`Error => ${errorData.message}`)
-                throw new Error('Failed to add client');
+                throw new Error(`Failed to add ${type}`);
             }
 
-            console.log('Client added successfully!');
-            alert('Clienr added successfully!'); // Show alert dialog
+            console.log(`${type} added successfully!`);
+            alert(`${type} added successfully!`); // Show alert dialog
 
             // Clear form fields after successful addition
             // setEmail('');
@@ -74,7 +74,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text,
             // setAddress('');
             // setPassword('');
         } catch (error) {
-            console.error('Error adding client:', error);
+            console.error(`Error adding ${type}:`, error);
             // Handle errors
         }
     };
@@ -91,7 +91,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, text,
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                Enregistrement d'une client
+                                Enregistrement
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
