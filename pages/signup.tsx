@@ -9,7 +9,7 @@ export const renderInputField = (
     value: string,
     handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     handleSelect?: (event: React.FormEvent<HTMLSelectElement>) => void,
-    selectList?: string[],
+    selectList?: any[],
 ) => {
     return (
         <div className="inline-flex flex-col items-start gap-[8px] relative flex-[0_0_auto]">

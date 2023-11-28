@@ -6,30 +6,38 @@ import { PackageType } from "./SettingComponents/PackageCard";
 import { Country } from "./SettingComponents/CountryCard";
 import { Client } from "./ClientList";
 
-interface Commande {
+export interface Commande {
     _id: string;
-    client: string;
-    pays: string;
-    ville: string;
-    typeColis: string;
-    description: string;
     trackingId: string;
-    unit: string;
+    typeColis: string;
     transportType: string;
+    client: Client;
+    description: string;
+    unit: string;
+    pays: string;
+    quantity: number;
+    ville: string;
     status: string;
+    specialNote: string;
 }
 
 export const OrderListComponent = () => {
 
     const [modify, setModify] = useState(false);
 
+    const [selectedOrder, setSelectedOrder] = useState<Commande>();
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
         setShowModal(!showModal);
+        if (showModal) { setModify(false) }
     }
 
-    const handleModify = () => {}
+    const handleModify = (item: Commande) => {
+        setModify(true)
+        setSelectedOrder(item)
+        toggleShowModal()
+    }
 
     useEffect(() => {
         fetchCommandesData()
@@ -195,6 +203,7 @@ export const OrderListComponent = () => {
     return (
         <div className="flex flex-col justify-center text-black">
             <div className="pl-4 pt-4">
+                {/* <p className="mb-3 font-semibold text-2xl">{modify.toString()}</p> */}
                 <p className="mb-3 font-semibold text-2xl">Commandes</p>
                 <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
                     <div className="rounded-[12px] border-blue-600">
@@ -231,7 +240,7 @@ export const OrderListComponent = () => {
                                     <tbody>
                                         {commandesData.map((item) => (
                                             <tr key={item._id} className="text-sm">
-                                                <td className="py-2 px-4 border-b">{item.client}</td>
+                                                <td className="py-2 px-4 border-b">{item.client.lastName} {item.client.firstName}</td>
                                                 <td className="py-2 px-4 border-b">{item.pays}</td>
                                                 <td className="py-2 px-4 border-b">{item.ville}</td>
                                                 <td className="py-2 px-4 border-b">{item.typeColis}</td>
@@ -245,7 +254,7 @@ export const OrderListComponent = () => {
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
                                                     <i className="fa-regular fa-trash-can text-red-600"></i>
-                                                    <i onClick={handleModify} className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
+                                                    <i onClick={() => handleModify(item)} className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
                                                 </td>
                                             </tr>
                                         ))}
@@ -262,11 +271,13 @@ export const OrderListComponent = () => {
                 isVisible={showModal}
                 onClose={toggleShowModal}
                 text='Loading Content Summary'
+                isModify={modify}
+                selectedOrder={selectedOrder!}
                 packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
                 transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
                 measureUnitsData={measureUnitsData.map((measureUnit: MeasureUnit) => measureUnit.label)}
                 countryData={countryData.map((country: Country) => country.label)}
-                clientsData={clientsData.map((client: Client) => `${client.lastName} ${client.firstName}`)}
+                clientsData={clientsData}
             />
 
         </div>

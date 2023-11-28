@@ -70,7 +70,7 @@ export const EmployeeListComponent = () => {
                 </div>
                 <div onClick={toggleShowModal} className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
                     <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
-                        Ajouter un client
+                        Ajouter un collaborateur
                     </div>
                     <i className="fa-solid fa-plus ml-1 text-white"></i>
                 </div>

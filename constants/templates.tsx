@@ -155,7 +155,7 @@ export const ADD_ORDER_INPUTS: TemplateInput[] = [
         id: "status",
         label: "Statut",
         placeholder: "Actif",
-        type: "text",
+        type: "select",
     },
     {
         id: "specialNote",

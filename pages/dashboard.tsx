@@ -27,7 +27,7 @@ function Dashboard() {
             <Layout title="" handleChangeItem={handleChangeItem}>
                 <div className="text-blue-400">
                     {/* <PricingListComponent /> */}
-                    <div className="text-green-400">hello{sidebarSectionContext?.selectedSidebarItem.label}</div>
+                    {/* <div className="text-green-400">hello{sidebarSectionContext?.selectedSidebarItem.label}</div> */}
                     {(() => {
                         switch (item) {
                             case SIDEBAR_ITEMS[0]:

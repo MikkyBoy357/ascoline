@@ -5,6 +5,7 @@ import Image from "next/image";
 import { SidebarContext } from '@/context/sidebar-context';
 
 export interface SidebarItem {
+    id: string;
     label: string;
     url: string;
     target?: string;
@@ -77,7 +78,8 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup, handleChangeItem }) => {
                             <Fragment key={index}>
                                 <li className={`mb-6 ml-8 text-gray-500 hover:text-gray-700 transition duration-300 ${isActive(item.url) ? 'blue-gray' : 'blue-gray'
                                     } ${item === item ? 'font-semibold' : ''} hover:cursor-pointer`} onClick={() => { handleClickSidebarItem(item) }}>
-                                    {item.label}
+                                    <div className='flex flex-row'>
+                                        <Image className='mr-3' src={`/sidebar_icons/${item.id}.svg`} alt="Jema.ai" width="25" height="100" /> {item.label}</div>
                                 </li>
                             </Fragment>
                         ))}

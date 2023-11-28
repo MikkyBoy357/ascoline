@@ -14,22 +14,22 @@ export const SIDEBAR_ITEMS: any = [
     },
     {
         id: "clients",
-        label: "Clients (Users)",
+        label: "Clients",
         url: "/firsthome",
     },
     {
         id: "commandes",
-        label: "Commandes(Package)",
+        label: "Commandes",
         url: "/firsthome",
     },
     {
         id: "collaborateurs",
-        label: "Collaborateurs(Employee)",
+        label: "Collaborateurs",
         url: "/firsthome",
     },
     {
         id: "tarification",
-        label: "Tarification(Pricing)",
+        label: "Tarification",
         url: "/firsthome",
     },
     {
@@ -39,7 +39,7 @@ export const SIDEBAR_ITEMS: any = [
     },
     {
         id: "setting",
-        label: "Setting (Paramètre)",
+        label: "Setting",
         url: "/firsthome",
     },
     // {
