@@ -3,15 +3,17 @@ import React from 'react';
 interface DeleteCountryModalProps {
     isVisible: boolean;
     onClose: () => void;
+    onYesClick: () => void;
 }
 
-const DeleteCountryModal: React.FC<DeleteCountryModalProps> = ({ isVisible, onClose }) => {
+const DeleteCountryModal: React.FC<DeleteCountryModalProps> = ({ isVisible, onClose, onYesClick }) => {
     if (!isVisible) return null;
 
     const handleYesClick = () => {
         // Handle deletion logic here
         // e.g., call a function to delete the country
         // ...
+        onYesClick();
         onClose(); // Close the modal after deletion
     };
 

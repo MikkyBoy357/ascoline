@@ -190,8 +190,8 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                 throw new Error('Failed to add order');
             }
 
-            console.log('Pricing added successfully!');
-            alert('Pricing added successfully!'); // Show alert dialog
+            console.log('Order added successfully!');
+            alert('Order added successfully!'); // Show alert dialog
 
             // Clear form fields after successful addition
             // setTrackingId('');

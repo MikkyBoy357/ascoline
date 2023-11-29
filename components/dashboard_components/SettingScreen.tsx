@@ -7,6 +7,7 @@ import { AddTransportModal } from "./SettingComponents/SettingPopups/AddTranspor
 import { AddPackageModal } from "./SettingComponents/SettingPopups/AddPackageModal";
 import { AddUnitModal } from "./SettingComponents/SettingPopups/AddUnitModal";
 import { AddCountryModal } from "./SettingComponents/SettingPopups/AddCountryModal";
+import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 
 
@@ -31,6 +32,46 @@ export const SettingScreen = () => {
         setShowModal(!showModal);
     }
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [delPopup, setDelPopup] = useState<"transportTypes" | "packageTypes" | "measureUnits" | "countries">("countries");
+
+    const toggleShowDeleteModal = (delPopup: "transportTypes" | "packageTypes" | "measureUnits" | "countries") => {
+        // setPopup(popup)
+        setDelPopup(delPopup)
+        setShowDeleteModal(!showDeleteModal)
+    }
+
+    const [itemId, setItemId] = useState("")
+
+    const handleSetItemId = (id: string) => {
+        setItemId(id)
+    }
+
+    const handleDeleteItem = async () => {
+        try {
+            console.log(`Deleting country with ID: ${itemId}`);
+            const response = await fetch(`http://localhost:3000/${delPopup}/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Error => ${errorData.message}`)
+                throw new Error(`Failed to delete ${delPopup}`);
+            }
+
+            alert(`${delPopup} deleted successfully!`); // Show success alert
+            // window.location.reload(); // Refresh the page
+
+        } catch (error) {
+            console.error(`Error deleting ${delPopup}:`, error);
+            alert(`Failed to delete ${delPopup}`); // Show error alert
+        }
+    };
+
     return (
 
         <div className="flex flex-col justify-center text-black">
@@ -46,7 +87,12 @@ export const SettingScreen = () => {
                     {/* Transport */}
                     <UnitCard toggleShowModal={() => { toggleShowModal("unit") }} />
                     {/* Package type */}
-                    <CountryCard toggleShowModal={() => { toggleShowModal("country") }} />
+                    <CountryCard
+                        toggleShowModal={() => { toggleShowModal("country") }}
+                        toggleShowDelModal={() => toggleShowDeleteModal("countries")}
+                        handleSetItemId={handleSetItemId}
+
+                    />
                 </div>
             </div>
 
@@ -54,6 +100,12 @@ export const SettingScreen = () => {
             <AddPackageModal isVisible={showModal && (popup == 'package')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
             <AddUnitModal isVisible={showModal && (popup == 'unit')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
             <AddCountryModal isVisible={showModal && (popup == 'country')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
+
+            <DeleteCountryModal
+                isVisible={showDeleteModal}
+                onClose={() => { toggleShowDeleteModal("countries") }}
+                onYesClick={handleDeleteItem}
+            />
 
         </div>
     );

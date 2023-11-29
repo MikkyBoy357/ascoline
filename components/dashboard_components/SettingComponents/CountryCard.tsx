@@ -7,10 +7,12 @@ export interface Country {
 }
 
 interface CountryCardProps {
-    toggleShowModal: () => void
+    toggleShowModal: () => void,
+    toggleShowDelModal: () => void,
+    handleSetItemId: (id: string) => void,
 }
 
-export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal }) => {
+export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggleShowDelModal, handleSetItemId }) => {
 
     useEffect(() => {
         fetchCountryData()
@@ -78,7 +80,10 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal }) => 
                                             <div className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
                                                 <div className="text-indigo-500 text-xs font-medium font-['Inter']">Modifier</div>
                                             </div>
-                                            <div className="ml-4 h-8 px-4 bg-red-600 rounded-lg justify-center items-center inline-flex">
+                                            <div onClick={() => {
+                                                toggleShowDelModal();
+                                                handleSetItemId(item._id)
+                                            }} className="ml-4 h-8 px-4 bg-red-600 rounded-lg justify-center items-center inline-flex">
                                                 <div className="text-white text-xs font-medium font-['Inter']">Supprimer</div>
                                             </div>
                                         </td>
