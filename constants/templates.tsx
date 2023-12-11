@@ -1,4 +1,4 @@
-export const BaseUrl: string = 'http://18.130.232.167:3000';
+export const BaseUrl: string = 'https://18.130.232.167:3000';
 
 export type TemplateInput = {
     id: string;
