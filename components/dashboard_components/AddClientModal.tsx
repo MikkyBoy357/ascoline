@@ -1,4 +1,4 @@
-import { USER_CONFIG_INPUTS } from '@/constants/templates';
+import { BaseUrl, USER_CONFIG_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 
@@ -49,7 +49,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/auth/signup', {
+            const response = await fetch(`${BaseUrl}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

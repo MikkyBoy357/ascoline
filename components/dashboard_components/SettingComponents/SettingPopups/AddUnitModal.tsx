@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 
@@ -35,7 +35,7 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, text, onC
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/measureUnits', {
+            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

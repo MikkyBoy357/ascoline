@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { LOGIN_INPUTS } from "@/constants/templates";
+import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import { renderInputField } from "../signup";
@@ -25,7 +25,7 @@ export const Login = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/auth/login', {
+            const response = await fetch(`${BaseUrl}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

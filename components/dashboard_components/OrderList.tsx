@@ -5,6 +5,7 @@ import { TransportType } from "./SettingComponents/TransportCard";
 import { PackageType } from "./SettingComponents/PackageCard";
 import { Country } from "./SettingComponents/CountryCard";
 import { Client } from "./ClientList";
+import { BaseUrl } from "@/constants/templates";
 
 export interface Commande {
     _id: string;
@@ -59,7 +60,7 @@ export const OrderListComponent = () => {
     // Function to fetch commandes data
     const fetchCommandesData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/commandes", {
+            const response = await fetch(`${BaseUrl}/commandes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +84,7 @@ export const OrderListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/packageTypes", {
+            const response = await fetch(`${BaseUrl}/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -107,7 +108,7 @@ export const OrderListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/transportTypes", {
+            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -131,7 +132,7 @@ export const OrderListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/measureUnits", {
+            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -155,7 +156,7 @@ export const OrderListComponent = () => {
     // Function to fetch country data
     const fetchCountryData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/countries", {
+            const response = await fetch(`${BaseUrl}/countries`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -179,7 +180,7 @@ export const OrderListComponent = () => {
     // Function to fetch clients data
     const fetchClientsData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/clients", {
+            const response = await fetch(`${BaseUrl}/clients`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

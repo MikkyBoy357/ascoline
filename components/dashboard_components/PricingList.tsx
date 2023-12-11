@@ -4,6 +4,7 @@ import { AddPricingModal } from "./AddPricingModal";
 import { PackageType } from "./SettingComponents/PackageCard";
 import { TransportType } from "./SettingComponents/TransportCard";
 import { MeasureUnit } from "./SettingComponents/UnitCard";
+import { BaseUrl } from "@/constants/templates";
 
 interface Pricing {
     _id: string;
@@ -42,7 +43,7 @@ export const PricingListComponent = () => {
     // Function to fetch pricings data
     const fetchPricingsData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/pricings", {
+            const response = await fetch(`${BaseUrl}/pricings`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -66,7 +67,7 @@ export const PricingListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/packageTypes", {
+            const response = await fetch(`${BaseUrl}/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +91,7 @@ export const PricingListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/transportTypes", {
+            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -114,7 +115,7 @@ export const PricingListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/measureUnits", {
+            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

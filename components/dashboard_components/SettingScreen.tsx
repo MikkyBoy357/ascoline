@@ -8,6 +8,7 @@ import { AddPackageModal } from "./SettingComponents/SettingPopups/AddPackageMod
 import { AddUnitModal } from "./SettingComponents/SettingPopups/AddUnitModal";
 import { AddCountryModal } from "./SettingComponents/SettingPopups/AddCountryModal";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import { BaseUrl } from "@/constants/templates";
 
 
 
@@ -50,7 +51,7 @@ export const SettingScreen = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting country with ID: ${itemId}`);
-            const response = await fetch(`http://localhost:3000/${delPopup}/${itemId}`, {
+            const response = await fetch(`${BaseUrl}/${delPopup}/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

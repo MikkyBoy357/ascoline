@@ -1,3 +1,4 @@
+import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
 
 export interface TransportType {
@@ -21,7 +22,7 @@ export const TransportCard: React.FC<TransportCardProps> = ({ toggleShowModal })
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/transportTypes", {
+            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

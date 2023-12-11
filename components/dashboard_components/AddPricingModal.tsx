@@ -1,4 +1,4 @@
-import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS } from '@/constants/templates';
+import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import { PackageType } from './SettingComponents/PackageCard';
@@ -59,7 +59,7 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/pricings', {
+            const response = await fetch(`${BaseUrl}/pricings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

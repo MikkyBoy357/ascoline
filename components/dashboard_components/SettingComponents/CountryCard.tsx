@@ -1,3 +1,4 @@
+import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
 
 export interface Country {
@@ -23,7 +24,7 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggl
     // Function to fetch country data
     const fetchCountryData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/countries", {
+            const response = await fetch(`${BaseUrl}/countries`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

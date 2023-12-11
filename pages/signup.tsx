@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { LOGIN_INPUTS, SIGN_UP_INPUTS } from "@/constants/templates";
+import { BaseUrl, LOGIN_INPUTS, SIGN_UP_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 
@@ -82,7 +82,7 @@ export const SignupComponent = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:3000/auth/signup', {
+            const response = await fetch(`${BaseUrl}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

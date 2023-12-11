@@ -1,3 +1,4 @@
+import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
 
 export interface PackageType {
@@ -21,7 +22,7 @@ export const PackageCard: React.FC<PackageCardProps> = ({ toggleShowModal }) => 
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/packageTypes", {
+            const response = await fetch(`${BaseUrl}/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

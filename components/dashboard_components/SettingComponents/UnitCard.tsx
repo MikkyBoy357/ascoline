@@ -1,3 +1,4 @@
+import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
 
 export interface MeasureUnit {
@@ -21,7 +22,7 @@ export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal }) => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/measureUnits", {
+            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

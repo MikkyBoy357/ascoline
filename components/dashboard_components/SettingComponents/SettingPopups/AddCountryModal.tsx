@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 
@@ -35,7 +35,7 @@ export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, tex
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/countries', {
+            const response = await fetch(`${BaseUrl}/countries`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

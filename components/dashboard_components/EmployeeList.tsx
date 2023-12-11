@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AddClientModal } from "./AddClientModal";
+import { BaseUrl } from "@/constants/templates";
 
 interface Employee {
     _id: string;
@@ -37,7 +38,7 @@ export const EmployeeListComponent = () => {
     // Function to fetch employees data
     const fetchEmployeesData = async () => {
         try {
-            const response = await fetch("http://localhost:3000/employees", {
+            const response = await fetch(`${BaseUrl}/employees`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
