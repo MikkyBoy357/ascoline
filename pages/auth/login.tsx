@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import { renderInputField } from "../signup";
 
-export const Login = () => {
+const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
@@ -107,3 +107,5 @@ export const Login = () => {
         </form>
     );
 };
+
+export default Login;
