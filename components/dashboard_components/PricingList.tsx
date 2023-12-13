@@ -6,12 +6,21 @@ import { TransportType } from "./SettingComponents/TransportCard";
 import { MeasureUnit } from "./SettingComponents/UnitCard";
 import { BaseUrl } from "@/constants/templates";
 
-interface Pricing {
+export interface Pricing {
     _id: string;
     price: number;
-    typeColis: string;
-    transportType: string;
-    unit: string;
+    typeColis: {
+        _id: string;
+        label: string;
+    };
+    transportType: {
+        _id: string;
+        label: string;
+    };
+    unit: {
+        _id: string;
+        label: string;
+    };
     description: string;
     quantity: number;
     status: string;
@@ -170,9 +179,9 @@ export const PricingListComponent = () => {
                                     <tbody>
                                         {pricingsData.map((item) => (
                                             <tr key={item._id} className="text-sm">
-                                                <td className="py-2 px-4 border-b">{item.transportType}</td>
-                                                <td className="py-2 px-4 border-b">{item.typeColis}</td>
-                                                <td className="py-2 px-4 border-b">{item.price}/{item.unit}</td>
+                                                <td className="py-2 px-4 border-b">{item.transportType.label}</td>
+                                                <td className="py-2 px-4 border-b">{item.typeColis.label}</td>
+                                                <td className="py-2 px-4 border-b">{item.price}/{item.unit.label}</td>
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
                                                     <div className="w-32 h-8 p-2 rounded-lg border border-indigo-500 justify-center items-center inline-flex">

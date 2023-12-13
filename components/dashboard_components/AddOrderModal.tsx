@@ -3,7 +3,10 @@ import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { Commande } from './OrderList';
 import { Client } from './ClientList';
+// import ClientSelectComponent, { Unit } from '../MyInputFieldComponents';
+import UnitSelectComponent from '../MyUnitSelectComponent';
 import ClientSelectComponent from '../MyInputFieldComponents';
+import { MeasureUnit } from './SettingComponents/UnitCard';
 
 export interface AddOrderModalProps {
     isVisible: Boolean,
@@ -13,7 +16,7 @@ export interface AddOrderModalProps {
     selectedOrder: Commande,
     packageTypesData: string[],
     transportTypesData: string[],
-    measureUnitsData: string[],
+    measureUnitsData: MeasureUnit[],
     countryData: string[],
     clientsData: Client[],
 }
@@ -45,13 +48,22 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         }
     };
 
+    const handleSelectUnit = (event: React.ChangeEvent<HTMLSelectElement>, dataList: any[]) => {
+        const selectedId = event.target.value;
+        const selected = measureUnitsData.find(item => item._id === selectedId);
+
+        if (selected) {
+            setUnit(selected); // Assign the selected Client object to state
+        }
+    };
+
     // text fields
     const [trackingId, setTrackingId] = useState("");
     const [typeColis, setTypeColis] = useState("");
     const [transportType, setTransportType] = useState("");
     const [client, setClient] = useState<Client>();
     const [description, setDescription] = useState("");
-    const [unit, setUnit] = useState("");
+    const [unit, setUnit] = useState<MeasureUnit>();
     const [pays, setPays] = useState("");
     const [quantity, setQuantity] = useState("");
     const [ville, setVille] = useState("");
@@ -147,7 +159,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                 transportType.trim() === '' ||
                 client?._id.trim() === '' ||
                 description.trim() === '' ||
-                unit.trim() === '' ||
+                unit?._id.trim() === '' ||
                 pays.trim() === '' ||
                 quantity.trim() === '' ||
                 ville.trim() === '' ||
@@ -244,7 +256,10 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                                         (e: any) => setTransportType(e.target.value),
                                         transportTypesData
                                     )}
-                                    <ClientSelectComponent id={ADD_ORDER_INPUTS[3].id} value={client?._id ?? ""} handleSelect={handleSelectClient} selectList={clientsData} />
+                                    <div className='flex flex-col'>
+                                        <p>Client</p>
+                                        <ClientSelectComponent id={ADD_ORDER_INPUTS[3].id} value={client?._id ?? ""} handleSelect={handleSelectClient} selectList={clientsData} />
+                                    </div>
                                     {/* { }
                                     {renderInputField(
                                         ADD_ORDER_INPUTS[3],
@@ -256,13 +271,17 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     {renderInputField(ADD_ORDER_INPUTS[4], description, (e) => setDescription(e.target.value))}
-                                    {renderInputField(
+                                    {/* {renderInputField(
                                         ADD_ORDER_INPUTS[5],
                                         unit,
                                         (e) => setUnit(e.target.value),
                                         (e: any) => setUnit(e.target.value),
                                         measureUnitsData
-                                    )}
+                                    )} */}
+                                    <div>
+                                        <p>Unite</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[5].id} value={unit?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, measureUnitsData)} selectList={measureUnitsData} />
+                                    </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     {renderInputField(

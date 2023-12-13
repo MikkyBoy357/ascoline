@@ -1,4 +1,4 @@
-import Layout, { SIDEBAR_ITEMS } from "@/components/Layout";
+
 import React, { useContext, useEffect, useState } from "react";
 import { ADD_ORDER_INPUTS, USER_CONFIG_INPUTS } from "@/constants/templates";
 import { AddOrderModal } from "@/components/dashboard_components/AddOrderModal";
@@ -8,6 +8,7 @@ import { ClientListComponent } from "@/components/dashboard_components/ClientLis
 import { SidebarContext, SidebarContextProvider } from "@/context/sidebar-context";
 import { EmployeeListComponent } from "@/components/dashboard_components/EmployeeList";
 import { SettingScreen } from "@/components/dashboard_components/SettingScreen";
+import Layout, { SIDEBAR_ITEMS } from "./dashboard/layout";
 
 function Dashboard() {
     const [item, setItem] = useState(SIDEBAR_ITEMS[0]);
@@ -24,7 +25,6 @@ function Dashboard() {
 
     return (
         <SidebarContextProvider>
-            <Layout title="" handleChangeItem={handleChangeItem}>
                 <div className="text-blue-400">
                     {/* <PricingListComponent /> */}
                     {/* <div className="text-green-400">hello{sidebarSectionContext?.selectedSidebarItem.label}</div> */}
@@ -49,7 +49,7 @@ function Dashboard() {
                         }
                     })()}
                 </div>
-            </Layout></SidebarContextProvider>
+            </SidebarContextProvider>
 
     )
 }

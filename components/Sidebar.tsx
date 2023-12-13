@@ -1,8 +1,11 @@
+'use client';
+
 import React, { Fragment, useContext, useState } from 'react';
 import { useRouter } from "next/router";
 // import { Link } from "react-router-dom";
 import Image from "next/image";
 import { SidebarContext } from '@/context/sidebar-context';
+import Link from 'next/link';
 
 export interface SidebarItem {
     id: string;
@@ -14,17 +17,17 @@ export interface SidebarItem {
 interface Props {
     items: SidebarItem[];
     onShowPopup: () => void;
-    handleChangeItem: (val: any) => void;
+
 }
 
-const Sidebar: React.FC<Props> = ({ items, onShowPopup, handleChangeItem }) => {
+const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
     const sidebarSectionContext = useContext(SidebarContext);
 
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
     const handleClick = () => {
-        router.push('/firsthome');
+        router.push('/dashboard');
     };
     const isActive = (url: string): boolean => {
         return router.pathname === url;
@@ -38,8 +41,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup, handleChangeItem }) => {
         // console.log(sidebarSectionContext?.selectedSidebarItem);
         sidebarSectionContext?.changeSidebarItem(item);
         console.log(sidebarSectionContext?.selectedSidebarItem, "omo");
-        handleChangeItem(item);
-        // router.push(item.url)
+        router.push(item.url)
     }
 
     return (
@@ -78,8 +80,9 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup, handleChangeItem }) => {
                             <Fragment key={index}>
                                 <li className={`mb-6 ml-8 text-gray-500 hover:text-gray-700 transition duration-300 ${isActive(item.url) ? 'blue-gray' : 'blue-gray'
                                     } ${item === item ? 'font-semibold' : ''} hover:cursor-pointer`} onClick={() => { handleClickSidebarItem(item) }}>
-                                    <div className='flex flex-row'>
-                                        <Image className='mr-3' src={`/sidebar_icons/${item.id}.svg`} alt="Jema.ai" width="25" height="100" /> {item.label}</div>
+                                    <Link href={item.url} className='flex flex-row'>
+                                        <Image className='mr-3' src={`/sidebar_icons/${item.id}.svg`} alt="Jema.ai" width="25" height="100" /> {item.label}
+                                    </Link>
                                 </li>
                             </Fragment>
                         ))}

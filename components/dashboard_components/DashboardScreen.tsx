@@ -1,0 +1,66 @@
+import { BaseUrl } from '@/constants/templates'
+import React, { useState, useEffect } from 'react'
+
+const DashboardScreen = () => {
+    const [totalColis, setTotalColis] = useState(0)
+    const [totalClients, setTotalClients] = useState(0)
+    const [colisDelivered, setColisDelivered] = useState(0)
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`${BaseUrl}/dashboard`, {
+                method: 'GET',
+                // You can add headers or body payload if needed
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setTotalColis(data.totalColis || 0);
+                setTotalClients(data.totalClients || 0);
+                setColisDelivered(data.totalColisDelivered || 0);
+            } else {
+                // Handle error cases
+                throw new Error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // Display an alert dialog for the error
+            alert('Failed to fetch data. Please try again.');
+        }
+    };
+
+    useEffect(() => {
+        console.log("AHHHH");
+        fetchData();
+        // You can add dependencies or modify the effect trigger as needed
+    }, []); // Empty dependency array ensures this runs only once on component mount
+
+
+    return (
+        <div className='text-black p-5'>
+            {/* First Row */}
+            <div className='flex flex-row justify-evenly'>
+                <DashboardCard title={'Nombre total de colis'} label={`${totalColis}`} color='bg-indigo-600' />
+                <DashboardCard title={'Nombre total des clients'} label={`${totalClients}`} color='bg-amber-500' />
+                <DashboardCard title={'Nombre total de colis livré'} label={`${colisDelivered}`} color='bg-indigo-600' />
+            </div>
+        </div>
+    )
+}
+
+interface Props {
+    title: string;
+    label: string;
+    color: string;
+}
+
+const DashboardCard: React.FC<Props> = ({ title, label, color }) => {
+    return (
+        <div className={`w-64 h-40 p-4 ${color} rounded-lg justify-center items-center gap-2 flex flex-col`}>
+            <div className="text-white text-lg font-normal">{title}</div>
+            <div className="text-white text-lg font-normal">{label}</div>
+        </div>
+    )
+}
+
+export default DashboardScreen

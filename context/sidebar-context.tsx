@@ -1,5 +1,5 @@
+import { SIDEBAR_ITEMS } from '@/pages/dashboard/layout';
 import React, { createContext, useState } from 'react';
-import { SIDEBAR_ITEMS } from '../components/Layout';
 
 export type SidebarItemType = {
     label: "Account",

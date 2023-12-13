@@ -1,19 +1,16 @@
 import React from 'react';
-import { Client } from './dashboard_components/ClientList';
-
-// export interface Unit {
-//     _id: string;
-//     label: string;
-// }
+import { MeasureUnit } from './dashboard_components/SettingComponents/UnitCard';
+import { TransportType } from './dashboard_components/SettingComponents/TransportCard';
+import { PackageType } from './dashboard_components/SettingComponents/PackageCard';
 
 interface SelectProps {
     id: string;
     value: string;
     handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    selectList: Client[];
+    selectList: MeasureUnit[] | TransportType[] | PackageType[];
 }
 
-const ClientSelectComponent: React.FC<SelectProps> = ({
+const UnitSelectComponent: React.FC<SelectProps> = ({
     id,
     value,
     handleSelect,
@@ -29,11 +26,11 @@ const ClientSelectComponent: React.FC<SelectProps> = ({
             <option value="">Select</option>
             {selectList.map((item) => (
                 <option key={item._id} value={item._id}>
-                    {`${item.lastName} ${item.firstName}`}
+                    {`${item.label}`}
                 </option>
             ))}
         </select>
     );
 };
 
-export default ClientSelectComponent;
+export default UnitSelectComponent;

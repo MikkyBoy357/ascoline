@@ -6,6 +6,8 @@ import { PackageType } from "./SettingComponents/PackageCard";
 import { Country } from "./SettingComponents/CountryCard";
 import { Client } from "./ClientList";
 import { BaseUrl } from "@/constants/templates";
+import { Pricing } from "./PricingList";
+// import { Unit } from "../MyInputFieldComponents";
 
 export interface Commande {
     _id: string;
@@ -13,8 +15,9 @@ export interface Commande {
     typeColis: string;
     transportType: string;
     client: Client;
+    pricing: Pricing;
     description: string;
-    unit: string;
+    unit: MeasureUnit;
     pays: string;
     quantity: number;
     ville: string;
@@ -225,16 +228,17 @@ export const OrderListComponent = () => {
                             <div className="container mx-auto mt-8">
                                 <table className="min-w-full">
                                     <thead>
-                                        <tr className="text-gray-500 text-sm">
+                                        <tr className="text-gray-500 text-sm text-left">
                                             <th className="py-2 px-4 border-b">Clients</th>
                                             <th className="py-2 px-4 border-b">Pays</th>
                                             <th className="py-2 px-4 border-b">Villes</th>
                                             <th className="py-2 px-4 border-b">Type colis</th>
                                             <th className="py-2 px-4 border-b">Description</th>
+                                            <th className="py-2 px-4 border-b">Price</th>
                                             <th className="py-2 px-4 border-b">Tracking id</th>
                                             <th className="py-2 px-4 border-b">Unité</th>
                                             <th className="py-2 px-4 border-b">Type de transport.</th>
-                                            <th className="py-2 px-4 border-b">Statut</th>
+                                            <th className="py-2 px-4 border-b text-center">Statut</th>
                                             <th className="py-2 px-4 border-b">Actions</th>
                                         </tr>
                                     </thead>
@@ -246,8 +250,9 @@ export const OrderListComponent = () => {
                                                 <td className="py-2 px-4 border-b">{item.ville}</td>
                                                 <td className="py-2 px-4 border-b">{item.typeColis}</td>
                                                 <td className="py-2 px-4 border-b">{item.description}</td>
+                                                <td className="py-2 px-4 border-b">{item.pricing.price}</td>
                                                 <td className="py-2 px-4 border-b">{item.trackingId}</td>
-                                                <td className="py-2 px-4 border-b">{item.unit}</td>
+                                                <td className="py-2 px-4 border-b">{item.unit.label}</td>
                                                 <td className="py-2 px-4 border-b">{item.transportType}</td>
                                                 <td className="py-2 px-4 border-b">
                                                     <div className={`px-4 py-2 rounded-3xl ${item.status === "Commande Arrivée" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status === "Commande Arrivée" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
@@ -276,7 +281,7 @@ export const OrderListComponent = () => {
                 selectedOrder={selectedOrder!}
                 packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
                 transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
-                measureUnitsData={measureUnitsData.map((measureUnit: MeasureUnit) => measureUnit.label)}
+                measureUnitsData={measureUnitsData}
                 countryData={countryData.map((country: Country) => country.label)}
                 clientsData={clientsData}
             />
