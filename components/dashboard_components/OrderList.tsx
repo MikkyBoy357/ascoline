@@ -12,10 +12,10 @@ import { Pricing } from "./PricingList";
 export interface Commande {
     _id: string;
     trackingId: string;
-    typeColis: string;
-    transportType: string;
+    typeColis: PackageType;
+    transportType: TransportType;
     client: Client;
-    pricing: Pricing;
+    pricing?: Pricing;
     description: string;
     unit: MeasureUnit;
     pays: string;
@@ -75,6 +75,7 @@ export const OrderListComponent = () => {
             }
 
             const data: Commande[] = await response.json();
+            console.log(data, "omo");
             // Set the fetched data into state
             setCommandesData(data);
 
@@ -248,12 +249,12 @@ export const OrderListComponent = () => {
                                                 <td className="py-2 px-4 border-b">{item.client.lastName} {item.client.firstName}</td>
                                                 <td className="py-2 px-4 border-b">{item.pays}</td>
                                                 <td className="py-2 px-4 border-b">{item.ville}</td>
-                                                <td className="py-2 px-4 border-b">{item.typeColis}</td>
+                                                <td className="py-2 px-4 border-b">{item.typeColis.label}</td>
                                                 <td className="py-2 px-4 border-b">{item.description}</td>
-                                                <td className="py-2 px-4 border-b">{item.pricing.price}</td>
+                                                <td className="py-2 px-4 border-b">{item.pricing?.price ?? "N/A"}</td>
                                                 <td className="py-2 px-4 border-b">{item.trackingId}</td>
                                                 <td className="py-2 px-4 border-b">{item.unit.label}</td>
-                                                <td className="py-2 px-4 border-b">{item.transportType}</td>
+                                                <td className="py-2 px-4 border-b">{item.transportType.label}</td>
                                                 <td className="py-2 px-4 border-b">
                                                     <div className={`px-4 py-2 rounded-3xl ${item.status === "Commande Arrivée" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status === "Commande Arrivée" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
                                                 </td>
@@ -279,8 +280,8 @@ export const OrderListComponent = () => {
                 text='Loading Content Summary'
                 isModify={modify}
                 selectedOrder={selectedOrder!}
-                packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
-                transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
+                packageTypesData={packageTypesData}
+                transportTypesData={transportTypesData}
                 measureUnitsData={measureUnitsData}
                 countryData={countryData.map((country: Country) => country.label)}
                 clientsData={clientsData}

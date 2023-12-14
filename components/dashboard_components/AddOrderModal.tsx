@@ -7,6 +7,8 @@ import { Client } from './ClientList';
 import UnitSelectComponent from '../MyUnitSelectComponent';
 import ClientSelectComponent from '../MyInputFieldComponents';
 import { MeasureUnit } from './SettingComponents/UnitCard';
+import { PackageType } from './SettingComponents/PackageCard';
+import { TransportType } from './SettingComponents/TransportCard';
 
 export interface AddOrderModalProps {
     isVisible: Boolean,
@@ -14,8 +16,8 @@ export interface AddOrderModalProps {
     onClose: () => void,
     isModify: Boolean,
     selectedOrder: Commande,
-    packageTypesData: string[],
-    transportTypesData: string[],
+    packageTypesData: PackageType[],
+    transportTypesData: TransportType[],
     measureUnitsData: MeasureUnit[],
     countryData: string[],
     clientsData: Client[],
@@ -48,19 +50,36 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         }
     };
 
-    const handleSelectUnit = (event: React.ChangeEvent<HTMLSelectElement>, dataList: any[]) => {
+    const handleSelectUnit = (event: React.ChangeEvent<HTMLSelectElement>, dataList: MeasureUnit[] | TransportType[] | PackageType[]) => {
         const selectedId = event.target.value;
-        const selected = measureUnitsData.find(item => item._id === selectedId);
+        const selected = dataList.find(item => item._id === selectedId);
 
         if (selected) {
-            setUnit(selected); // Assign the selected Client object to state
+            // Check if the selected object exists in the measureUnitsData array
+            const existsInMeasureUnitsData = measureUnitsData.some(unit => unit._id === selected._id);
+            const existsInTransportData = transportTypesData.some(unit => unit._id === selected._id);
+            const existsInPackageData = packageTypesData.some(unit => unit._id === selected._id);
+
+            if (existsInMeasureUnitsData) {
+                setUnit(selected);
+                // Assign the selected object to state since it exists in measureUnitsData array
+            } else if (existsInTransportData) {
+                setTransportType(selected)
+            } else if (existsInPackageData) {
+                setTypeColis(selected)
+            } else {
+                // Handle the case when selected object doesn't exist in measureUnitsData array
+                console.log('Selected object does not exist in measureUnitsData array.');
+                // Perform necessary actions here
+            }
+            // setUnit(selected); // Assign the selected Client object to state
         }
     };
 
     // text fields
     const [trackingId, setTrackingId] = useState("");
-    const [typeColis, setTypeColis] = useState("");
-    const [transportType, setTransportType] = useState("");
+    const [typeColis, setTypeColis] = useState<PackageType>();
+    const [transportType, setTransportType] = useState<TransportType>();
     const [client, setClient] = useState<Client>();
     const [description, setDescription] = useState("");
     const [unit, setUnit] = useState<MeasureUnit>();
@@ -138,11 +157,11 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         try {
             const newOrder = {
                 trackingId: trackingId,
-                typeColis: typeColis,
-                transportType: transportType,
+                typeColis: typeColis?._id,
+                transportType: transportType?._id,
                 client: client?._id,
                 description: description,
-                unit: unit,
+                unit: unit?._id,
                 pays: pays,
                 quantity: Number(quantity),
                 ville: ville,
@@ -150,13 +169,13 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                 specialNote: specialNote,
             };
 
-            console.log("NewOrder", newOrder)
+            console.log("NewOrder JSON Body", newOrder)
 
             // Perform validation to check if all variables are not empty
             if (
                 trackingId.trim() === '' ||
-                typeColis.trim() === '' ||
-                transportType.trim() === '' ||
+                typeColis?._id.trim() === '' ||
+                transportType?._id.trim() === '' ||
                 client?._id.trim() === '' ||
                 description.trim() === '' ||
                 unit?._id.trim() === '' ||
@@ -240,22 +259,18 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
                                     {renderInputField(ADD_ORDER_INPUTS[0], trackingId, (e) => setTrackingId(e.target.value))}
-                                    {renderInputField(
-                                        ADD_ORDER_INPUTS[1],
-                                        typeColis,
-                                        (e) => setTypeColis(e.target.value),
-                                        (e: any) => setTypeColis(e.target.value),
-                                        packageTypesData
-                                    )}
+                                    {/* // Package Select */}
+                                    <div>
+                                        <p>Type de colis</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[1].id} value={typeColis?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, packageTypesData)} selectList={packageTypesData} />
+                                    </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(
-                                        ADD_ORDER_INPUTS[2],
-                                        transportType,
-                                        (e) => setTransportType(e.target.value),
-                                        (e: any) => setTransportType(e.target.value),
-                                        transportTypesData
-                                    )}
+                                    {/* // Transport Select */}
+                                    <div>
+                                        <p>Type de Transport</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[2].id} value={transportType?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, transportTypesData)} selectList={transportTypesData} />
+                                    </div>
                                     <div className='flex flex-col'>
                                         <p>Client</p>
                                         <ClientSelectComponent id={ADD_ORDER_INPUTS[3].id} value={client?._id ?? ""} handleSelect={handleSelectClient} selectList={clientsData} />
@@ -278,6 +293,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                                         (e: any) => setUnit(e.target.value),
                                         measureUnitsData
                                     )} */}
+                                    {/* // Unit Select */}
                                     <div>
                                         <p>Unite</p>
                                         <UnitSelectComponent id={ADD_ORDER_INPUTS[5].id} value={unit?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, measureUnitsData)} selectList={measureUnitsData} />
