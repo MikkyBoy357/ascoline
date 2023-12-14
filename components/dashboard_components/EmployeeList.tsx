@@ -2,37 +2,39 @@ import { useEffect, useState } from "react";
 import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 
-interface Employee {
+export interface Employee {
     _id: string;
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
     status: string;
+    address: string;
 }
 
 export const EmployeeListComponent = () => {
 
-    // // Dummy data for demonstration
-    // const data = [
-    //     { id: 1, nom: 'Doe', prenom: 'John', email: 'john.doe@example.com', telephone: '123-456-7890', status: 'Actif' },
-    //     { id: 2, nom: 'Cristiano Ronaldo', prenom: 'Jane', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Inactif' },
-    //     { id: 2, nom: 'BATCHO', prenom: 'Harold', email: 'jane.smith@example.com', telephone: '987-654-3210', status: 'Actif' },
-    //     // Add more data as needed
-    // ];
+    const [modify, setModify] = useState(false);
 
-    const [employeesData, setEmployeesData] = useState<Employee[]>([]);
-
+    const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
         setShowModal(!showModal);
+        if (showModal) { setModify(false) }
     }
+
+    const handleModify = (item: Employee) => {
+        setModify(true)
+        setSelectedEmployee(item)
+        toggleShowModal()
+    }
+
+    const [employeesData, setEmployeesData] = useState<Employee[]>([]);
 
     useEffect(() => {
         fetchEmployeesData()
     }, [])
-
 
 
     // Function to fetch employees data
@@ -102,7 +104,7 @@ export const EmployeeListComponent = () => {
                                                 </td>
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
-                                                    <div className="flex items-center justify-center p-[8px] relative rounded-[10px] border border-solid border-[#5c73db]">
+                                                    <div onClick={() => handleModify(item)} className="flex items-center justify-center p-[8px] relative rounded-[10px] border border-solid border-[#5c73db]">
                                                         <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#5c73db] text-[12px] tracking-[0] leading-[normal]">
                                                             Modifier
                                                         </div>
@@ -118,7 +120,13 @@ export const EmployeeListComponent = () => {
                 </div>
             </div>
 
-            <AddClientModal isVisible={showModal} onClose={toggleShowModal} type='employee' />
+            <AddClientModal
+                isVisible={showModal}
+                onClose={toggleShowModal}
+                type='employee'
+                isModify={modify}
+                selectedUser={selectedEmployee!}
+            />
 
         </div>
     );

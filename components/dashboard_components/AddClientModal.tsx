@@ -1,14 +1,24 @@
 import { BaseUrl, USER_CONFIG_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Client } from './ClientList';
+import { Employee } from './EmployeeList';
 
 export interface AddClientModalProps {
     isVisible: Boolean,
     type: string,
     onClose: () => void,
+    isModify: Boolean,
+    selectedUser: Client | Employee,
 }
 
-export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type, onClose }) => {
+export const AddClientModal: React.FC<AddClientModalProps> = ({
+    isVisible,
+    type,
+    onClose,
+    isModify,
+    selectedUser
+}) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
@@ -22,6 +32,60 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
     const [address, setAddress] = useState("");
     const [password, setPassword] = useState("");
 
+    // auto fill text field when user is editing an order
+    useEffect(() => {
+        if (isModify) {
+            console.log("====> Modify <====")
+
+            setEmail(selectedUser.email)
+            setPhone(selectedUser.phone)
+            setLastName(selectedUser.lastName)
+            setFirstName(selectedUser.firstName)
+            setAddress(selectedUser.address ?? "")
+            setPassword("")
+        }
+    }, [])
+
+    const [isChanged, setIsChanged] = useState(false);
+
+    const wasChanged = () => {
+        if (
+            email !== selectedUser.email ||
+            phone !== selectedUser.phone ||
+            lastName !== selectedUser.lastName ||
+            firstName !== selectedUser.firstName ||
+            address !== "" ||
+            password !== ""
+        ) {
+            setIsChanged(true)
+        } else {
+            setIsChanged(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isModify) {
+            wasChanged();
+        }
+    }, [
+        email,
+        phone,
+        lastName,
+        firstName,
+        address,
+        password
+    ]);
+
+    const getEndpoint = () => {
+        if (type == 'client') {
+            return "clients"
+        } else if (type = 'employee') {
+            return "employees"
+        } else {
+            return "N/A"
+        }
+    }
+
     // Function to add client
     const addClient = async () => {
         try {
@@ -31,10 +95,13 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
                 lastName: lastName,
                 firstName: firstName,
                 address: address,
-                password: password,
+                // password: password,
                 status: 'actif',
                 type: type
             };
+
+            console.log("NewOrder JSON Body", newClient)
+            console.log(type)
 
             // Perform validation to check if all variables are not empty
             if (
@@ -42,20 +109,35 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
                 phone.trim() === '' ||
                 lastName.trim() === '' ||
                 firstName.trim() === '' ||
-                address.trim() === '' ||
-                password.trim() === ''
+                address.trim() === ''
+                // || password.trim() === ''
             ) {
                 alert('Please fill in all fields.');
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/auth/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newClient),
-            });
+            var response;
+
+            if (!isModify) {
+                response = await fetch(`${BaseUrl}/auth/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newClient),
+                });
+            } else {
+                if (!isChanged) {
+                    return alert("Values were not changed");
+                }
+                response = await fetch(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newClient),
+                });
+            }
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -63,8 +145,8 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
                 throw new Error(`Failed to add ${type}`);
             }
 
-            console.log(`${type} added successfully!`);
-            alert(`${type} added successfully!`); // Show alert dialog
+            console.log(`${type} ${isModify ? "edited" : "added"} successfully!`);
+            alert(`${type} ${isModify ? "edited" : "added"} successfully!`); // Show alert dialog
 
             // Clear form fields after successful addition
             // setEmail('');
@@ -91,7 +173,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isVisible, type,
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                Enregistrement
+                                {isModify ? `Edit` : `Enregistrement`}
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
