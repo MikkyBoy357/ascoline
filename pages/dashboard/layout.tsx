@@ -35,11 +35,11 @@ export const SIDEBAR_ITEMS: any = [
         label: "Tarification",
         url: "/dashboard/tarification",
     },
-    {
-        id: "profile",
-        label: "Profile",
-        url: "/dashboard/profile",
-    },
+    // {
+    //     id: "profile",
+    //     label: "Profile",
+    //     url: "/dashboard/profile",
+    // },
     {
         id: "setting",
         label: "Setting",

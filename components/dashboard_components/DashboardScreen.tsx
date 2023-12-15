@@ -37,9 +37,9 @@ const DashboardScreen = () => {
 
 
     return (
-        <div className='text-black p-5'>
+        <div className='text-black p-5 flex items-center justify-center h-full'>
             {/* First Row */}
-            <div className='flex flex-row justify-evenly'>
+            <div className='flex gap-10'>
                 <DashboardCard title={'Nombre total de colis'} label={`${totalColis}`} color='bg-indigo-600' />
                 <DashboardCard title={'Nombre total des clients'} label={`${totalClients}`} color='bg-amber-500' />
                 <DashboardCard title={'Nombre total de colis livré'} label={`${colisDelivered}`} color='bg-indigo-600' />
