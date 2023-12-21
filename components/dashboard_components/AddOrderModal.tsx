@@ -90,7 +90,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
     const [specialNote, setSpecialNote] = useState("");
 
     // Order Status enums
-    const statusEnum = ['Réceptionné en Chine', 'Commande Arrivée'];
+    const statusEnum = ["En attente de confirmation", "Confirmation de réception", "En transit", "Commande arrivée", "Commande livré"];
 
     // auto fill text field when user is editing an order
     useEffect(() => {

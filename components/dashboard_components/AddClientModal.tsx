@@ -95,12 +95,12 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
                 lastName: lastName,
                 firstName: firstName,
                 address: address,
-                // password: password,
+                password: password,
                 status: 'actif',
                 type: type
             };
 
-            console.log("NewOrder JSON Body", newClient)
+            console.log("NewUser JSON Body", newClient)
             console.log(type)
 
             // Perform validation to check if all variables are not empty

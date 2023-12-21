@@ -1,14 +1,20 @@
 import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { MeasureUnit } from '../UnitCard';
+import { TransportType } from '../TransportCard';
+import { Country } from '../CountryCard';
+import { PackageType } from '../PackageCard';
 
 export interface AddUnitModalProps {
     isVisible: Boolean,
-    text: string,
+    popup: "transportTypes" | "packageTypes" | "measureUnits" | "countries",
     onClose: () => void,
+    isModify: Boolean,
+    selectedItem: MeasureUnit | TransportType | PackageType | Country,
 }
 
-export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, text, onClose }) => {
+export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, onClose, isModify, selectedItem }) => {
     if (!isVisible) return null;
 
     const handleClose = (e: any) => {
@@ -17,6 +23,38 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, text, onC
 
     const [label, setLabel] = useState("");
     const [description, setDescription] = useState("");
+
+    // auto fill text field when user is editing an order
+    useEffect(() => {
+        if (isModify) {
+            console.log("====> Modify <====")
+
+            setLabel(selectedItem.label)
+            setDescription(selectedItem.description)
+        }
+    }, [])
+
+    const [isChanged, setIsChanged] = useState(false);
+
+    const wasChanged = () => {
+        if (
+            label !== selectedItem.label ||
+            description !== selectedItem.description
+        ) {
+            setIsChanged(true)
+        } else {
+            setIsChanged(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isModify) {
+            wasChanged();
+        }
+    }, [
+        label,
+        description
+    ]);
 
     // Function to add unit
     const addUnit = async () => {
@@ -35,20 +73,35 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, text, onC
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/measureUnits`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newUnit),
-            });
+            var response;
 
-            if (!response.ok) {
-                throw new Error('Failed to add Measure Unit');
+            if (!isModify) {
+                response = await fetch(`${BaseUrl}/${popup}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newUnit),
+                });
+            } else {
+                if (!isChanged) {
+                    return alert("Values were not changed");
+                }
+                response = await fetch(`${BaseUrl}/${popup}/${selectedItem._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newUnit),
+                });
             }
 
-            console.log('Measure Unit added successfully!');
-            alert('Measure Unit added successfully!'); // Show alert dialog
+            if (!response.ok) {
+                throw new Error('Failed to add item');
+            }
+
+            console.log(`item ${isModify ? 'edited' : 'added'} successfully!`);
+            alert(`item ${isModify ? 'edited' : 'added'} successfully!`); // Show alert dialog
 
             // Clear form fields after successful addition
             // setLabel('')
@@ -71,7 +124,7 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, text, onC
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                Enregistrement d'un type de unité
+                                {`${isModify ? 'Edit' : 'Enregistrement'} d'un type de unité`}
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex flex-col items-start gap-[12px] flex-[0_0_auto]">

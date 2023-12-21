@@ -114,19 +114,19 @@ export const SignupComponent = () => {
 
             <div className="bg-[#ffffff] flex flex-row justify-center w-full">
                 <div className="bg-[#ffffff] w-[1440px] h-[1024px] relative">
-                    <div className="inline-flex flex-col items-center gap-[40px] absolute top-[270px] left-[460px]">
+                    <div className="inline-flex flex-col items-center gap-[40px] absolute top-[150px] left-[460px]">
                         <div className="inline-flex flex-col items-center gap-[8px] relative flex-[0_0_auto]">
-                            <div className="relative w-[230px] h-[70px]">
+                            <div className="relative w-[150px] h-[100px]">
                                 <img
-                                    className="absolute w-[54px] h-[54px] top-[5px] left-0"
-                                    height={54}
-                                    width={54}
+                                    className="absolute w-[104px] h-[104px] top-[5px] left-0"
+                                    height={312}
+                                    width={312}
                                     alt="Save care box"
-                                    src="logo.svg"
+                                    src="/logo.jpeg"
                                 />
-                                <div className="absolute w-[144px] h-[40px] top-[24px] left-[60px] [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[32px] tracking-[-0.96px] leading-[normal]">
+                                {/* <div className="absolute w-[144px] h-[40px] top-[24px] left-[60px] [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[32px] tracking-[-0.96px] leading-[normal]">
                                     Ascoline
-                                </div>
+                                </div> */}
                             </div>
                             {/* <FullDark className="!h-[44.76px]" /> */}
                             <p className="w-fit [font-family:'Inter-Medium',Helvetica] font-medium text-black text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">

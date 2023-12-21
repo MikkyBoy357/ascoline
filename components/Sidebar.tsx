@@ -62,10 +62,10 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
                 <div className="w-60 flex flex-col items-center justify-center p-4 hover:cursor-pointer"
                     onClick={handleClick}>
                     <div className="flex flex-row">
-                        <Image src={"logo.svg"} alt="Jema.ai" width="25" height="100" />
-                        <div className="ml-2 [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[22px] tracking-[-0.96px] leading-[normal]">
+                        <Image src={"/logo.jpeg"} alt="Jema.ai" width="75" height="300" />
+                        {/* <div className="ml-2 [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[22px] tracking-[-0.96px] leading-[normal]">
                             Ascoline
-                        </div>
+                        </div> */}
                         {/* <h1 className="text-lg font-normal text-gray-700 text-center">Open Source </h1> */}
                         {/* <h1 className="text-lg font-semibold text-gray-700  text-center">Jasper <i
                             className="fas fa-arrow-right text-primary"/> alternative</h1> */}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import TransportCard from "./SettingComponents/TransportCard";
-import PackageCard from "./SettingComponents/PackageCard";
-import UnitCard from "./SettingComponents/UnitCard";
-import CountryCard from "./SettingComponents/CountryCard";
+import TransportCard, { TransportType } from "./SettingComponents/TransportCard";
+import PackageCard, { PackageType } from "./SettingComponents/PackageCard";
+import UnitCard, { MeasureUnit } from "./SettingComponents/UnitCard";
+import CountryCard, { Country } from "./SettingComponents/CountryCard";
 import { AddTransportModal } from "./SettingComponents/SettingPopups/AddTransportModal";
 import { AddPackageModal } from "./SettingComponents/SettingPopups/AddPackageModal";
 import { AddUnitModal } from "./SettingComponents/SettingPopups/AddUnitModal";
@@ -14,24 +14,29 @@ import { BaseUrl } from "@/constants/templates";
 
 export const SettingScreen = () => {
 
-    // // Dummy data for demonstration
-    // const data = [
-    //     { id: 1, transportType: "avion", typeColis: "CMR", pricePerUnit: '8000F / Kg' },
-    //     { id: 2, transportType: "bateau", typeColis: "Batterie", pricePerUnit: '120 000f / M3' },
-    //     // Add more data as needed
-    // ];
+    const [modify, setModify] = useState(false);
 
-    const [loaded, setLoaded] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<MeasureUnit | TransportType | PackageType | Country>();
 
     // const [popup, setPopup] = useState("")
-    const [popup, setPopup] = useState<"transport" | "package" | "unit" | "country">("transport");
+    const [popup, setPopup] = useState<"transportTypes" | "packageTypes" | "measureUnits" | "countries">("transportTypes");
 
     const [showModal, setShowModal] = useState(false);
 
-    const toggleShowModal = (popup: "transport" | "package" | "unit" | "country") => {
+    const toggleShowModal = (popup: "transportTypes" | "packageTypes" | "measureUnits" | "countries") => {
         setPopup(popup)
         setShowModal(!showModal);
+        if (showModal) { setModify(false) }
     }
+
+    // const handleModify = (
+    //     // popup: "transportTypes" | "packageTypes" | "measureUnits" | "countries",
+    //     item: MeasureUnit | TransportType | PackageType | Country
+    // ) => {
+    //     setModify(true)
+    //     setSelectedItem(item)
+    //     // toggleShowModal(p)
+    // }
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [delPopup, setDelPopup] = useState<"transportTypes" | "packageTypes" | "measureUnits" | "countries">("countries");
@@ -46,6 +51,11 @@ export const SettingScreen = () => {
 
     const handleSetItemId = (id: string) => {
         setItemId(id)
+    }
+
+    const handleModify = (item: Country | MeasureUnit | TransportType | PackageType) => {
+        setSelectedItem(item)
+        setModify(true)
     }
 
     const handleDeleteItem = async () => {
@@ -80,27 +90,49 @@ export const SettingScreen = () => {
                 <p className="mb-3 font-semibold text-2xl">Parametres</p>
                 <div className="flex flex-row">
                     {/* Transport */}
-                    <TransportCard toggleShowModal={() => { toggleShowModal("transport") }} />
+                    <TransportCard
+                        toggleShowModal={() => { toggleShowModal("transportTypes") }}
+                        toggleShowDelModal={() => toggleShowDeleteModal("transportTypes")}
+                        handleSetItemId={handleSetItemId}
+                        handleModify={handleModify}
+                    />
                     {/* Package type */}
-                    <PackageCard toggleShowModal={() => { toggleShowModal("package") }} />
+                    <PackageCard
+                        toggleShowModal={() => { toggleShowModal("packageTypes") }}
+                        toggleShowDelModal={() => toggleShowDeleteModal("packageTypes")}
+                        handleSetItemId={handleSetItemId}
+                        handleModify={handleModify}
+                    />
                 </div>
                 <div className="mt-4 flex flex-row">
                     {/* Transport */}
-                    <UnitCard toggleShowModal={() => { toggleShowModal("unit") }} />
+                    <UnitCard
+                        toggleShowModal={() => { toggleShowModal("measureUnits") }}
+                        toggleShowDelModal={() => toggleShowDeleteModal("measureUnits")}
+                        handleSetItemId={handleSetItemId}
+                        handleModify={handleModify}
+                    />
                     {/* Package type */}
                     <CountryCard
-                        toggleShowModal={() => { toggleShowModal("country") }}
+                        toggleShowModal={() => { toggleShowModal("countries") }}
                         toggleShowDelModal={() => toggleShowDeleteModal("countries")}
                         handleSetItemId={handleSetItemId}
+                        handleModify={handleModify}
 
                     />
                 </div>
             </div>
 
-            <AddTransportModal isVisible={showModal && (popup == 'transport')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
-            <AddPackageModal isVisible={showModal && (popup == 'package')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
-            <AddUnitModal isVisible={showModal && (popup == 'unit')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
-            <AddCountryModal isVisible={showModal && (popup == 'country')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' />
+            {/* <AddTransportModal isVisible={showModal && (popup == 'transport')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' /> */}
+            {/* <AddPackageModal isVisible={showModal && (popup == 'package')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' /> */}
+            <AddUnitModal
+                isVisible={showModal}
+                onClose={() => { toggleShowModal(popup) }}
+                popup={popup}
+                isModify={modify}
+                selectedItem={selectedItem!}
+            />
+            {/* <AddCountryModal isVisible={showModal && (popup == 'country')} onClose={() => { toggleShowModal(popup) }} text='Loading Content Summary' /> */}
 
             <DeleteCountryModal
                 isVisible={showDeleteModal}

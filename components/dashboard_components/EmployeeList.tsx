@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
+import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Employee {
     _id: string;
@@ -35,6 +36,43 @@ export const EmployeeListComponent = () => {
     useEffect(() => {
         fetchEmployeesData()
     }, [])
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const toggleShowDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal);
+    }
+
+    const [itemId, setItemId] = useState("")
+
+    const handleSetItemId = (id: string) => {
+        setItemId(id)
+    }
+
+    const handleDeleteItem = async () => {
+        try {
+            console.log(`Deleting employee with ID: ${itemId}`);
+            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Error => ${errorData.message}`)
+                throw new Error(`Failed to delete`);
+            }
+
+            alert(`deleted successfully!`); // Show success alert
+            // window.location.reload(); // Refresh the page
+
+        } catch (error) {
+            console.error(`Error deleting:`, error);
+            alert(`Failed to delete`); // Show error alert
+        }
+    };
 
 
     // Function to fetch employees data
@@ -102,13 +140,10 @@ export const EmployeeListComponent = () => {
                                                 <td className="py-2 px-4 border-b">
                                                     <div className={`px-4 py-2 rounded-3xl ${item.status.toLocaleLowerCase() === "actif" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status.toLocaleLowerCase() === "actif" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
                                                 </td>
-                                                <td className="py-2 px-4 border-b">
+                                                <td className="py-2 px-4 border-b text-center">
                                                     {/* Add your action buttons or links here */}
-                                                    <div onClick={() => handleModify(item)} className="flex items-center justify-center p-[8px] relative rounded-[10px] border border-solid border-[#5c73db]">
-                                                        <div className="relative w-fit mt-[-1.00px] [font-family:'Inter-Medium',Helvetica] font-medium text-[#5c73db] text-[12px] tracking-[0] leading-[normal]">
-                                                            Modifier
-                                                        </div>
-                                                    </div>
+                                                    <i onClick={() => { setItemId(item._id); toggleShowDeleteModal() }} className="fa-regular fa-trash-can text-red-600"></i>
+                                                    <i onClick={() => handleModify(item)} className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
                                                 </td>
                                             </tr>
                                         ))}
@@ -126,6 +161,12 @@ export const EmployeeListComponent = () => {
                 type='employee'
                 isModify={modify}
                 selectedUser={selectedEmployee!}
+            />
+
+            <DeleteCountryModal
+                isVisible={showDeleteModal}
+                onClose={() => { toggleShowDeleteModal() }}
+                onYesClick={handleDeleteItem}
             />
 
         </div>

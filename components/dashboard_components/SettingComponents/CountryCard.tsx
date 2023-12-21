@@ -1,5 +1,8 @@
 import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
+import { PackageType } from './PackageCard';
+import { TransportType } from './TransportCard';
+import { MeasureUnit } from './UnitCard';
 
 export interface Country {
     _id: string;
@@ -11,9 +14,10 @@ interface CountryCardProps {
     toggleShowModal: () => void,
     toggleShowDelModal: () => void,
     handleSetItemId: (id: string) => void,
+    handleModify: (item: Country | MeasureUnit | TransportType | PackageType) => void,
 }
 
-export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggleShowDelModal, handleSetItemId }) => {
+export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggleShowDelModal, handleSetItemId, handleModify }) => {
 
     useEffect(() => {
         fetchCountryData()
@@ -78,7 +82,12 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggl
                                         <td className="py-2 px-4 border-b">{item.description}</td>
                                         <td className="py-2 px-4 border-b">
                                             {/* Add your action buttons or links here */}
-                                            <div className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
+                                            <div onClick={() => {
+                                                handleModify(item)
+                                                handleSetItemId(item._id)
+                                                toggleShowModal()
+                                            }}
+                                                className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
                                                 <div className="text-indigo-500 text-xs font-medium font-['Inter']">Modifier</div>
                                             </div>
                                             <div onClick={() => {

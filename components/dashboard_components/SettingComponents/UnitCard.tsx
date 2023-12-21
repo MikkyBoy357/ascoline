@@ -1,5 +1,8 @@
 import { BaseUrl } from '@/constants/templates';
 import React, { useEffect, useState } from 'react';
+import { Country } from './CountryCard';
+import { PackageType } from './PackageCard';
+import { TransportType } from './TransportCard';
 
 export interface MeasureUnit {
     _id: string;
@@ -8,10 +11,13 @@ export interface MeasureUnit {
 }
 
 interface UnitCardProps {
-    toggleShowModal: () => void
+    toggleShowModal: () => void,
+    toggleShowDelModal: () => void,
+    handleSetItemId: (id: string) => void,
+    handleModify: (item: Country | MeasureUnit | TransportType | PackageType) => void,
 }
 
-export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal }) => {
+export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal, toggleShowDelModal, handleSetItemId, handleModify }) => {
 
     useEffect(() => {
         fetchUnitData()
@@ -76,10 +82,18 @@ export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal }) => {
                                         <td className="py-2 px-4 border-b">{item.description}</td>
                                         <td className="py-2 px-4 border-b">
                                             {/* Add your action buttons or links here */}
-                                            <div className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
+                                            <div onClick={() => {
+                                                handleModify(item)
+                                                handleSetItemId(item._id)
+                                                toggleShowModal()
+                                            }}
+                                                className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
                                                 <div className="text-indigo-500 text-xs font-medium font-['Inter']">Modifier</div>
                                             </div>
-                                            <div className="ml-4 h-8 px-4 bg-red-600 rounded-lg justify-center items-center inline-flex">
+                                            <div onClick={() => {
+                                                toggleShowDelModal();
+                                                handleSetItemId(item._id)
+                                            }} className="ml-4 h-8 px-4 bg-red-600 rounded-lg justify-center items-center inline-flex">
                                                 <div className="text-white text-xs font-medium font-['Inter']">Supprimer</div>
                                             </div>
                                         </td>
