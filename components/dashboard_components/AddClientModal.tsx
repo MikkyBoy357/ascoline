@@ -3,6 +3,8 @@ import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { Client } from './ClientList';
 import { Employee } from './EmployeeList';
+import {Toast} from "@/constants/toastConfig";
+import {useRouter} from "next/router";
 
 export interface AddClientModalProps {
     isVisible: Boolean,
@@ -25,6 +27,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
         if (e.target.id === "wrapper") { onClose(); }
     }
 
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [lastName, setLastName] = useState("");
@@ -146,7 +149,12 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
             }
 
             console.log(`${type} ${isModify ? "edited" : "added"} successfully!`);
-            alert(`${type} ${isModify ? "edited" : "added"} successfully!`); // Show alert dialog
+            onClose();
+            Toast.fire({
+                icon: "success",
+                title: `${type} ${isModify ? "edited" : "added"} successfully!`,
+            });
+            router.reload();
 
             // Clear form fields after successful addition
             // setEmail('');

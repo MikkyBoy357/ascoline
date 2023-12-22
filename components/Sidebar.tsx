@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { SidebarContext } from '@/context/sidebar-context';
 import Link from 'next/link';
+import {usePathname} from "next/navigation";
 
 export interface SidebarItem {
     id: string;
@@ -25,12 +26,13 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
+    const pathName = usePathname();
 
     const handleClick = () => {
         router.push('/dashboard');
     };
     const isActive = (url: string): boolean => {
-        return router.pathname === url;
+        return url.endsWith(pathName)
     };
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -78,10 +80,10 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
                     <ul className="py-4">
                         {items.map((item, index) => (
                             <Fragment key={index}>
-                                <li className={`mb-6 ml-8 text-gray-500 hover:text-gray-700 transition duration-300 ${isActive(item.url) ? 'blue-gray' : 'blue-gray'
+                                <li className={`mb-6 mx-8 py-2 px-4 group rounded-md hover:bg-[#4763e4] hover:text-white transition duration-300 ${isActive(item.url) ? 'text-white bg-[#4763e4]' : 'text-gray-500'
                                     } ${item === item ? 'font-semibold' : ''} hover:cursor-pointer`} onClick={() => { handleClickSidebarItem(item) }}>
                                     <Link href={item.url} className='flex flex-row'>
-                                        <Image className='mr-3' src={`/sidebar_icons/${item.id}.svg`} alt="Jema.ai" width="25" height="100" /> {item.label}
+                                        <Image className='mr-3'  src={`/sidebar_icons/${item.id}.svg`} alt="Jema.ai" width="25" height="80" /> {item.label}
                                     </Link>
                                 </li>
                             </Fragment>

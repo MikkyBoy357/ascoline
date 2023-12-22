@@ -9,11 +9,13 @@ import { AddUnitModal } from "./SettingComponents/SettingPopups/AddUnitModal";
 import { AddCountryModal } from "./SettingComponents/SettingPopups/AddCountryModal";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import { BaseUrl } from "@/constants/templates";
+import {useRouter} from "next/router";
 
 
 
 export const SettingScreen = () => {
 
+    const router = useRouter();
     const [modify, setModify] = useState(false);
 
     const [selectedItem, setSelectedItem] = useState<MeasureUnit | TransportType | PackageType | Country>();
@@ -74,7 +76,8 @@ export const SettingScreen = () => {
                 throw new Error(`Failed to delete ${delPopup}`);
             }
 
-            alert(`${delPopup} deleted successfully!`); // Show success alert
+            router.reload();
+            //alert(`${delPopup} deleted successfully!`); // Show success alert
             // window.location.reload(); // Refresh the page
 
         } catch (error) {

@@ -1,4 +1,4 @@
-import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, BaseUrl } from '@/constants/templates';
+import {ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, ADD_PRODUCT_INPUTS, BaseUrl} from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { PackageType } from './SettingComponents/PackageCard';
@@ -8,19 +8,20 @@ import UnitSelectComponent from '../MyUnitSelectComponent';
 import { Pricing } from './PricingList';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {Product} from "@/components/dashboard_components/ProductsList";
 
-export interface AddPricingModalProps {
+export interface AddProductModalProps {
     isVisible: Boolean,
     text: string,
     onClose: () => void,
     isModify: Boolean,
-    selectedItem: Pricing,
+    selectedItem: Product,
     packageTypesData: PackageType[],
     transportTypesData: TransportType[],
     measureUnitsData: MeasureUnit[],
 }
 
-export const AddPricingModal: React.FC<AddPricingModalProps> = ({
+export const AddProductModal: React.FC<AddProductModalProps> = ({
     isVisible,
     text,
     onClose,
@@ -38,38 +39,12 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
         if (e.target.id === "wrapper") { onClose(); }
     }
 
-    const handleSelectUnit = (event: React.ChangeEvent<HTMLSelectElement>, dataList: MeasureUnit[] | TransportType[] | PackageType[]) => {
-        const selectedId = event.target.value;
-        const selected = dataList.find(item => item._id === selectedId);
-
-        if (selected) {
-            // Check if the selected object exists in the measureUnitsData array
-            const existsInMeasureUnitsData = measureUnitsData.some(unit => unit._id === selected._id);
-            const existsInTransportData = transportTypesData.some(unit => unit._id === selected._id);
-            const existsInPackageData = packageTypesData.some(unit => unit._id === selected._id);
-
-            if (existsInMeasureUnitsData) {
-                setUnit(selected);
-                // Assign the selected object to state since it exists in measureUnitsData array
-            } else if (existsInTransportData) {
-                setTransportType(selected)
-            } else if (existsInPackageData) {
-                setTypeColis(selected)
-            } else {
-                // Handle the case when selected object doesn't exist in measureUnitsData array
-                console.log('Selected object does not exist in measureUnitsData array.');
-                // Perform necessary actions here
-            }
-            // setUnit(selected); // Assign the selected Client object to state
-        }
-    };
 
     const [price, setPrice] = useState("");
-    const [typeColis, setTypeColis] = useState<PackageType>();
-    const [transportType, setTransportType] = useState<TransportType>();
-    const [unit, setUnit] = useState<MeasureUnit>();
     const [description, setDescription] = useState("");
     const [quantity, setQuantity] = useState("");
+    const [name, setName] = useState("");
+
 
     // auto fill text field when user is editing an order
     useEffect(() => {
@@ -77,9 +52,7 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
             console.log("====> Modify <====")
 
             setPrice(selectedItem.price.toString())
-            setTypeColis(packageTypesData.find(item => item._id === selectedItem.typeColis._id))
-            setTransportType(transportTypesData.find(item => item._id === selectedItem.transportType._id))
-            setUnit(measureUnitsData.find(item => item._id === selectedItem.unit._id))
+            setName(selectedItem.name);
             setDescription(selectedItem.description)
             setQuantity(selectedItem.quantity.toString())
         }
@@ -90,9 +63,7 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
     const wasChanged = () => {
         if (
             price !== selectedItem.price.toString() ||
-            typeColis?._id !== selectedItem.typeColis._id ||
-            transportType?._id !== selectedItem.transportType._id ||
-            unit?._id !== selectedItem.unit._id ||
+            name !== selectedItem.name ||
             description !== selectedItem.description ||
             quantity !== selectedItem.quantity.toString()
 
@@ -110,33 +81,26 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
         }
     }, [
         price,
-        typeColis,
-        transportType,
-        unit,
+        name,
         description,
         quantity
     ]);
 
 
     // Function to add pricing
-    const addPricing = async () => {
+    const addProduct = async () => {
         try {
-            const newPricing = {
+            const newProduct = {
                 price: Number(price),
-                typeColis: typeColis,
-                transportType: transportType,
-                unit: unit,
+                name: name,
                 description: description,
                 quantity: Number(quantity),
-                status: 'test',
             };
 
             // Perform validation to check if all variables are not empty
             if (
                 price.trim() === '' ||
-                typeColis?._id.trim() === '' ||
-                transportType?._id.trim() === '' ||
-                unit?._id.trim() === '' ||
+                name.trim() === '' ||
                 description.trim() === '' ||
                 quantity.trim() === ''
             ) {
@@ -146,35 +110,35 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
 
             var response;
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/pricings`, {
+                response = await fetch(`${BaseUrl}/products`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(newPricing),
+                    body: JSON.stringify(newProduct),
                 });
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/pricings/${selectedItem._id}`, {
+                response = await fetch(`${BaseUrl}/products/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(newPricing),
+                    body: JSON.stringify(newProduct),
                 });
             }
 
             if (!response.ok) {
-                throw new Error(`Failed to ${isModify ? 'edit' : 'add'} pricing`);
+                throw new Error(`Failed to ${isModify ? 'edit' : 'add'} product`);
             }
 
-            console.log(`Pricing ${isModify ? 'edited' : 'added'} successfully!`);
+            console.log(`Products ${isModify ? 'edited' : 'added'} successfully!`);
             onClose();
             Toast.fire({
                 icon: "success",
-                title: `Pricing ${isModify ? 'edited' : 'added'} successfully!`,
+                title: `Products ${isModify ? 'edited' : 'added'} successfully!`,
             });
             router.reload();
 
@@ -204,34 +168,23 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                {`${isModify ? 'Edit' : 'Enregistrement'} d'une tarification`}
+                                {`${isModify ? 'Edit' : 'Enregistrement'} d'un produit`}
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
-                                <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
-                                    {renderInputField(ADD_PRICING_INPUTS[0], price, (e) => setPrice(e.target.value))}
-                                    <div>
-                                        <p>Type de colis</p>
-                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[1].id} value={typeColis?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, packageTypesData)} selectList={packageTypesData} />
-                                    </div>
-                                </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    <div>
-                                        <p>Type de Transport</p>
-                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[2].id} value={transportType?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, transportTypesData)} selectList={transportTypesData} />
-                                    </div>
-                                    <div>
-                                        <p>Unite</p>
-                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[3].id} value={unit?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, measureUnitsData)} selectList={measureUnitsData} />
+                                    <div className="flex flex-row items-start gap-[8px] relative flex-1 grow">
+                                        {renderInputField(ADD_PRODUCT_INPUTS[0], name, (e) => setName(e.target.value))}
+                                        {renderInputField(ADD_PRODUCT_INPUTS[1], description, (e) => setDescription(e.target.value))}
                                     </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     <div className="flex flex-row items-start gap-[8px] relative flex-1 grow">
-                                        {renderInputField(ADD_PRICING_INPUTS[4], description, (e) => setDescription(e.target.value))}
-                                        {renderInputField(ADD_PRICING_INPUTS[5], quantity, (e) => setQuantity(e.target.value))}
+                                        {renderInputField(ADD_PRODUCT_INPUTS[2], price, (e) => setPrice(e.target.value))}
+                                        {renderInputField(ADD_PRODUCT_INPUTS[3], quantity, (e) => setQuantity(e.target.value))}
                                     </div>
                                 </div>
                                 <div className="mt-5 flex flex-row">
-                                    <div onClick={addPricing} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
+                                    <div onClick={addProduct} className="w-48 h-12 p-4 bg-indigo-600 rounded-lg justify-center items-center gap-2 inline-flex">
                                         <div className="text-white text-lg font-normal font-['Inter']">Enregistrer</div>
                                     </div>
                                     <div onClick={onClose} className="ml-4 w-48 h-12 p-4 rounded-lg border border-zinc-300 justify-center items-center gap-2 inline-flex">

@@ -5,6 +5,8 @@ import { MeasureUnit } from '../UnitCard';
 import { TransportType } from '../TransportCard';
 import { Country } from '../CountryCard';
 import { PackageType } from '../PackageCard';
+import {useRouter} from "next/router";
+import {Toast} from "@/constants/toastConfig";
 
 export interface AddUnitModalProps {
     isVisible: Boolean,
@@ -16,6 +18,8 @@ export interface AddUnitModalProps {
 
 export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, onClose, isModify, selectedItem }) => {
     if (!isVisible) return null;
+
+    const router = useRouter();
 
     const handleClose = (e: any) => {
         if (e.target.id === "wrapper") { onClose(); }
@@ -101,7 +105,13 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, on
             }
 
             console.log(`item ${isModify ? 'edited' : 'added'} successfully!`);
-            alert(`item ${isModify ? 'edited' : 'added'} successfully!`); // Show alert dialog
+            onClose();
+            Toast.fire({
+                icon: "success",
+                title: `item ${isModify ? 'edited' : 'added'} successfully!`,
+            });
+            router.reload();
+            //alert(`item ${isModify ? 'edited' : 'added'} successfully!`); // Show alert dialog
 
             // Clear form fields after successful addition
             // setLabel('')

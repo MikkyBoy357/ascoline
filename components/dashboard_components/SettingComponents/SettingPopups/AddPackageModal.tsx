@@ -1,6 +1,8 @@
 import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
+import {useRouter} from "next/router";
+import {Toast} from "@/constants/toastConfig";
 
 export interface AddPackageModalProps {
     isVisible: Boolean,
@@ -11,6 +13,7 @@ export interface AddPackageModalProps {
 export const AddPackageModal: React.FC<AddPackageModalProps> = ({ isVisible, text, onClose }) => {
     if (!isVisible) return null;
 
+    const router = useRouter();
     const handleClose = (e: any) => {
         if (e.target.id === "wrapper") { onClose(); }
     }
@@ -48,7 +51,13 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({ isVisible, tex
             }
 
             console.log('Package Type added successfully!');
-            alert('Package Type added successfully!'); // Show alert dialog
+            onClose();
+            Toast.fire({
+                icon: "success",
+                title: 'Package Type added successfully!',
+            });
+            router.reload();
+            //alert('Package Type added successfully!'); // Show alert dialog
 
             // Clear form fields after successful addition
             // setLabel('')

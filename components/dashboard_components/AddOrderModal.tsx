@@ -9,6 +9,9 @@ import ClientSelectComponent from '../MyInputFieldComponents';
 import { MeasureUnit } from './SettingComponents/UnitCard';
 import { PackageType } from './SettingComponents/PackageCard';
 import { TransportType } from './SettingComponents/TransportCard';
+import {Toast} from "@/constants/toastConfig";
+import {useRouter} from "next/router";
+
 
 export interface AddOrderModalProps {
     isVisible: Boolean,
@@ -37,6 +40,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
 }) => {
     if (!isVisible) return null;
 
+    const router = useRouter();
     const handleClose = (e: any) => {
         if (e.target.id === "wrapper") { onClose(); }
     }
@@ -222,7 +226,12 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
             }
 
             console.log(`Order ${isModify ? "edited" : "added"} successfully!`);
-            alert(`Order ${isModify ? "edited" : "added"} successfully!`); // Show alert dialog
+            onClose();
+            Toast.fire({
+                icon: "success",
+                title: `Order ${isModify ? "edited" : "added"} successfully!`,
+            });
+            router.reload();
 
             // Clear form fields after successful addition
             // setTrackingId('');

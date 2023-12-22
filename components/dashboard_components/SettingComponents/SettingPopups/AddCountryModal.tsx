@@ -1,6 +1,8 @@
 import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
+import {useRouter} from "next/router";
+import {Toast} from "@/constants/toastConfig";
 
 export interface AddCountryModalProps {
     isVisible: Boolean,
@@ -11,6 +13,8 @@ export interface AddCountryModalProps {
 export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, text, onClose }) => {
     if (!isVisible) return null;
 
+
+    const router = useRouter();
     const handleClose = (e: any) => {
         if (e.target.id === "wrapper") { onClose(); }
     }
@@ -48,7 +52,13 @@ export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, tex
             }
 
             console.log('Country added successfully!');
-            alert('Country added successfully!'); // Show alert dialog
+            onClose();
+            Toast.fire({
+                icon: "success",
+                title: 'Country added successfully!',
+            });
+            router.reload();
+            //alert('Country added successfully!'); // Show alert dialog
 
             // Clear form fields after successful addition
             // setLabel('')

@@ -1,5 +1,5 @@
-export const BaseUrl: string = 'http://18.130.232.167:3000';
-// export const BaseUrl: string = 'http://localhost:3000';
+//export const BaseUrl: string = 'http://18.130.232.167:3000';
+ export const BaseUrl: string = 'http://localhost:3000';
 
 export type TemplateInput = {
     id: string;
@@ -197,6 +197,33 @@ export const ADD_PRICING_INPUTS: TemplateInput[] = [
         id: "description",
         label: "Description",
         placeholder: "Alex",
+        type: "text",
+    },
+    {
+        id: "quantity",
+        label: "Quantité",
+        placeholder: "2",
+        type: "text",
+    },
+];
+
+export const ADD_PRODUCT_INPUTS: TemplateInput[] = [
+    {
+        id: "product-name",
+        label: "Nom",
+        placeholder: "Ordinateur",
+        type: "text",
+    },
+    {
+        id: "product-description",
+        label: "Description",
+        placeholder: "Alex",
+        type: "text",
+    },
+    {
+        id: "product-price",
+        label: "Prix",
+        placeholder: "200",
         type: "text",
     },
     {

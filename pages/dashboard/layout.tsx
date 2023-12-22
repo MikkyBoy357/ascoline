@@ -2,6 +2,8 @@
 
 import Sidebar from '@/components/Sidebar';
 import React, { Fragment, useState } from 'react'
+import {useRouter} from "next/router";
+import {usePathname} from "next/navigation";
 
 interface Props {
     children: React.ReactNode;
@@ -35,6 +37,11 @@ export const SIDEBAR_ITEMS: any = [
         label: "Tarification",
         url: "/dashboard/tarification",
     },
+    {
+        id: "product",
+        label: "Produits",
+        url: "/dashboard/product",
+    },
     // {
     //     id: "profile",
     //     label: "Profile",
@@ -45,6 +52,7 @@ export const SIDEBAR_ITEMS: any = [
         label: "Setting",
         url: "/dashboard/setting",
     },
+
     // {
     //     label: "Templates",
     //     url: "/",
@@ -64,6 +72,7 @@ export const SIDEBAR_ITEMS: any = [
 
 const DashboardLayout = ({children} : any) => {
     const [showPopup, setShowPopup] = useState(false);
+    const router = useRouter();
 
     const handlePopup = () => {
         setShowPopup(!showPopup);
