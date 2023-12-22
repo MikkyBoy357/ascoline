@@ -1,5 +1,5 @@
-//export const BaseUrl: string = 'http://18.130.232.167:3000';
- export const BaseUrl: string = 'http://localhost:3000';
+export const BaseUrl: string = 'http://18.130.232.167:3000';
+ //export const BaseUrl: string = 'http://localhost:3000';
 
 export type TemplateInput = {
     id: string;
