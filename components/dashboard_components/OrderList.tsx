@@ -7,6 +7,7 @@ import { Country } from "./SettingComponents/CountryCard";
 import { Client } from "./ClientList";
 import { BaseUrl } from "@/constants/templates";
 import { Pricing } from "./PricingList";
+import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 // import { Unit } from "../MyInputFieldComponents";
 
 export interface Commande {
@@ -26,6 +27,13 @@ export interface Commande {
 }
 
 export const OrderListComponent = () => {
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemId, setItemId] = useState("")
+
+    const toggleShowDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal);
+    }
 
     const [modify, setModify] = useState(false);
 
@@ -205,6 +213,31 @@ export const OrderListComponent = () => {
         }
     };
 
+    const handleDeleteItem = async () => {
+        try {
+            console.log(`Deleting client with ID: ${itemId}`);
+            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Error => ${errorData.message}`)
+                throw new Error(`Failed to delete`);
+            }
+
+            alert(`deleted successfully!`); // Show success alert
+            // window.location.reload(); // Refresh the page
+
+        } catch (error) {
+            console.error(`Error deleting:`, error);
+            alert(`Failed to delete`); // Show error alert
+        }
+    };
+
     return (
         <div className="flex flex-col justify-center text-black">
             <div className="pl-4 pt-4">
@@ -260,7 +293,10 @@ export const OrderListComponent = () => {
                                                 </td>
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
-                                                    <i className="fa-regular fa-trash-can text-red-600"></i>
+                                                    <i onClick={() => {
+                                                        setItemId(item._id);
+                                                        toggleShowDeleteModal()
+                                                    }} className="fa-regular fa-trash-can text-red-600"></i>
                                                     <i onClick={() => handleModify(item)} className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"></i>
                                                 </td>
                                             </tr>
@@ -285,6 +321,12 @@ export const OrderListComponent = () => {
                 measureUnitsData={measureUnitsData}
                 countryData={countryData.map((country: Country) => country.label)}
                 clientsData={clientsData}
+            />
+
+            <DeleteCountryModal
+                isVisible={showDeleteModal}
+                onClose={() => { toggleShowDeleteModal() }}
+                onYesClick={handleDeleteItem}
             />
 
         </div>

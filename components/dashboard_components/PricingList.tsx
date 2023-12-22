@@ -5,6 +5,7 @@ import { PackageType } from "./SettingComponents/PackageCard";
 import { TransportType } from "./SettingComponents/TransportCard";
 import { MeasureUnit } from "./SettingComponents/UnitCard";
 import { BaseUrl } from "@/constants/templates";
+import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Pricing {
     _id: string;
@@ -28,12 +29,27 @@ export interface Pricing {
 
 export const PricingListComponent = () => {
 
-    const [loaded, setLoaded] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemId, setItemId] = useState("")
 
+    const toggleShowDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal);
+    }
+
+    const [modify, setModify] = useState(false);
+
+    const [selectedItem, setSelectedItem] = useState<Pricing>();
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
         setShowModal(!showModal);
+        if (showModal) { setModify(false) }
+    }
+
+    const handleModify = (item: Pricing) => {
+        setModify(true)
+        setSelectedItem(item)
+        toggleShowModal()
     }
 
     useEffect(() => {
@@ -145,6 +161,31 @@ export const PricingListComponent = () => {
         }
     };
 
+    const handleDeleteItem = async () => {
+        try {
+            console.log(`Deleting client with ID: ${itemId}`);
+            const response = await fetch(`${BaseUrl}/pricings/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Error => ${errorData.message}`)
+                throw new Error(`Failed to delete`);
+            }
+
+            alert(`deleted successfully!`); // Show success alert
+            // window.location.reload(); // Refresh the page
+
+        } catch (error) {
+            console.error(`Error deleting:`, error);
+            alert(`Failed to delete`); // Show error alert
+        }
+    };
+
 
     return (
         <div className="flex flex-col justify-center text-black">
@@ -184,10 +225,13 @@ export const PricingListComponent = () => {
                                                 <td className="py-2 px-4 border-b">{item.price}/{item.unit.label}</td>
                                                 <td className="py-2 px-4 border-b">
                                                     {/* Add your action buttons or links here */}
-                                                    <div className="w-32 h-8 p-2 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
+                                                    <div onClick={() => handleModify(item)} className="w-32 h-8 p-2 rounded-lg border border-indigo-500 justify-center items-center inline-flex">
                                                         <div className="text-indigo-500 text-xs font-medium font-['Inter']">Modifier</div>
                                                     </div>
-                                                    <div className="ml-4 w-32 h-8 p-2 bg-red-600 rounded-lg justify-center items-center inline-flex">
+                                                    <div onClick={() => {
+                                                        setItemId(item._id);
+                                                        toggleShowDeleteModal();
+                                                    }} className="ml-4 w-32 h-8 p-2 bg-red-600 rounded-lg justify-center items-center inline-flex">
                                                         <div className="text-white text-xs font-medium font-['Inter']">Supprimer</div>
                                                     </div>
                                                 </td>
@@ -206,9 +250,17 @@ export const PricingListComponent = () => {
                 isVisible={showModal}
                 onClose={toggleShowModal}
                 text='Loading Content Summary'
-                packageTypesData={packageTypesData.map((packageType: PackageType) => packageType.label)}
-                transportTypesData={transportTypesData.map((transportType: TransportType) => transportType.label)}
-                measureUnitsData={measureUnitsData.map((measureUnit: MeasureUnit) => measureUnit.label)}
+                isModify={modify}
+                selectedItem={selectedItem!}
+                packageTypesData={packageTypesData}
+                transportTypesData={transportTypesData}
+                measureUnitsData={measureUnitsData}
+            />
+
+            <DeleteCountryModal
+                isVisible={showDeleteModal}
+                onClose={() => { setShowDeleteModal(!showDeleteModal) }}
+                onYesClick={handleDeleteItem}
             />
 
         </div>

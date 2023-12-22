@@ -1,21 +1,29 @@
 import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, BaseUrl } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PackageType } from './SettingComponents/PackageCard';
+import { TransportType } from './SettingComponents/TransportCard';
+import { MeasureUnit } from './SettingComponents/UnitCard';
+import UnitSelectComponent from '../MyUnitSelectComponent';
+import { Pricing } from './PricingList';
 
 export interface AddPricingModalProps {
     isVisible: Boolean,
     text: string,
     onClose: () => void,
-    packageTypesData: string[],
-    transportTypesData: string[],
-    measureUnitsData: string[],
+    isModify: Boolean,
+    selectedItem: Pricing,
+    packageTypesData: PackageType[],
+    transportTypesData: TransportType[],
+    measureUnitsData: MeasureUnit[],
 }
 
 export const AddPricingModal: React.FC<AddPricingModalProps> = ({
     isVisible,
     text,
     onClose,
+    isModify,
+    selectedItem,
     packageTypesData,
     transportTypesData,
     measureUnitsData
@@ -26,12 +34,85 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
         if (e.target.id === "wrapper") { onClose(); }
     }
 
+    const handleSelectUnit = (event: React.ChangeEvent<HTMLSelectElement>, dataList: MeasureUnit[] | TransportType[] | PackageType[]) => {
+        const selectedId = event.target.value;
+        const selected = dataList.find(item => item._id === selectedId);
+
+        if (selected) {
+            // Check if the selected object exists in the measureUnitsData array
+            const existsInMeasureUnitsData = measureUnitsData.some(unit => unit._id === selected._id);
+            const existsInTransportData = transportTypesData.some(unit => unit._id === selected._id);
+            const existsInPackageData = packageTypesData.some(unit => unit._id === selected._id);
+
+            if (existsInMeasureUnitsData) {
+                setUnit(selected);
+                // Assign the selected object to state since it exists in measureUnitsData array
+            } else if (existsInTransportData) {
+                setTransportType(selected)
+            } else if (existsInPackageData) {
+                setTypeColis(selected)
+            } else {
+                // Handle the case when selected object doesn't exist in measureUnitsData array
+                console.log('Selected object does not exist in measureUnitsData array.');
+                // Perform necessary actions here
+            }
+            // setUnit(selected); // Assign the selected Client object to state
+        }
+    };
+
     const [price, setPrice] = useState("");
-    const [typeColis, setTypeColis] = useState("");
-    const [transportType, setTransportType] = useState("");
-    const [unit, setUnit] = useState("");
+    const [typeColis, setTypeColis] = useState<PackageType>();
+    const [transportType, setTransportType] = useState<TransportType>();
+    const [unit, setUnit] = useState<MeasureUnit>();
     const [description, setDescription] = useState("");
     const [quantity, setQuantity] = useState("");
+
+    // auto fill text field when user is editing an order
+    useEffect(() => {
+        if (isModify) {
+            console.log("====> Modify <====")
+
+            setPrice(selectedItem.price.toString())
+            setTypeColis(packageTypesData.find(item => item._id === selectedItem.typeColis._id))
+            setTransportType(transportTypesData.find(item => item._id === selectedItem.transportType._id))
+            setUnit(measureUnitsData.find(item => item._id === selectedItem.unit._id))
+            setDescription(selectedItem.description)
+            setQuantity(selectedItem.quantity.toString())
+        }
+    }, [])
+
+    const [isChanged, setIsChanged] = useState(false);
+
+    const wasChanged = () => {
+        if (
+            price !== selectedItem.price.toString() ||
+            typeColis?._id !== selectedItem.typeColis._id ||
+            transportType?._id !== selectedItem.transportType._id ||
+            unit?._id !== selectedItem.unit._id ||
+            description !== selectedItem.description ||
+            quantity !== selectedItem.quantity.toString()
+
+        ) {
+            setIsChanged(true);
+        } else {
+            setIsChanged(false);
+        }
+    };
+
+    // Call the `wasChanged` function whenever the state values change
+    useEffect(() => {
+        if (isModify) {
+            wasChanged();
+        }
+    }, [
+        price,
+        typeColis,
+        transportType,
+        unit,
+        description,
+        quantity
+    ]);
+
 
     // Function to add pricing
     const addPricing = async () => {
@@ -49,9 +130,9 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
             // Perform validation to check if all variables are not empty
             if (
                 price.trim() === '' ||
-                typeColis.trim() === '' ||
-                transportType.trim() === '' ||
-                unit.trim() === '' ||
+                typeColis?._id.trim() === '' ||
+                transportType?._id.trim() === '' ||
+                unit?._id.trim() === '' ||
                 description.trim() === '' ||
                 quantity.trim() === ''
             ) {
@@ -59,28 +140,42 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/pricings`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPricing),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to add pricing');
+            var response;
+            if (!isModify) {
+                response = await fetch(`${BaseUrl}/pricings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newPricing),
+                });
+            } else {
+                if (!isChanged) {
+                    return alert("Values were not changed");
+                }
+                response = await fetch(`${BaseUrl}/pricings/${selectedItem._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newPricing),
+                });
             }
 
-            console.log('Pricing added successfully!');
-            alert('Pricing added successfully!'); // Show alert dialog
+            if (!response.ok) {
+                throw new Error(`Failed to ${isModify ? 'edit' : 'add'} pricing`);
+            }
+
+            console.log(`Pricing ${isModify ? 'edited' : 'added'} successfully!`);
+            alert(`Pricing ${isModify ? 'edited' : 'added'} successfully!`); // Show alert dialog
 
             // Clear form fields after successful addition
-            setPrice('');
-            setTypeColis('');
-            setTransportType('');
-            setUnit('');
-            setDescription('');
-            setQuantity('');
+            // setPrice('');
+            // setTypeColis('');
+            // setTransportType('');
+            // setUnit('');
+            // setDescription('');
+            // setQuantity('');
         } catch (error) {
             console.error('Error adding pricing:', error);
             // Handle errors
@@ -99,34 +194,25 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
                         <div className="w-[1104px] bg-white rounded-[12px]">
                             {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
                             <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                                Enregistrement d'une tarification
+                                {`${isModify ? 'Edit' : 'Enregistrement'} d'une tarification`}
                             </div>
                             <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
                                     {renderInputField(ADD_PRICING_INPUTS[0], price, (e) => setPrice(e.target.value))}
-                                    {renderInputField(
-                                        ADD_PRICING_INPUTS[1],
-                                        typeColis,
-                                        (e) => setTypeColis(e.target.value),
-                                        (e: any) => setTypeColis(e.target.value),
-                                        packageTypesData
-                                    )}
+                                    <div>
+                                        <p>Type de colis</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[1].id} value={typeColis?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, packageTypesData)} selectList={packageTypesData} />
+                                    </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
-                                    {renderInputField(
-                                        ADD_PRICING_INPUTS[2],
-                                        transportType,
-                                        (e) => setTransportType(e.target.value),
-                                        (e: any) => setTransportType(e.target.value),
-                                        transportTypesData
-                                    )}
-                                    {renderInputField(
-                                        ADD_PRICING_INPUTS[3],
-                                        unit,
-                                        (e) => setUnit(e.target.value),
-                                        (e: any) => setUnit(e.target.value),
-                                        measureUnitsData
-                                    )}
+                                    <div>
+                                        <p>Type de Transport</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[2].id} value={transportType?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, transportTypesData)} selectList={transportTypesData} />
+                                    </div>
+                                    <div>
+                                        <p>Unite</p>
+                                        <UnitSelectComponent id={ADD_ORDER_INPUTS[3].id} value={unit?._id ?? ""} handleSelect={(e) => handleSelectUnit(e, measureUnitsData)} selectList={measureUnitsData} />
+                                    </div>
                                 </div>
                                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                                     <div className="flex flex-row items-start gap-[8px] relative flex-1 grow">

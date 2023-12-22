@@ -37,10 +37,10 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
     };
 
     const handleClickSidebarItem = (item: any) => {
-        console.log(item);
+        // console.log(item);
         // console.log(sidebarSectionContext?.selectedSidebarItem);
         sidebarSectionContext?.changeSidebarItem(item);
-        console.log(sidebarSectionContext?.selectedSidebarItem, "omo");
+        // console.log(sidebarSectionContext?.selectedSidebarItem, "omo");
         router.push(item.url)
     }
 
