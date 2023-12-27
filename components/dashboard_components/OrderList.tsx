@@ -294,15 +294,15 @@ export const OrderListComponent = () => {
                                             <tbody>
                                             {commandesData.map((item) => (
                                                 <tr key={item._id} className="text-sm">
-                                                    <td className="py-2 px-4 border-b">{item.client.lastName} {item.client.firstName}</td>
-                                                    <td className="py-2 px-4 border-b">{item.pays}</td>
-                                                    <td className="py-2 px-4 border-b">{item.ville}</td>
-                                                    <td className="py-2 px-4 border-b">{item.typeColis.label}</td>
-                                                    <td className="py-2 px-4 border-b">{item.description}</td>
-                                                    <td className="py-2 px-4 border-b">{item.pricing?.price ?? "N/A"}</td>
-                                                    <td className="py-2 px-4 border-b">{item.trackingId}</td>
-                                                    <td className="py-2 px-4 border-b">{item.unit.label}</td>
-                                                    <td className="py-2 px-4 border-b">{item.transportType.label}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.client?.lastName ?? "N/A"} {item?.client?.firstName ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.pays ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.ville ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.typeColis?.label ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.description ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.pricing?.price ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.trackingId ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.unit?.label ?? "N/A"}</td>
+                                                    <td className="py-2 px-4 border-b">{item?.transportType?.label ?? "N/A"}</td>
                                                     <td className="py-2 px-4 border-b">
                                                         <div className={`px-4 py-2 rounded-3xl ${item.status === "Commande Arrivée" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.status === "Commande Arrivée" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.status}</div>
                                                     </td>

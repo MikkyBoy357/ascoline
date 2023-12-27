@@ -34,14 +34,22 @@ const Login = () => {
             });
 
             if (response.ok) {
+
                 const data = await response.json();
-                const { token } = data;
 
-                // Save the token in local storage
-                localStorage.setItem('token', token);
+                if (data.user.type !== "admin") {
+                    // Display alert dialog to the user when login fails
+                    alert("Login failed. The user doesn't have correct access");
+                } else {
+                    const { token } = data;
 
-                // If login is successful, redirect to dashboard or perform necessary actions
-                router.push('/dashboard');
+                    // Save the token in local storage
+                    localStorage.setItem('token', token);
+
+                    // If login is successful, redirect to dashboard or perform necessary actions
+                    router.push('/dashboard');
+                }
+
             } else {
                 const errorData = await response.json();
                 console.log("Omo", errorData.message)

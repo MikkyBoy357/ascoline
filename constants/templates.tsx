@@ -5,7 +5,7 @@ export type TemplateInput = {
     id: string;
     label: string;
     placeholder: string;
-    type: "text" | "textarea" | "select";
+    type: "text" | "textarea" | "select" | "password";
     options?: string[];
 };
 
@@ -20,7 +20,7 @@ export const LOGIN_INPUTS: TemplateInput[] = [
         id: "password",
         label: "Mot de passe",
         placeholder: "*******",
-        type: "text",
+        type: "password",
     },
 ]
 
@@ -41,13 +41,13 @@ export const SIGN_UP_INPUTS: TemplateInput[] = [
         id: "password",
         label: "Mot de passe",
         placeholder: "*******",
-        type: "text",
+        type: "password",
     },
     {
         id: "cpassword",
         label: "Confirmer votre mot de passe",
         placeholder: "*******",
-        type: "text",
+        type: "password",
     },
 ]
 

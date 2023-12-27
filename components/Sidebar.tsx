@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Fragment, useContext, useState } from 'react';
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 // import { Link } from "react-router-dom";
 import Image from "next/image";
 import { SidebarContext } from '@/context/sidebar-context';
@@ -88,6 +88,18 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
                                 </li>
                             </Fragment>
                         ))}
+                        <button className={`mb-6 mx-8 py-2 px-4 group rounded-md hover:bg-[#4763e4] hover:text-white transition duration-300`} onClick={() => {
+                            // Remove the token in local storage
+                            localStorage.removeItem('token');
+
+                            // Redirect to login or perform necessary actions
+                            router.push('/auth/login');
+                        }}>
+                            <div className='flex flex-row items-center  text-black'>
+                                <i className={`mr-3 fa-solid fa-power-off text-gray-700`}/>
+                                Déconnexion
+                            </div>
+                        </button>
                     </ul>
 
                     {/* <div className="flex flex-col pl-8 h-full w-full align-bottom justify-center pt-20">
