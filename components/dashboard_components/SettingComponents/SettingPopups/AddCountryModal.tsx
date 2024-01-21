@@ -3,6 +3,7 @@ import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {POST} from "@/constants/fetchConfig";
 
 export interface AddCountryModalProps {
     isVisible: Boolean,
@@ -39,17 +40,19 @@ export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, tex
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/countries`, {
+/*            const response = await fetch(`${BaseUrl}/countries`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newCountry),
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await POST(`${BaseUrl}/countries`, newCountry);
+
+/*            if (!response.ok) {
                 throw new Error('Failed to add Country');
-            }
+            }*/
 
             console.log('Country added successfully!');
             onClose();

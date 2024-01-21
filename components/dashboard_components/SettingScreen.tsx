@@ -10,6 +10,7 @@ import { AddCountryModal } from "./SettingComponents/SettingPopups/AddCountryMod
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import { BaseUrl } from "@/constants/templates";
 import {useRouter} from "next/router";
+import {DELETE} from "@/constants/fetchConfig";
 
 
 
@@ -63,18 +64,20 @@ export const SettingScreen = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting country with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/${delPopup}/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/${delPopup}/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await DELETE(`${BaseUrl}/${delPopup}/${itemId}`);
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete ${delPopup}`);
-            }
+            }*/
 
             router.reload();
             //alert(`${delPopup} deleted successfully!`); // Show success alert

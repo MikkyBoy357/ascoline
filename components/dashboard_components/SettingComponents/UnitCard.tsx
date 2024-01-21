@@ -3,6 +3,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import { Country } from './CountryCard';
 import { PackageType } from './PackageCard';
 import { TransportType } from './TransportCard';
+import CustomLoader from "@/components/CustomLoader";
+import {GET} from "@/constants/fetchConfig";
 
 export interface MeasureUnit {
     _id: string;
@@ -27,18 +29,21 @@ export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal, toggleShowD
     // Function to fetch measure units data
     const fetchUnitData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: MeasureUnit[] = await response.json();
+            const data: MeasureUnit[] =  response;
             // Set the fetched data into state
             setMeasureUnitsData(data);
 
@@ -73,7 +78,7 @@ export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal, toggleShowD
                 </div>
 
                 {
-                    loading ? (<span>Laoding ...</span>) : (
+                    loading ? (<CustomLoader/>) : (
                         <div className="inline-flex flex-col items-start gap-[16px]">
                             <div className="container mx-auto mt-8">
                                 <table className="min-w-full">

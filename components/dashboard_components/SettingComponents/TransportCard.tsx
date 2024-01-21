@@ -3,6 +3,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import { Country } from './CountryCard';
 import { PackageType } from './PackageCard';
 import { MeasureUnit } from './UnitCard';
+import CustomLoader from "@/components/CustomLoader";
+import {GET} from "@/constants/fetchConfig";
 
 export interface TransportType {
     _id: string;
@@ -30,18 +32,21 @@ export const TransportCard: React.FC<TransportCardProps> = ({ toggleShowModal, t
     // Function to fetch transport types data
     const fetchTransportData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/transportTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/transportTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+
+            const response = await GET(`${BaseUrl}/transportTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+ /*           if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: TransportType[] = await response.json();
+            const data: TransportType[] =  response;
             // Set the fetched data into state
             setTransportTypesData(data);
 
@@ -77,7 +82,7 @@ export const TransportCard: React.FC<TransportCardProps> = ({ toggleShowModal, t
                 </div>
 
                 {
-                    loading ? (<span>Loading ...</span>) : (
+                    loading ? (<CustomLoader/>) : (
                         <div className="inline-flex flex-col items-start gap-[16px]">
                             <div className="container mx-auto mt-8">
                                 <table className="min-w-full">

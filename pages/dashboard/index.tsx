@@ -5,6 +5,7 @@ import type { NextPageWithLayout } from '../_app'
 import type { ReactElement } from 'react'
 import DashboardLayout from './layout';
 import DashboardScreen from '@/components/dashboard_components/DashboardScreen';
+import {SessionProvider} from "next-auth/react";
 
 const Page: NextPageWithLayout = () => {
   return (
@@ -12,11 +13,13 @@ const Page: NextPageWithLayout = () => {
   )
 }
 
-Page.getLayout = function getLayout(page: ReactElement) {
+Page.getLayout = function getLayout(page: ReactElement,) {
   return (
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
+      <SessionProvider>
+        <DashboardLayout>
+          {page}
+        </DashboardLayout>
+      </SessionProvider>
   )
 }
 

@@ -8,6 +8,8 @@ import { BaseUrl } from "@/constants/templates";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
 import {AddProductModal} from "@/components/dashboard_components/AddProductModal";
+import CustomLoader from "@/components/CustomLoader";
+import {DELETE, GET} from "@/constants/fetchConfig";
 
 export interface Product {
     _id: string;
@@ -50,18 +52,20 @@ export const ProductListComponent = () => {
 
     const fetchProductData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/products${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/products${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/products${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Product[] = await response.json();
+            const data: Product[] = response;
             // Set the fetched data into state
             setPricingsData(data);
 
@@ -88,18 +92,20 @@ export const ProductListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting product with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/products/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/products/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await DELETE(`${BaseUrl}/products/${itemId}`);
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete`);
-            }
+            }*/
 
             router.reload();// Show success alert
             // window.location.reload(); // Refresh the page
@@ -134,7 +140,7 @@ export const ProductListComponent = () => {
                         </div>
 
                         {
-                            loading ? (<span>Loading</span>) : (
+                            loading ? (<CustomLoader/>) : (
                                 <div className="inline-flex flex-col items-start gap-[16px]">
                                     <div className="container mx-auto mt-8">
                                         <table className="min-w-full">

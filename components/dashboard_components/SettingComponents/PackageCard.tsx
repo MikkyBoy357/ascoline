@@ -3,6 +3,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import { Country } from './CountryCard';
 import { TransportType } from './TransportCard';
 import { MeasureUnit } from './UnitCard';
+import CustomLoader from "@/components/CustomLoader";
+import {GET} from "@/constants/fetchConfig";
 
 export interface PackageType {
     _id: string;
@@ -28,18 +30,21 @@ export const PackageCard: React.FC<PackageCardProps> = ({ toggleShowModal, toggl
     // Function to fetch package types data
     const fetchPackageData = useCallback( async() => {
         try {
-            const response = await fetch(`${BaseUrl}/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+
+   /*         if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: PackageType[] = await response.json();
+            const data: PackageType[] =  response;
             // Set the fetched data into state
             setPackageTypesData(data);
 
@@ -74,7 +79,7 @@ export const PackageCard: React.FC<PackageCardProps> = ({ toggleShowModal, toggl
                 </div>
 
                 {
-                    loading ? (<span>Loading ...</span>) : (
+                    loading ? (<CustomLoader/>) : (
                         <div className="inline-flex flex-col items-start gap-[16px]">
                             <div className="container mx-auto mt-8">
                                 <table className="min-w-full">

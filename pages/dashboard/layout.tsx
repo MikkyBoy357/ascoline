@@ -1,9 +1,11 @@
 'use client';
 
 import Sidebar from '@/components/Sidebar';
-import React, { Fragment, useState } from 'react'
+import React, {Fragment, useCallback, useMemo, useState} from 'react'
 import {useRouter} from "next/router";
 import {usePathname} from "next/navigation";
+import {AsteriskSquare, BookUser, Boxes, Coins, PackageSearch, PieChart, Settings, Users} from "lucide-react";
+import {User} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
 
 interface Props {
     children: React.ReactNode;
@@ -16,63 +18,67 @@ export const SIDEBAR_ITEMS: any = [
         id: "dashboard",
         label: "Dashboard",
         url: "/dashboard",
+        icon: PieChart,
+        permissions: []
     },
     {
         id: "clients",
         label: "Clients",
         url: "/dashboard/clients",
+        icon: Users,
+        permissions: [{name: "client", action: "read"}]
     },
     {
         id: "commandes",
         label: "Commandes",
         url: "/dashboard/orders",
+        icon: Boxes,
+        permissions: [{name: "commande", action: "read"}]
     },
     {
         id: "collaborateurs",
         label: "Collaborateurs",
         url: "/dashboard/partners",
+        icon: BookUser,
+        permissions: [{name: "employee", action: "read"}]
     },
     {
         id: "tarification",
         label: "Tarification",
         url: "/dashboard/tarification",
+        icon: Coins,
+        permissions: [{name: "pricing", action: "read"}]
     },
     {
         id: "product",
         label: "Produits",
         url: "/dashboard/product",
+        icon: PackageSearch,
+        permissions: [{name: "product", action: "read"}]
+
     },
-    // {
-    //     id: "profile",
-    //     label: "Profile",
-    //     url: "/dashboard/profile",
-    // },
     {
         id: "setting",
-        label: "Setting",
-        url: "/dashboard/setting",
-    },
+        label: "Permissions",
+        url: "/dashboard/permissions",
+        icon: AsteriskSquare,
+        permissions: [{name: "user", action: "read"}]
 
-    // {
-    //     label: "Templates",
-    //     url: "/",
-    //     // target: "blank"
-    // },
-    // {
-    //     label: "Contact",
-    //     url: "https://tidycal.com/yuvalsuede/60-minute-consultation-with-yuval",
-    //     target: "blank"
-    // },
-    // {
-    //     label: "Account",
-    //     url: "https://www.linkedin.com/in/yuval-suede/",
-    //     target: "blank"
-    // },
+    },
+    {
+        id: "setting",
+        label: "Paramètres",
+        url: "/dashboard/setting",
+        icon: Settings,
+        permissions: [{name: "country", action: "read"}, {name: "transportType", action: "read"}, {name: "packageType", action: "read"}, {name: "measureUnit", action: "read"}]
+    },
 ];
 
 const DashboardLayout = ({children} : any) => {
     const [showPopup, setShowPopup] = useState(false);
     const router = useRouter();
+
+
 
     const handlePopup = () => {
         setShowPopup(!showPopup);

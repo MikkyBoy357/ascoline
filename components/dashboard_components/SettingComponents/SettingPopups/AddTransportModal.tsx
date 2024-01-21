@@ -3,6 +3,7 @@ import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {POST} from "@/constants/fetchConfig";
 
 export interface AddTransportModalProps {
     isVisible: Boolean,
@@ -39,17 +40,20 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({ isVisible,
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newTransport),
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await POST(`${BaseUrl}/transportTypes`, newTransport);
+
+
+/*            if (!response.ok) {
                 throw new Error('Failed to add Transport');
-            }
+            }*/
 
             console.log('Transport added successfully!');
             onClose();

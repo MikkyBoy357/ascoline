@@ -7,6 +7,7 @@ import { Country } from '../CountryCard';
 import { PackageType } from '../PackageCard';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {POST, PUT} from "@/constants/fetchConfig";
 
 export interface AddUnitModalProps {
     isVisible: Boolean,
@@ -80,29 +81,35 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, on
             var response;
 
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/${popup}`, {
+/*                response = await fetch(`${BaseUrl}/${popup}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newUnit),
-                });
+                });*/
+
+                response = await POST(`${BaseUrl}/${popup}`, newUnit);
+
+
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/${popup}/${selectedItem._id}`, {
+   /*             response = await fetch(`${BaseUrl}/${popup}/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newUnit),
-                });
+                });*/
+
+                response = await PUT(`${BaseUrl}/${popup}/${selectedItem._id}`, newUnit);
             }
 
-            if (!response.ok) {
+/*            if (!response.ok) {
                 throw new Error('Failed to add item');
-            }
+            }*/
 
             console.log(`item ${isModify ? 'edited' : 'added'} successfully!`);
             onClose();

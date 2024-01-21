@@ -4,6 +4,8 @@ import { PackageType } from './PackageCard';
 import { TransportType } from './TransportCard';
 import { MeasureUnit } from './UnitCard';
 import {useRouter} from "next/router";
+import CustomLoader from "@/components/CustomLoader";
+import {GET} from "@/constants/fetchConfig";
 
 export interface Country {
     _id: string;
@@ -32,18 +34,20 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggl
     // Function to fetch country data
     const fetchCountryData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Country[] = await response.json();
+            const data: Country[] = response;
             // Set the fetched data into state
             setCountryData(data);
 
@@ -77,7 +81,7 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggl
                     }}/>
                 </div>
 
-                {loading ? (<span>Loading ...</span>) : (
+                {loading ? (<CustomLoader/>) : (
                     <div className="inline-flex flex-col items-start gap-[16px]">
                         <div className="container mx-auto mt-8">
                             <table className="min-w-full">

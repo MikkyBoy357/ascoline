@@ -11,6 +11,7 @@ import { PackageType } from './SettingComponents/PackageCard';
 import { TransportType } from './SettingComponents/TransportCard';
 import {Toast} from "@/constants/toastConfig";
 import {useRouter} from "next/router";
+import {POST, PUT} from "@/constants/fetchConfig";
 
 
 export interface AddOrderModalProps {
@@ -203,27 +204,35 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                     },
                     body: JSON.stringify(newOrder),
                 });
+
+                response = await POST(`${BaseUrl}/commandes`, newOrder);
+
+
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/commandes/${selectedOrder._id}`, {
+/*                response = await fetch(`${BaseUrl}/commandes/${selectedOrder._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newOrder),
-                });
+                });*/
+
+                response = await PUT(`${BaseUrl}/commandes/${selectedOrder._id}`, newOrder);
+
+
             }
 
-            if (!response.ok) {
+/*            if (!response.ok) {
                 console.log(response)
 
                 const errorData = await response.json()
                 alert(`Error adding pricing: ${errorData.message}`)
 
                 throw new Error('Failed to add order');
-            }
+            }*/
 
             console.log(`Order ${isModify ? "edited" : "added"} successfully!`);
             onClose();

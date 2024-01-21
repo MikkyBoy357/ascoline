@@ -3,6 +3,9 @@ import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
+import {Loader2} from "lucide-react";
+import CustomLoader from "@/components/CustomLoader";
+import {DELETE, GET} from "@/constants/fetchConfig";
 
 export interface Client {
     _id: string;
@@ -41,18 +44,20 @@ export const ClientListComponent = () => {
     // Function to fetch clients data
     const fetchClientsData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`,);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Client[] = await response.json();
+            const data: Client[] = response;
             // Set the fetched data into state
             setClientsData(data);
 
@@ -83,18 +88,20 @@ export const ClientListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/clients/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/clients/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await DELETE(`${BaseUrl}/clients/${itemId}`, );
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete`);
-            }
+            }*/
 
             router.reload();
             //alert(`deleted successfully!`); // Show success alert
@@ -127,7 +134,7 @@ export const ClientListComponent = () => {
                     <i className="fa-solid fa-plus ml-1 text-white"></i>
                 </div>
                 {
-                    loading ? (<span>Loading</span>) : (
+                    loading ? (<CustomLoader/>) : (
                         <div className="mr-10 px-4 pb-10 bg-white rounded-[12px]">
                             <div className="flex flex-col rounded-[12px] border-blue-600">
                                 <div className="inline-flex flex-col items-start gap-[16px]">

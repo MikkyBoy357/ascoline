@@ -8,6 +8,7 @@ import UnitSelectComponent from '../MyUnitSelectComponent';
 import { Pricing } from './PricingList';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {POST, PUT} from "@/constants/fetchConfig";
 
 export interface AddPricingModalProps {
     isVisible: Boolean,
@@ -146,29 +147,37 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
 
             var response;
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/pricings`, {
+/*                response = await fetch(`${BaseUrl}/pricings`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newPricing),
-                });
+                });*/
+
+                response = await POST(`${BaseUrl}/pricings`, newPricing);
+
+
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/pricings/${selectedItem._id}`, {
+/*                response = await fetch(`${BaseUrl}/pricings/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newPricing),
-                });
+                });*/
+
+                response = await PUT(`${BaseUrl}/pricings/${selectedItem._id}`, newPricing);
+
+
             }
 
-            if (!response.ok) {
+/*            if (!response.ok) {
                 throw new Error(`Failed to ${isModify ? 'edit' : 'add'} pricing`);
-            }
+            }*/
 
             console.log(`Pricing ${isModify ? 'edited' : 'added'} successfully!`);
             onClose();

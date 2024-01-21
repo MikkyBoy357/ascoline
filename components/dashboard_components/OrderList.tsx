@@ -9,6 +9,8 @@ import { BaseUrl } from "@/constants/templates";
 import { Pricing } from "./PricingList";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
+import CustomLoader from "@/components/CustomLoader";
+import {DELETE, GET} from "@/constants/fetchConfig";
 // import { Unit } from "../MyInputFieldComponents";
 
 export interface Commande {
@@ -47,18 +49,20 @@ export const OrderListComponent = () => {
     // Function to fetch clients data
     const fetchClientsData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/clients`, {
+/*            const response = await fetch(`${BaseUrl}/clients`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+           const response = await GET(`${BaseUrl}/clients`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Client[] = await response.json();
+            const data: Client[] = response;
             // Set the fetched data into state
             setClientsData(data);
 
@@ -71,18 +75,20 @@ export const OrderListComponent = () => {
     // Function to fetch commandes data
     const fetchCommandesData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Commande[] = await response.json();
+            const data: Commande[] = response;
             console.log(data, "omo");
             // Set the fetched data into state
             setCommandesData(data);
@@ -98,18 +104,21 @@ export const OrderListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/packageTypes`, {
+ /*           const response = await fetch(`${BaseUrl}/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/packageTypes`);
+
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: PackageType[] = await response.json();
+            const data: PackageType[] = response;
             // Set the fetched data into state
             setPackageTypesData(data);
 
@@ -122,18 +131,20 @@ export const OrderListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/transportTypes`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: TransportType[] = await response.json();
+            const data: TransportType[] = response;
             // Set the fetched data into state
             setTransportTypesData(data);
 
@@ -146,18 +157,20 @@ export const OrderListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/measureUnits`, {
+/*            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/measureUnits`);
+
+ /*           if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: MeasureUnit[] = await response.json();
+            const data: MeasureUnit[] = response;
             // Set the fetched data into state
             setMeasureUnitsData(data);
 
@@ -170,18 +183,21 @@ export const OrderListComponent = () => {
     // Function to fetch country data
     const fetchCountryData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/countries`, {
+/*            const response = await fetch(`${BaseUrl}/countries`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/countries`);
+
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Country[] = await response.json();
+            const data: Country[] = response;
             // Set the fetched data into state
             setCountryData(data);
 
@@ -225,18 +241,20 @@ export const OrderListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = DELETE(`${BaseUrl}/commandes/${itemId}`);
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete`);
-            }
+            }*/
 
             router.reload();
             //alert(`deleted successfully!`); // Show success alert
@@ -272,7 +290,7 @@ export const OrderListComponent = () => {
                         </div>
 
                         {
-                            loading ? (<span>Loading</span>) : (
+                            loading ? (<CustomLoader/>) : (
                                 <div className="inline-flex flex-col items-start gap-[16px]">
                                     <div className="container mx-auto mt-8">
                                         <table className="min-w-full">

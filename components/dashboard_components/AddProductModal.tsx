@@ -9,6 +9,7 @@ import { Pricing } from './PricingList';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
 import {Product} from "@/components/dashboard_components/ProductsList";
+import {POST, PUT} from "@/constants/fetchConfig";
 
 export interface AddProductModalProps {
     isVisible: Boolean,
@@ -110,29 +111,37 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
 
             var response;
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/products`, {
+  /*              response = await fetch(`${BaseUrl}/products`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newProduct),
-                });
+                });*/
+
+                response = await POST(`${BaseUrl}/products`, newProduct);
+
+
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/products/${selectedItem._id}`, {
+/*                response = await fetch(`${BaseUrl}/products/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newProduct),
-                });
+                });*/
+
+                response = await PUT(`${BaseUrl}/products/${selectedItem._id}`, newProduct);
+
+
             }
 
-            if (!response.ok) {
+/*            if (!response.ok) {
                 throw new Error(`Failed to ${isModify ? 'edit' : 'add'} product`);
-            }
+            }*/
 
             console.log(`Products ${isModify ? 'edited' : 'added'} successfully!`);
             onClose();

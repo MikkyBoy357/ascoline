@@ -5,6 +5,7 @@ import { Client } from './ClientList';
 import { Employee } from './EmployeeList';
 import {Toast} from "@/constants/toastConfig";
 import {useRouter} from "next/router";
+import {POST, PUT} from "@/constants/fetchConfig";
 
 export interface AddClientModalProps {
     isVisible: Boolean,
@@ -122,31 +123,38 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
             var response;
 
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/auth/signup`, {
+ /*               response = await fetch(`${BaseUrl}/auth/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newClient),
-                });
+                });*/
+
+                response = await POST(`${BaseUrl}/auth/signup`, newClient);
+
+
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-                response = await fetch(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, {
+/*                response = await fetch(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(newClient),
-                });
+                });*/
+
+                response = await PUT(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, newClient);
+
             }
 
-            if (!response.ok) {
+ /*           if (!response.ok) {
                 const errorData = await response.json();
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to add ${type}`);
-            }
+            }*/
 
             console.log(`${type} ${isModify ? "edited" : "added"} successfully!`);
             onClose();

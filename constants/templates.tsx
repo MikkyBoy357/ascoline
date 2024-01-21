@@ -1,5 +1,11 @@
-export const BaseUrl: string = 'http://13.41.57.233:3000';
- //export const BaseUrl: string = 'http://localhost:3000';
+//export const BaseUrl: string = 'http://13.41.57.233:3000';
+import {
+    Permission,
+    PermissionName,
+    User
+} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
+
+export const BaseUrl: string = 'http://localhost:3000';
 
 export type TemplateInput = {
     id: string;
@@ -248,3 +254,54 @@ export const ADD_TRANSPORT_INPUTS: TemplateInput[] = [
         type: "text",
     },
 ];
+
+export const validPermissionNames = ['employee', 'client', 'commande', 'country', 'measureUnit', 'packageType', 'pricing', 'product', 'transportType', 'user', 'permission'];
+
+export function checkPermissionNameToDisplay(permission : Permission)  {
+
+    let name = "";
+
+    if (permission.name === "employee")
+        name = "employé";
+    else if (permission.name === "country")
+        name = "pays";
+    else if (permission.name === "measureUnit")
+        name = "unité-de-mesure";
+    else if (permission.name === "packageType")
+        name = "type-de-packet";
+    else if (permission.name === "pricing")
+        name = "tarification";
+    else if (permission.name === "product")
+        name = "produit";
+    else if (permission.name === "transportType")
+        name = "type-de-transport";
+    else if (permission.name === "user")
+        name = "utilisateur";
+    else
+        name = permission.name;
+
+
+    return name
+}
+
+export function checkPermissionActionToDisplay(permission : Permission)  {
+
+    let action = "";
+
+
+
+    if (permission.action === "update")
+        action = "modifier";
+    else if (permission.action === "delete")
+        action = "supprimer";
+    else if (permission.action === "read")
+        action = "lire";
+    else if (permission.action === "create")
+        action = "créer";
+    else
+        action = permission.action;
+
+
+
+    return action
+}

@@ -3,6 +3,8 @@ import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
+import CustomLoader from "@/components/CustomLoader";
+import {DELETE, GET} from "@/constants/fetchConfig";
 
 export interface Employee {
     _id: string;
@@ -44,18 +46,20 @@ export const EmployeeListComponent = () => {
 
     const fetchEmployeesData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`${BaseUrl}/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Employee[] = await response.json();
+            const data: Employee[] =  response;
             // Set the fetched data into state
             setEmployeesData(data);
 
@@ -85,18 +89,20 @@ export const EmployeeListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting employee with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await DELETE(`${BaseUrl}/employees/${itemId}`);
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete`);
-            }
+            }*/
 
             router.reload();
             //alert(`deleted successfully!`); // Show success alert
@@ -133,7 +139,7 @@ export const EmployeeListComponent = () => {
                 </div>
 
                 {
-                    loading ? (<span>Loading</span>) : (
+                    loading ? (<CustomLoader/>) : (
                         <div className="mr-10 px-4 pb-10 bg-white rounded-[12px]">
                             <div className="flex flex-col rounded-[12px] border-blue-600">
                                 <div className="inline-flex flex-col items-start gap-[16px]">

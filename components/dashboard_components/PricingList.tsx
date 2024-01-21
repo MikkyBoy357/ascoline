@@ -7,6 +7,8 @@ import { MeasureUnit } from "./SettingComponents/UnitCard";
 import { BaseUrl } from "@/constants/templates";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
+import CustomLoader from "@/components/CustomLoader";
+import {DELETE, GET} from "@/constants/fetchConfig";
 
 export interface Pricing {
     _id: string;
@@ -61,18 +63,21 @@ export const PricingListComponent = () => {
 
     const fetchPricingsData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+ /*           const response = await fetch(`${BaseUrl}/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+
+
+  /*          if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Pricing[] = await response.json();
+            const data: Pricing[] = response;
             // Set the fetched data into state
             setPricingsData(data);
 
@@ -101,18 +106,21 @@ export const PricingListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/packageTypes`, {
+/*            const response = await fetch(`${BaseUrl}/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/packageTypes`);
+
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: PackageType[] = await response.json();
+            const data: PackageType[] = response;
             // Set the fetched data into state
             setPackageTypesData(data);
 
@@ -125,18 +133,20 @@ export const PricingListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/transportTypes`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: TransportType[] = await response.json();
+            const data: TransportType[] = response;
             // Set the fetched data into state
             setTransportTypesData(data);
 
@@ -149,18 +159,20 @@ export const PricingListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-            const response = await fetch(`${BaseUrl}/measureUnits`, {
+/*            const response = await fetch(`${BaseUrl}/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`${BaseUrl}/measureUnits`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: MeasureUnit[] = await response.json();
+            const data: MeasureUnit[] =  response;
             // Set the fetched data into state
             setMeasureUnitsData(data);
 
@@ -173,18 +185,20 @@ export const PricingListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/pricings/${itemId}`, {
+/*            const response = await fetch(`${BaseUrl}/pricings/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await DELETE(`${BaseUrl}/pricings/${itemId}`);
+
+/*            if (!response.ok) {
                 const errorData = await response.json()
                 alert(`Error => ${errorData.message}`)
                 throw new Error(`Failed to delete`);
-            }
+            }*/
 
             //alert(`deleted successfully!`);
             router.reload();// Show success alert
@@ -220,7 +234,7 @@ export const PricingListComponent = () => {
                         </div>
 
                         {
-                            loading ? (<span>Loading</span>) : (
+                            loading ? (<CustomLoader/>) : (
                                 <div className="inline-flex flex-col items-start gap-[16px]">
                                     <div className="container mx-auto mt-8">
                                         <table className="min-w-full">

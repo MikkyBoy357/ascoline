@@ -3,6 +3,7 @@ import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";
+import {POST} from "@/constants/fetchConfig";
 
 export interface AddPackageModalProps {
     isVisible: Boolean,
@@ -38,17 +39,19 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({ isVisible, tex
                 return;
             }
 
-            const response = await fetch(`${BaseUrl}/packageTypes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPackage),
-            });
+            // const response = await fetch(`${BaseUrl}/packageTypes`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(newPackage),
+            // });
 
-            if (!response.ok) {
+            const response = await POST(`${BaseUrl}/packageTypes`, newPackage);
+
+/*            if (!response.ok) {
                 throw new Error('Failed to add Package Type');
-            }
+            }*/
 
             console.log('Package Type added successfully!');
             onClose();

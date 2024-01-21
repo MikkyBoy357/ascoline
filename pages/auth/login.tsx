@@ -4,6 +4,9 @@ import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import { renderInputField } from "../signup";
+import {signIn} from "next-auth/react";
+import logoPic from "@/public/logo.jpeg";
+import {POST} from "@/constants/fetchConfig";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -25,37 +28,44 @@ const Login = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch(`${BaseUrl}/auth/login`, {
+/*            const response = await fetch(`${BaseUrl}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password: pass }),
-            });
+            });*/
 
-            if (response.ok) {
+            const response = await POST(`${BaseUrl}/auth/login`, {email, password: pass});
 
-                const data = await response.json();
+            const data = response;
 
-                if (data.user.type !== "admin") {
-                    // Display alert dialog to the user when login fails
-                    alert("Login failed. The user doesn't have correct access");
-                } else {
-                    const { token } = data;
-
-                    // Save the token in local storage
-                    localStorage.setItem('token', token);
-
-                    // If login is successful, redirect to dashboard or perform necessary actions
-                    router.push('/dashboard');
-                }
-
+            if (data.user.type !== "admin" && data.user.type !== "employee") {
+                // Display alert dialog to the user when login fails
+                alert("Login failed. The user doesn't have correct access");
             } else {
-                const errorData = await response.json();
-                console.log("Omo", errorData.message)
+                const { token } = data;
+                const { user } = data;
 
-                alert(errorData.message);
+                console.log("user", data.user.permissions)
+
+                await signIn("credentials", {
+                    redirect: true,
+                    ...user,
+                    permissions: JSON.stringify(user.permissions),
+                    jwt: token,
+                    callbackUrl: "/dashboard",
+                });
+                // Save the user in local storage
+                localStorage.setItem('user', JSON.stringify(user));
+
+                // Save the token in local storage
+                localStorage.setItem('token', token);
+
+                // If login is successful, redirect to dashboard or perform necessary actions
+                router.push('/dashboard');
             }
+
         } catch (error) {
             console.error('Error:', error);
             // Display alert dialog to the user when login fails
@@ -66,16 +76,16 @@ const Login = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="bg-[#ffffff] flex flex-row justify-center w-full">
-                <div className="bg-[#ffffff] w-[1440px] h-[1024px] relative">
-                    <div className="inline-flex flex-col items-center gap-[40px] absolute top-[270px] left-[460px]">
+                <div className="bg-[#ffffff] w-screen h-screen relative">
+                    <div className="inline-flex flex-col items-center gap-10 absolute top-40 left-1/3">
                         <div className="inline-flex flex-col items-center gap-[8px] relative flex-[0_0_auto]">
                             <div className="relative w-[150px] h-[100px]">
-                                <img
+                                <Image
                                     className="absolute w-[104px] h-[104px] top-[5px] left-0"
                                     height={312}
                                     width={312}
                                     alt="Save care box"
-                                    src="/logo.jpeg"
+                                    src={logoPic}
                                 />
                                 {/* <div className="absolute w-[144px] h-[40px] top-[24px] left-[60px] [font-family:'MADE_TOMMY-Medium',Helvetica] font-medium text-[#04009a] text-[32px] tracking-[-0.96px] leading-[normal]">
                                     Ascoline
