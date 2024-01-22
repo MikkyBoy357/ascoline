@@ -119,10 +119,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
                             </Fragment>
                         ))}
                         <button className={`mb-6 mx-8 py-2 px-4 group rounded-md hover:bg-[#4763e4] text-gray-500 hover:text-white transition duration-300`} onClick={() => {
-                            signOut({
-                                redirect: true,
-                                callbackUrl: "/auth/login",
-                            });
+                            signOut();
                         }}>
                             <div className='flex flex-row items-center font-semibold'>
                                 <Power className="mr-3" color="black"/>
