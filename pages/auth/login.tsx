@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
+import { LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import { renderInputField } from "../signup";
@@ -28,7 +28,7 @@ const Login = () => {
         event.preventDefault();
 
         try {
-/*            const response = await fetch(`${BaseUrl}/auth/login`, {
+/*            const response = await fetch(`/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const Login = () => {
                 body: JSON.stringify({ email, password: pass }),
             });*/
 
-            const response = await POST(`${BaseUrl}/auth/login`, {email, password: pass});
+            const response = await POST(`/auth/login`, {email, password: pass});
 
             const data = response;
 

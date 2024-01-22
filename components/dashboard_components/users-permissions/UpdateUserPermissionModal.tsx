@@ -1,4 +1,4 @@
-import {BaseUrl, checkPermissionActionToDisplay, checkPermissionNameToDisplay} from '@/constants/templates';
+import { checkPermissionActionToDisplay, checkPermissionNameToDisplay} from '@/constants/templates';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useRouter} from "next/router";
 import {Permission, User} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
@@ -44,7 +44,7 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
         if (token) headers.Authorization = `Bearer ${token}`;
 
         try {
-            const response = await fetch(`${BaseUrl}/permissions`, {
+            const response = await fetch(`/permissions`, {
                 method: "GET",
                 headers: headers
             });
@@ -109,7 +109,7 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
                 };
 
 
-                const response = await  PUT(`${BaseUrl}/users/${selectedUser?._id}`, updateData)
+                const response = await  PUT(`/users/${selectedUser?._id}`, updateData)
 
                 console.log("response",  response);
 

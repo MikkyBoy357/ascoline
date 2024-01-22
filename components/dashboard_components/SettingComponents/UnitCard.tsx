@@ -1,4 +1,4 @@
-import { BaseUrl } from '@/constants/templates';
+
 import React, {useCallback, useEffect, useState} from 'react';
 import { Country } from './CountryCard';
 import { PackageType } from './PackageCard';
@@ -29,14 +29,14 @@ export const UnitCard: React.FC<UnitCardProps> = ({ toggleShowModal, toggleShowD
     // Function to fetch measure units data
     const fetchUnitData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/measureUnits${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 
 /*            if (!response.ok) {

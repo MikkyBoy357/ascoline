@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
@@ -39,7 +39,7 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({ isVisible, tex
                 return;
             }
 
-            // const response = await fetch(`${BaseUrl}/packageTypes`, {
+            // const response = await fetch(`/packageTypes`, {
             //     method: 'POST',
             //     headers: {
             //         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({ isVisible, tex
             //     body: JSON.stringify(newPackage),
             // });
 
-            const response = await POST(`${BaseUrl}/packageTypes`, newPackage);
+            const response = await POST(`/packageTypes`, newPackage);
 
 /*            if (!response.ok) {
                 throw new Error('Failed to add Package Type');

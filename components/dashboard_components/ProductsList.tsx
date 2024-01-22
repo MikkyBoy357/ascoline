@@ -4,7 +4,7 @@ import { AddPricingModal } from "./AddPricingModal";
 import { PackageType } from "./SettingComponents/PackageCard";
 import { TransportType } from "./SettingComponents/TransportCard";
 import { MeasureUnit } from "./SettingComponents/UnitCard";
-import { BaseUrl } from "@/constants/templates";
+
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
 import {AddProductModal} from "@/components/dashboard_components/AddProductModal";
@@ -52,14 +52,14 @@ export const ProductListComponent = () => {
 
     const fetchProductData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/products${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/products${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/products${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/products${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -92,14 +92,14 @@ export const ProductListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting product with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/products/${itemId}`, {
+/*            const response = await fetch(`/products/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = await DELETE(`${BaseUrl}/products/${itemId}`);
+            const response = await DELETE(`/products/${itemId}`);
 
 /*            if (!response.ok) {
                 const errorData = await response.json()

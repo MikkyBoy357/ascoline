@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { BaseUrl, FORGOT_PASSWORD_INPUTS, LOGIN_INPUTS } from "@/constants/templates";
+import {  FORGOT_PASSWORD_INPUTS, LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import { renderInputField } from "./signup";
@@ -22,7 +22,7 @@ export const ForgotPasswordComponent = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch(`${BaseUrl}/auth/login`, {
+            const response = await fetch(`/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

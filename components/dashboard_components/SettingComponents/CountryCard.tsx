@@ -1,4 +1,4 @@
-import { BaseUrl } from '@/constants/templates';
+
 import React, {useCallback, useEffect, useState} from 'react';
 import { PackageType } from './PackageCard';
 import { TransportType } from './TransportCard';
@@ -34,14 +34,14 @@ export const CountryCard: React.FC<CountryCardProps> = ({ toggleShowModal, toggl
     // Function to fetch country data
     const fetchCountryData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/countries${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");

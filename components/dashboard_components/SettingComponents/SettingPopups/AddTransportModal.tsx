@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
@@ -40,7 +40,7 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({ isVisible,
                 return;
             }
 
-/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`/transportTypes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({ isVisible,
                 body: JSON.stringify(newTransport),
             });*/
 
-            const response = await POST(`${BaseUrl}/transportTypes`, newTransport);
+            const response = await POST(`/transportTypes`, newTransport);
 
 
 /*            if (!response.ok) {

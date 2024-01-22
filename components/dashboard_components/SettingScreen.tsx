@@ -8,7 +8,7 @@ import { AddPackageModal } from "./SettingComponents/SettingPopups/AddPackageMod
 import { AddUnitModal } from "./SettingComponents/SettingPopups/AddUnitModal";
 import { AddCountryModal } from "./SettingComponents/SettingPopups/AddCountryModal";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
-import { BaseUrl } from "@/constants/templates";
+
 import {useRouter} from "next/router";
 import {DELETE} from "@/constants/fetchConfig";
 
@@ -64,14 +64,14 @@ export const SettingScreen = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting country with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/${delPopup}/${itemId}`, {
+/*            const response = await fetch(`/${delPopup}/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = await DELETE(`${BaseUrl}/${delPopup}/${itemId}`);
+            const response = await DELETE(`/${delPopup}/${itemId}`);
 
 /*            if (!response.ok) {
                 const errorData = await response.json()

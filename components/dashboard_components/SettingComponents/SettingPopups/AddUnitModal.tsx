@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { MeasureUnit } from '../UnitCard';
@@ -81,7 +81,7 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, on
             var response;
 
             if (!isModify) {
-/*                response = await fetch(`${BaseUrl}/${popup}`, {
+/*                response = await fetch(`/${popup}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -89,14 +89,14 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, on
                     body: JSON.stringify(newUnit),
                 });*/
 
-                response = await POST(`${BaseUrl}/${popup}`, newUnit);
+                response = await POST(`/${popup}`, newUnit);
 
 
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-   /*             response = await fetch(`${BaseUrl}/${popup}/${selectedItem._id}`, {
+   /*             response = await fetch(`/${popup}/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({ isVisible, popup, on
                     body: JSON.stringify(newUnit),
                 });*/
 
-                response = await PUT(`${BaseUrl}/${popup}/${selectedItem._id}`, newUnit);
+                response = await PUT(`/${popup}/${selectedItem._id}`, newUnit);
             }
 
 /*            if (!response.ok) {

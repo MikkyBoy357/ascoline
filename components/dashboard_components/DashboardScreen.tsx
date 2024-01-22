@@ -1,4 +1,4 @@
-import { BaseUrl } from '@/constants/templates'
+
 import React, { useState, useEffect } from 'react'
 import {GET} from "@/constants/fetchConfig";
 
@@ -9,12 +9,12 @@ const DashboardScreen = () => {
 
     const fetchData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/dashboard`, {
+/*            const response = await fetch(`/dashboard`, {
                 method: 'GET',
                 // You can add headers or body payload if needed
             });*/
 
-            const response = await GET(`${BaseUrl}/dashboard`);
+            const response = await GET(`/dashboard`);
 
             const data =  response;
             setTotalColis(data.totalColis || 0);

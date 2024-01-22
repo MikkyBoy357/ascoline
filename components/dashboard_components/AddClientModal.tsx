@@ -1,4 +1,4 @@
-import { BaseUrl, USER_CONFIG_INPUTS } from '@/constants/templates';
+import { USER_CONFIG_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { Client } from './ClientList';
@@ -123,7 +123,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
             var response;
 
             if (!isModify) {
- /*               response = await fetch(`${BaseUrl}/auth/signup`, {
+ /*               response = await fetch(`/auth/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,14 +131,14 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
                     body: JSON.stringify(newClient),
                 });*/
 
-                response = await POST(`${BaseUrl}/auth/signup`, newClient);
+                response = await POST(`/auth/signup`, newClient);
 
 
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-/*                response = await fetch(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, {
+/*                response = await fetch(`/${getEndpoint()}/${selectedUser._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
                     body: JSON.stringify(newClient),
                 });*/
 
-                response = await PUT(`${BaseUrl}/${getEndpoint()}/${selectedUser._id}`, newClient);
+                response = await PUT(`/${getEndpoint()}/${selectedUser._id}`, newClient);
 
             }
 

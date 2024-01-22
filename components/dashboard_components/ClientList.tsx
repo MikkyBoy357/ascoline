@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import { AddClientModal } from "./AddClientModal";
-import { BaseUrl } from "@/constants/templates";
+
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
 import {Loader2} from "lucide-react";
@@ -44,14 +44,14 @@ export const ClientListComponent = () => {
     // Function to fetch clients data
     const fetchClientsData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`,);
+            const response = await GET(`/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`,);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -88,14 +88,14 @@ export const ClientListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/clients/${itemId}`, {
+/*            const response = await fetch(`/clients/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = await DELETE(`${BaseUrl}/clients/${itemId}`, );
+            const response = await DELETE(`/clients/${itemId}`, );
 
 /*            if (!response.ok) {
                 const errorData = await response.json()

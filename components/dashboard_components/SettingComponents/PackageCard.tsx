@@ -1,4 +1,4 @@
-import { BaseUrl } from '@/constants/templates';
+
 import React, {useCallback, useEffect, useState} from 'react';
 import { Country } from './CountryCard';
 import { TransportType } from './TransportCard';
@@ -30,14 +30,14 @@ export const PackageCard: React.FC<PackageCardProps> = ({ toggleShowModal, toggl
     // Function to fetch package types data
     const fetchPackageData = useCallback( async() => {
         try {
-/*            const response = await fetch(`${BaseUrl}/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/packageTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 
    /*         if (!response.ok) {

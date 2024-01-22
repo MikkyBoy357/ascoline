@@ -5,7 +5,7 @@ import { TransportType } from "./SettingComponents/TransportCard";
 import { PackageType } from "./SettingComponents/PackageCard";
 import { Country } from "./SettingComponents/CountryCard";
 import { Client } from "./ClientList";
-import { BaseUrl } from "@/constants/templates";
+
 import { Pricing } from "./PricingList";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
@@ -49,14 +49,14 @@ export const OrderListComponent = () => {
     // Function to fetch clients data
     const fetchClientsData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/clients`, {
+/*            const response = await fetch(`/clients`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-           const response = await GET(`${BaseUrl}/clients`);
+           const response = await GET(`/clients`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -75,14 +75,14 @@ export const OrderListComponent = () => {
     // Function to fetch commandes data
     const fetchCommandesData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -104,14 +104,14 @@ export const OrderListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
- /*           const response = await fetch(`${BaseUrl}/packageTypes`, {
+ /*           const response = await fetch(`/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/packageTypes`);
+            const response = await GET(`/packageTypes`);
 
 
 /*            if (!response.ok) {
@@ -131,14 +131,14 @@ export const OrderListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/transportTypes`);
+            const response = await GET(`/transportTypes`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -157,14 +157,14 @@ export const OrderListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/measureUnits`, {
+/*            const response = await fetch(`/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/measureUnits`);
+            const response = await GET(`/measureUnits`);
 
  /*           if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -183,14 +183,14 @@ export const OrderListComponent = () => {
     // Function to fetch country data
     const fetchCountryData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/countries`, {
+/*            const response = await fetch(`/countries`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/countries`);
+            const response = await GET(`/countries`);
 
 
 /*            if (!response.ok) {
@@ -241,14 +241,14 @@ export const OrderListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
+/*            const response = await fetch(`/commandes/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = DELETE(`${BaseUrl}/commandes/${itemId}`);
+            const response = DELETE(`/commandes/${itemId}`);
 
 /*            if (!response.ok) {
                 const errorData = await response.json()

@@ -1,4 +1,4 @@
-import { ADD_ORDER_INPUTS, BaseUrl } from '@/constants/templates';
+import { ADD_ORDER_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { Commande } from './OrderList';
@@ -197,7 +197,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
             var response;
 
             if (!isModify) {
-                response = await fetch(`${BaseUrl}/commandes`, {
+                response = await fetch(`/commandes`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -205,14 +205,14 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                     body: JSON.stringify(newOrder),
                 });
 
-                response = await POST(`${BaseUrl}/commandes`, newOrder);
+                response = await POST(`/commandes`, newOrder);
 
 
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-/*                response = await fetch(`${BaseUrl}/commandes/${selectedOrder._id}`, {
+/*                response = await fetch(`/commandes/${selectedOrder._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                     body: JSON.stringify(newOrder),
                 });*/
 
-                response = await PUT(`${BaseUrl}/commandes/${selectedOrder._id}`, newOrder);
+                response = await PUT(`/commandes/${selectedOrder._id}`, newOrder);
 
 
             }

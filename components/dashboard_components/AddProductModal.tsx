@@ -1,4 +1,4 @@
-import {ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, ADD_PRODUCT_INPUTS, BaseUrl} from '@/constants/templates';
+import {ADD_ORDER_INPUTS, ADD_PRICING_INPUTS, ADD_PRODUCT_INPUTS} from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useEffect, useState } from 'react';
 import { PackageType } from './SettingComponents/PackageCard';
@@ -111,7 +111,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
 
             var response;
             if (!isModify) {
-  /*              response = await fetch(`${BaseUrl}/products`, {
+  /*              response = await fetch(`/products`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -119,14 +119,14 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     body: JSON.stringify(newProduct),
                 });*/
 
-                response = await POST(`${BaseUrl}/products`, newProduct);
+                response = await POST(`/products`, newProduct);
 
 
             } else {
                 if (!isChanged) {
                     return alert("Values were not changed");
                 }
-/*                response = await fetch(`${BaseUrl}/products/${selectedItem._id}`, {
+/*                response = await fetch(`/products/${selectedItem._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     body: JSON.stringify(newProduct),
                 });*/
 
-                response = await PUT(`${BaseUrl}/products/${selectedItem._id}`, newProduct);
+                response = await PUT(`/products/${selectedItem._id}`, newProduct);
 
 
             }

@@ -1,4 +1,4 @@
-import { ADD_TRANSPORT_INPUTS, BaseUrl } from '@/constants/templates';
+import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
 import { renderInputField } from '@/pages/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
@@ -40,7 +40,7 @@ export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, tex
                 return;
             }
 
-/*            const response = await fetch(`${BaseUrl}/countries`, {
+/*            const response = await fetch(`/countries`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const AddCountryModal: React.FC<AddCountryModalProps> = ({ isVisible, tex
                 body: JSON.stringify(newCountry),
             });*/
 
-            const response = await POST(`${BaseUrl}/countries`, newCountry);
+            const response = await POST(`/countries`, newCountry);
 
 /*            if (!response.ok) {
                 throw new Error('Failed to add Country');

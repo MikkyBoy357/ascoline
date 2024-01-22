@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import { AddClientModal } from "../AddClientModal";
 import {
-    BaseUrl,
+
     checkPermissionActionToDisplay,
     checkPermissionNameToDisplay,
     validPermissionNames
@@ -104,7 +104,7 @@ export const UsersPermissionsListComponent = () => {
 
         try {
 
-            const response = await GET(`${BaseUrl}/users?type=employee${searchText.length > 0 ? `&search=${searchText}` : ""}`);
+            const response = await GET(`/users?type=employee${searchText.length > 0 ? `&search=${searchText}` : ""}`);
 
 
 

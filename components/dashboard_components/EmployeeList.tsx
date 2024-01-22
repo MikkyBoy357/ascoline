@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import { AddClientModal } from "./AddClientModal";
-import { BaseUrl } from "@/constants/templates";
+
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
 import CustomLoader from "@/components/CustomLoader";
@@ -46,14 +46,14 @@ export const EmployeeListComponent = () => {
 
     const fetchEmployeesData = useCallback(async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+/*            const response = await fetch(`/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -89,14 +89,14 @@ export const EmployeeListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting employee with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
+/*            const response = await fetch(`/employees/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = await DELETE(`${BaseUrl}/employees/${itemId}`);
+            const response = await DELETE(`/employees/${itemId}`);
 
 /*            if (!response.ok) {
                 const errorData = await response.json()

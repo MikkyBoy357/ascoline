@@ -4,7 +4,7 @@ import { AddPricingModal } from "./AddPricingModal";
 import { PackageType } from "./SettingComponents/PackageCard";
 import { TransportType } from "./SettingComponents/TransportCard";
 import { MeasureUnit } from "./SettingComponents/UnitCard";
-import { BaseUrl } from "@/constants/templates";
+
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import {useRouter} from "next/router";
 import CustomLoader from "@/components/CustomLoader";
@@ -63,14 +63,14 @@ export const PricingListComponent = () => {
 
     const fetchPricingsData = useCallback(async () => {
         try {
- /*           const response = await fetch(`${BaseUrl}/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
+ /*           const response = await fetch(`/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`);
+            const response = await GET(`/pricings${searchText.length > 0 ? `?search=${searchText}` : ""}`);
 
 
   /*          if (!response.ok) {
@@ -106,14 +106,14 @@ export const PricingListComponent = () => {
     // Function to fetch package types data
     const fetchPackageData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/packageTypes`, {
+/*            const response = await fetch(`/packageTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/packageTypes`);
+            const response = await GET(`/packageTypes`);
 
 
 /*            if (!response.ok) {
@@ -133,14 +133,14 @@ export const PricingListComponent = () => {
     // Function to fetch transport types data
     const fetchTransportData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/transportTypes`, {
+/*            const response = await fetch(`/transportTypes`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/transportTypes`);
+            const response = await GET(`/transportTypes`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -159,14 +159,14 @@ export const PricingListComponent = () => {
     // Function to fetch measure units data
     const fetchUnitData = async () => {
         try {
-/*            const response = await fetch(`${BaseUrl}/measureUnits`, {
+/*            const response = await fetch(`/measureUnits`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });*/
 
-            const response = await GET(`${BaseUrl}/measureUnits`);
+            const response = await GET(`/measureUnits`);
 
 /*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -185,14 +185,14 @@ export const PricingListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting client with ID: ${itemId}`);
-/*            const response = await fetch(`${BaseUrl}/pricings/${itemId}`, {
+/*            const response = await fetch(`/pricings/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-            const response = await DELETE(`${BaseUrl}/pricings/${itemId}`);
+            const response = await DELETE(`/pricings/${itemId}`);
 
 /*            if (!response.ok) {
                 const errorData = await response.json()
