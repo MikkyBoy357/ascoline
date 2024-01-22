@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(
 
 
 
-        if (!config?.url?.endsWith("/login")) {
+        if (!config?.url?.endsWith("/auth/login")) {
             if (session?.user?.jwt)
                 config.headers["Authorization"] = `Bearer ${session?.user?.jwt}`;
         }
@@ -52,6 +52,7 @@ axiosInstance.interceptors.response.use(
         }
 
         if (error.response.status === 401) {
+            console.log("401 401 401")
             signOut();
         }
 

@@ -34,10 +34,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const pathName = usePathname();
-    const { data: session, status } = useSession({
-        required: true,
-        onUnauthenticated: () => router.replace("/auth/login"),
-    });
+    const { data: session, status } = useSession();
 
 
     const handleClick = () => {
