@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     serverActions: {
-      allowedOrigins: ["13.41.57.233:3001", "localhost:3001"]
+      allowedOrigins: ["13.41.57.233:3001", "localhost:3001", "13.41.57.233:3000"]
     }
   }
 }

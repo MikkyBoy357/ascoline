@@ -52,14 +52,7 @@ axiosInstance.interceptors.response.use(
         }
 
         if (error.response.status === 401) {
-            console.log("401");
-            if (typeof window !== "undefined") {
-                // Remove the token in local storage
-                localStorage.removeItem('token');
-
-                // Redirect to login or perform necessary actions
-                window.location.replace('/auth/login')
-            }
+            signOut();
         }
 
         if (error.response.status === 403) {
