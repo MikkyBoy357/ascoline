@@ -8,7 +8,7 @@ export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     function middleware(req) {
 
-         console.log(req.nextUrl.pathname)
+
 
         if (
             req.nextUrl.pathname === "/signup" &&
