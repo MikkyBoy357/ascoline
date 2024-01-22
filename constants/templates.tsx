@@ -5,7 +5,7 @@ import {
     User
 } from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
 
-export const BaseUrl: string = 'http://localhost:3000';
+
 
 export type TemplateInput = {
     id: string;
