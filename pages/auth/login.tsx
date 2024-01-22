@@ -50,20 +50,14 @@ const Login = () => {
                 console.log("user", data.user.permissions)
 
                 await signIn("credentials", {
-                    redirect: true,
+                    redirect: false,
                     ...user,
                     permissions: JSON.stringify(user.permissions),
                     jwt: token,
-                    callbackUrl: "/dashboard",
                 });
-                // Save the user in local storage
-                localStorage.setItem('user', JSON.stringify(user));
-
-                // Save the token in local storage
-                localStorage.setItem('token', token);
 
                 // If login is successful, redirect to dashboard or perform necessary actions
-                router.push('/dashboard');
+                router.replace('/dashboard');
             }
 
         } catch (error) {

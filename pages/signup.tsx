@@ -3,6 +3,7 @@ import Image from "next/image";
 import {  LOGIN_INPUTS, SIGN_UP_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
+import {POST} from "@/constants/fetchConfig";
 
 export const renderInputField = (
     input: { id: any; label: any; placeholder?: string; type?: "text" | "textarea" | "select" | "password"; options?: string[] | undefined },
@@ -70,7 +71,7 @@ export const SignupComponent = () => {
     const [cpass, setCpass] = useState("");
 
     const handleCreateAccount = () => {
-        router.push('/dashboard');
+        /*router.replace('/dashboard');*/
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,25 +98,29 @@ export const SignupComponent = () => {
         };
 
         try {
-            const response = await fetch(`/auth/signup`, {
+/*            const response = await fetch(`/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
-            });
+            });*/
 
-            if (response.status === 201) {
-                console.log('User signed up successfully!');
-                // Handle success (redirect or show success message)
-                router.back();
-                alert("User signed up successfully now Login");
+            const response = await POST(`/auth/signup`, data);
+
+            console.log('User signed up successfully!');
+            // Handle success (redirect or show success message)
+            router.replace('/dashboard');
+            alert("User signed up successfully now Login");
+
+/*            if (response.status === 201) {
+
             } else {
                 const errorData = await response.json();
                 console.log('Error:', errorData);
                 // Display error alert dialog
                 alert(errorData.message);
-            }
+            }*/
         } catch (error) {
             console.error('There was a problem with the request:', error);
             // Display error alert dialog for network or other errors

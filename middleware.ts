@@ -9,17 +9,32 @@ export default async function middleware(
 ) {
   const token = await getToken({ req });
   const isAuthenticated = !!token;
+  const isOnDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+  const isHome = req.nextUrl.pathname === "/";
 
   if (req.nextUrl.pathname.startsWith("/auth/login") && isAuthenticated) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+
+    return Response.redirect(new URL("/dashboard", req.nextUrl));
   } else if (req.nextUrl.pathname === "/") {
     if (isAuthenticated)
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    else return NextResponse.redirect(new URL("/auth/login", req.url));
+      return Response.redirect(new URL("/dashboard", req.nextUrl));
+    else return Response.redirect(new URL("/auth/login", req.nextUrl));
   }
 
+/*  if (isOnDashboard) {
+    if (isAuthenticated) return null;
+    else return Response.redirect(new URL("/auth/login", req.nextUrl));
+    // Redirect unauthenticated users to login page
+  } else if (isAuthenticated) {
+    return Response.redirect(new URL("/dashboard", req.nextUrl));
+  } else if (isHome) {
+    if (isAuthenticated) Response.redirect(new URL("/dashboard", req.nextUrl));
+    else  return Response.redirect(new URL("/auth/login", req.nextUrl));
+  }
+  return null;*/
 
-  const authMiddleware = await withAuth({
+
+  const authMiddleware = withAuth({
     pages: {
       signIn: "/auth/login",
       error: "/auth/login",
