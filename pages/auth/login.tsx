@@ -50,14 +50,15 @@ const Login = () => {
                 console.log("user", data.user.permissions)
 
                 await signIn("credentials", {
-                    redirect: false,
+                    redirect: true,
+                    callbackUrl: "/dashboard",
                     ...user,
                     permissions: JSON.stringify(user.permissions),
                     jwt: token,
                 });
 
                 // If login is successful, redirect to dashboard or perform necessary actions
-                router.replace('/dashboard');
+                //router.replace('/dashboard');
             }
 
         } catch (error) {

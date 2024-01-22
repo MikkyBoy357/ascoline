@@ -13,11 +13,11 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page)
  
-  return <SessionProvider session={pageProps.session}>
+  return <SessionProvider session={session}>
     {getLayout(<Component {...pageProps} />)}
   </SessionProvider>
 }

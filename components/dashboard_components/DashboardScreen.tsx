@@ -29,7 +29,7 @@ const DashboardScreen = () => {
     };
 
     useEffect(() => {
-        console.log("AHHHH");
+
         fetchData();
         // You can add dependencies or modify the effect trigger as needed
     }, []); // Empty dependency array ensures this runs only once on component mount

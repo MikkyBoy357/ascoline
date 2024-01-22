@@ -7,7 +7,7 @@ import { getToken } from "next-auth/jwt";
 export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     function middleware(req) {
-        console.log("ok", req.nextUrl.pathname);
+
 
         if (
             req.nextUrl.pathname === "/" &&
@@ -24,6 +24,7 @@ export default withAuth(
         }
     },
     {
+        secret: process.env.NEXTAUTH_SECRET,
         pages: {
             signIn: "/auth/login",
             error: "/auth/login",

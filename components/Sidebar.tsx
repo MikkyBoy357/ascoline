@@ -34,7 +34,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const pathName = usePathname();
-    const { data: session, status } = useSession();
+    const { data: session, status } = useSession({required: true});
 
 
     const handleClick = () => {
@@ -59,6 +59,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
         const user : User  | null = session?.user as User;
 
 
+
         if (user) {
             if (user.type === "admin")
                 return true
@@ -66,7 +67,7 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
         } else {
             return false
         }
-    }, [session])
+    }, [session, status])
 
 
 
