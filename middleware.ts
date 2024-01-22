@@ -8,6 +8,14 @@ export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
     function middleware(req) {
 
+         console.log(req.nextUrl.pathname)
+
+        if (
+            req.nextUrl.pathname === "/signup" &&
+            req.nextauth.token === null
+        ) {
+            return NextResponse.redirect(new URL("/signup", req.url));
+        }
 
         if (
             req.nextUrl.pathname === "/" &&

@@ -1,5 +1,5 @@
 import { ADD_ORDER_INPUTS } from '@/constants/templates';
-import { renderInputField } from '@/pages/signup';
+import { renderInputField } from '@/components/signup';
 import React, { useEffect, useState } from 'react';
 import { Commande } from './OrderList';
 import { Client } from './ClientList';

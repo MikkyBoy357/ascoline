@@ -1,5 +1,5 @@
 import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
-import { renderInputField } from '@/pages/signup';
+import { renderInputField } from '@/components/signup';
 import React, { useState } from 'react';
 import {useRouter} from "next/router";
 import {Toast} from "@/constants/toastConfig";

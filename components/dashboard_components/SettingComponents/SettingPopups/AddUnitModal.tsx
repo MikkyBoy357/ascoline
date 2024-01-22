@@ -1,5 +1,5 @@
 import { ADD_TRANSPORT_INPUTS } from '@/constants/templates';
-import { renderInputField } from '@/pages/signup';
+import { renderInputField } from '@/components/signup';
 import React, { useEffect, useState } from 'react';
 import { MeasureUnit } from '../UnitCard';
 import { TransportType } from '../TransportCard';

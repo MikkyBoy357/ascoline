@@ -1,5 +1,5 @@
 import { USER_CONFIG_INPUTS } from '@/constants/templates';
-import { renderInputField } from '@/pages/signup';
+import { renderInputField } from '@/components/signup';
 import React, { useEffect, useState } from 'react';
 import { Client } from './ClientList';
 import { Employee } from './EmployeeList';

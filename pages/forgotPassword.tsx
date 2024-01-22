@@ -3,7 +3,7 @@ import Image from "next/image";
 import {  FORGOT_PASSWORD_INPUTS, LOGIN_INPUTS } from "@/constants/templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
-import { renderInputField } from "./signup";
+import { renderInputField } from '@/components/signup';
 
 export default function ForgotPassword() {
     return (
