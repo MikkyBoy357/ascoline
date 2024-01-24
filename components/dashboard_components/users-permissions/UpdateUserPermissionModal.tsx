@@ -5,7 +5,7 @@ import {Permission, User} from "@/components/dashboard_components/users-permissi
 import Modal from "@/components/Modal";
 import Select from "react-select";
 import {Toast} from "@/constants/toastConfig";
-import {PUT} from "@/constants/fetchConfig";
+import {GET, PUT} from "@/constants/fetchConfig";
 
 export interface UpdateUserPermissionModalProps {
     visible: boolean,
@@ -44,16 +44,18 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
         if (token) headers.Authorization = `Bearer ${token}`;
 
         try {
-            const response = await fetch(`/permissions`, {
+/*            const response = await fetch(`/permissions`, {
                 method: "GET",
                 headers: headers
-            });
+            });*/
 
-            if (!response.ok) {
+            const response = await GET(`/permissions`);
+
+/*            if (!response.ok) {
                 throw new Error("Failed to fetch data");
-            }
+            }*/
 
-            const data: Permission[] = await response.json();
+            const data: Permission[] = response;
             // Set the fetched data into state
             setPermissionsData(data);
 
