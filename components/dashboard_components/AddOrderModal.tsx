@@ -190,6 +190,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                 status.trim() === '' ||
                 specialNote.trim() === ''
             ) {
+
                 alert('Please fill in all fields.');
                 return;
             }

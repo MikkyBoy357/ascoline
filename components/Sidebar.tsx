@@ -59,7 +59,6 @@ const Sidebar: React.FC<Props> = ({ items, onShowPopup}) => {
         const user : User  | null = session?.user as User;
 
 
-
         if (user) {
             if (user.type === "admin")
                 return true
