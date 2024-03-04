@@ -58,11 +58,30 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
 
   const [isChanged, setIsChanged] = useState(false);
 
+  const wasChanged = () => {
+    if (
+      trackingId !== selectedOrder.trackingId ||
+      typeColis !== selectedOrder.typeColis ||
+      transportType !== selectedOrder.transportType ||
+      client !== selectedOrder.client ||
+      description !== selectedOrder.description ||
+      unit !== selectedOrder.unit ||
+      pays !== selectedOrder.pays ||
+      quantity !== selectedOrder.quantity.toString() ||
+      ville !== selectedOrder.ville ||
+      status !== selectedOrder.status ||
+      specialNote !== selectedOrder.specialNote
+    ) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  };
+
   // auto fill text field when user is editing an order
   useEffect(() => {
     if (isModify) {
       console.log("====> Modify <====");
-
       setTrackingId(selectedOrder.trackingId);
       setTypeColis(selectedOrder.typeColis);
       setTransportType(selectedOrder.transportType);
@@ -74,27 +93,41 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
       setVille(selectedOrder.ville);
       setStatus(selectedOrder.status);
       setSpecialNote(selectedOrder.specialNote);
+    } else {
+      setTrackingId("");
+      setTypeColis(undefined);
+      setTransportType(undefined);
+      setClient(undefined);
+      setDescription("");
+      setUnit(unit);
+      setPays("");
+      setQuantity("");
+      setVille("");
+      setStatus("");
+      setSpecialNote("");
     }
-  }, []);
+  }, [
+    isModify,
+    selectedOrder,
+    setTrackingId,
+    setTypeColis,
+    setTransportType,
+    setClient,
+    setDescription,
+    setUnit,
+    setPays,
+    setQuantity,
+    setVille,
+    setStatus,
+    setSpecialNote,
+  ]);
 
   // Call the `wasChanged` function whenever the state values change
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [
-    trackingId,
-    typeColis,
-    transportType,
-    client,
-    description,
-    unit,
-    pays,
-    quantity,
-    ville,
-    status,
-    specialNote,
-  ]);
+  }, [wasChanged]);
 
   const handleClose = (e: any) => {
     if (e.target.id === "wrapper") {
@@ -158,25 +191,6 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
     "Commande arrivée",
     "Commande livré",
   ];
-  const wasChanged = () => {
-    if (
-      trackingId !== selectedOrder.trackingId ||
-      typeColis !== selectedOrder.typeColis ||
-      transportType !== selectedOrder.transportType ||
-      client !== selectedOrder.client ||
-      description !== selectedOrder.description ||
-      unit !== selectedOrder.unit ||
-      pays !== selectedOrder.pays ||
-      quantity !== selectedOrder.quantity.toString() ||
-      ville !== selectedOrder.ville ||
-      status !== selectedOrder.status ||
-      specialNote !== selectedOrder.specialNote
-    ) {
-      setIsChanged(true);
-    } else {
-      setIsChanged(false);
-    }
-  };
 
   // Function to add pricing
   const addOrder = async () => {
@@ -211,7 +225,10 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         status.trim() === "" ||
         specialNote.trim() === ""
       ) {
-        alert("Please fill in all fields.");
+        await Toast.fire({
+          icon: "error",
+          title: "Veuillez remplir tous les champs",
+        });
         return;
       }
 
@@ -229,27 +246,15 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         response = await POST(`/commandes`, newOrder);
       } else {
         if (!isChanged) {
-          return alert("Values were not changed");
+          await Toast.fire({
+            icon: "error",
+            title: "Les valeures n'ont pas changé",
+          });
+          return;
         }
-        /*                response = await fetch(`/commandes/${selectedOrder._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newOrder),
-                });*/
 
         response = await PUT(`/commandes/${selectedOrder._id}`, newOrder);
       }
-
-      /*            if (!response.ok) {
-                console.log(response)
-
-                const errorData = await response.json()
-                alert(`Error adding pricing: ${errorData.message}`)
-
-                throw new Error('Failed to add order');
-            }*/
 
       console.log(`Order ${isModify ? "edited" : "added"} successfully!`);
       onClose();
@@ -258,19 +263,11 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         title: `Order ${isModify ? "edited" : "added"} successfully!`,
       });
       router.reload();
-
-      // Clear form fields after successful addition
-      // setTrackingId('');
-      // setTypeColis('');
-      // setTransportType('');
-      // setDescription('');
-      // setUnit('');
-      // setPays('')
-      // setQuantity('');
-      // setVille('')
-      // setStatus('')
-      // setSpecialNote('')
     } catch (error) {
+      await Toast.fire({
+        icon: "error",
+        title: "Une erreur est survenue",
+      });
       console.error("Error adding pricing:", error);
       // Handle errors
     }
