@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { AddClientModal } from "./AddClientModal";
 
-import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import DeleteCountryModal from "../SettingComponents/SettingPopups/DeleteCountryModal";
 import { useRouter } from "next/router";
-import { Loader2 } from "lucide-react";
 import CustomLoader from "@/components/CustomLoader";
 import { DELETE, GET } from "@/constants/fetchConfig";
+import { PaginationElement } from "@/components/dashboard_components/PaginationElement";
 
-export interface Client {
+export interface Employee {
   _id: string;
   firstName: string;
   lastName: string;
@@ -17,14 +17,19 @@ export interface Client {
   address: string;
 }
 
-export const ClientListComponent = () => {
+export const EmployeeListComponent = () => {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [modify, setModify] = useState(false);
-
-  const [selectedClient, setSelectedClient] = useState<Client>();
-  const [showModal, setShowModal] = useState(false);
   const [searchText, setSearchText] = useState("");
+
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
+  const [showModal, setShowModal] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const toggleShowModal = () => {
     setShowModal(!showModal);
@@ -33,45 +38,40 @@ export const ClientListComponent = () => {
     }
   };
 
-  const handleModify = (item: Client) => {
+  const handleModify = (item: Employee) => {
     setModify(true);
-    setSelectedClient(item);
+    setSelectedEmployee(item);
     toggleShowModal();
   };
 
-  const [clientsData, setClientsData] = useState<Client[]>([]);
+  const [employeesData, setEmployeesData] = useState<Employee[]>([]);
 
-  // Function to fetch clients data
-  const fetchClientsData = useCallback(async () => {
+  // Function to fetch employees data
+
+  const fetchEmployeesData = useCallback(async () => {
     try {
-      /*            const response = await fetch(`/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });*/
-
       const response = await GET(
-        `/clients${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+        `/employees?page=${page}${
+          searchText.length > 0 ? `&search=${searchText}` : ""
+        }`,
       );
 
-      /*            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }*/
-
-      const data: Client[] = response;
+      const data: Employee[] = response.employees;
       // Set the fetched data into state
-      setClientsData(data);
+      setEmployeesData(data);
+      setPage(response.currentPage);
+      setPages(response.totalPages);
+      setTotal(response.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors
     }
-  }, [searchText]);
+  }, [searchText, page]);
 
   useEffect(() => {
     setLoading(true);
-    fetchClientsData().finally(() => setLoading(false));
-  }, [fetchClientsData, setLoading]);
+    fetchEmployeesData().finally(() => setLoading(false));
+  }, [fetchEmployeesData, setLoading]);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -87,15 +87,15 @@ export const ClientListComponent = () => {
 
   const handleDeleteItem = async () => {
     try {
-      console.log(`Deleting client with ID: ${itemId}`);
-      /*            const response = await fetch(`/clients/${itemId}`, {
+      console.log(`Deleting employee with ID: ${itemId}`);
+      /*            const response = await fetch(`/employees/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });*/
 
-      const response = await DELETE(`/clients/${itemId}`);
+      const response = await DELETE(`/employees/${itemId}`);
 
       /*            if (!response.ok) {
                 const errorData = await response.json()
@@ -115,37 +115,40 @@ export const ClientListComponent = () => {
   return (
     <div className="bg-gray-50 flex flex-col justify-center text-black">
       <div className="pl-4 pt-4">
-        <p className="mb-3 font-semibold text-2xl">Clients</p>
-        <div className="relative mb-4 mr-4">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Recherche ..."
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-          />
-        </div>
-        <button
-          onClick={toggleShowModal}
-          className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]"
-        >
-          <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
-            Ajouter un client
-          </div>
-          <i className="fa-solid fa-plus ml-1 text-white"></i>
-        </button>
-        {loading ? (
-          <CustomLoader />
-        ) : (
-          <div className="mr-10 px-4 pb-10 bg-white rounded-[12px]">
-            <div className="flex flex-col rounded-[12px] border-blue-600">
-              <div className="inline-flex flex-col items-start gap-[16px]">
-                <div className="container mx-auto mt-8">
+        <p className="mb-3 font-semibold text-2xl">Collaborateurs</p>
+
+        <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
+          <div className="rounded-[12px] border-blue-600">
+            <div className="relative mb-4">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+                placeholder="Recherche ..."
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+              />
+            </div>
+
+            <button
+              onClick={toggleShowModal}
+              className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]"
+            >
+              <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
+                Ajouter un collaborateur
+              </div>
+              <i className="fa-solid fa-plus ml-1 text-white"></i>
+            </button>
+
+            {loading ? (
+              <CustomLoader />
+            ) : (
+              <div className="inline-flex flex-col items-start gap-[16px] min-w-full max-w-6xl overflow-auto">
+                <div className="container mx-auto mt-8 h-[60vh]">
                   <table className="min-w-full">
                     <thead>
                       <tr className="text-gray-500">
@@ -158,7 +161,7 @@ export const ClientListComponent = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {clientsData.map((item) => (
+                      {employeesData.map((item) => (
                         <tr key={item._id}>
                           <td className="py-2 px-4 border-b">
                             {item.lastName}
@@ -190,11 +193,11 @@ export const ClientListComponent = () => {
                                 setItemId(item._id);
                                 toggleShowDeleteModal();
                               }}
-                              className="fa-regular fa-trash-can text-red-600 cursor-pointer"
+                              className="fa-regular fa-trash-can text-red-600"
                             ></i>
                             <i
                               onClick={() => handleModify(item)}
-                              className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB] cursor-pointer"
+                              className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
                             ></i>
                           </td>
                         </tr>
@@ -203,17 +206,25 @@ export const ClientListComponent = () => {
                   </table>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Footer */}
+            <PaginationElement
+              page={page}
+              setPage={setPage}
+              pages={pages}
+              total={total}
+            />
           </div>
-        )}
+        </div>
       </div>
 
       <AddClientModal
         isVisible={showModal}
         onClose={toggleShowModal}
-        type="client"
+        type="employee"
         isModify={modify}
-        selectedUser={selectedClient!}
+        selectedUser={selectedEmployee!}
       />
 
       <DeleteCountryModal

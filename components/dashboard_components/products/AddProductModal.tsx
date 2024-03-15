@@ -4,15 +4,15 @@ import {
   ADD_PRODUCT_INPUTS,
 } from "@/constants/templates";
 import { renderInputField } from "@/components/signup";
-import React, { useEffect, useState } from "react";
-import { PackageType } from "./SettingComponents/PackageCard";
-import { TransportType } from "./SettingComponents/TransportCard";
-import { MeasureUnit } from "./SettingComponents/UnitCard";
-import UnitSelectComponent from "../MyUnitSelectComponent";
-import { Pricing } from "./PricingList";
+import React, { useCallback, useEffect, useState } from "react";
+import { PackageType } from "../SettingComponents/PackageCard";
+import { TransportType } from "../SettingComponents/TransportCard";
+import { MeasureUnit } from "../SettingComponents/UnitCard";
+import UnitSelectComponent from "../../MyUnitSelectComponent";
+import { Pricing } from "../pricings/PricingList";
 import { useRouter } from "next/router";
 import { Toast } from "@/constants/toastConfig";
-import { Product } from "@/components/dashboard_components/ProductsList";
+import { Product } from "@/components/dashboard_components/products/ProductsList";
 import { POST, PUT } from "@/constants/fetchConfig";
 
 export interface AddProductModalProps {
@@ -36,8 +36,6 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   transportTypesData,
   measureUnitsData,
 }) => {
-  if (!isVisible) return null;
-
   const router = useRouter();
 
   const handleClose = (e: any) => {
@@ -61,11 +59,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
       setDescription(selectedItem.description);
       setQuantity(selectedItem.quantity.toString());
     }
-  }, []);
+  }, [isModify, selectedItem]);
 
   const [isChanged, setIsChanged] = useState(false);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       price !== selectedItem.price.toString() ||
       name !== selectedItem.name ||
@@ -76,14 +74,14 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
     } else {
       setIsChanged(false);
     }
-  };
+  }, [description, name, price, quantity, selectedItem]);
 
   // Call the `wasChanged` function whenever the state values change
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [price, name, description, quantity]);
+  }, [price, name, description, quantity, isModify, wasChanged]);
 
   // Function to add pricing
   const addProduct = async () => {
@@ -108,14 +106,6 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
 
       var response;
       if (!isModify) {
-        /*              response = await fetch(`/products`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newProduct),
-                });*/
-
         response = await POST(`/products`, newProduct);
       } else {
         if (!isChanged) {
@@ -156,6 +146,8 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
       // Handle errors
     }
   };
+
+  if (!isVisible) return null;
 
   return (
     <div

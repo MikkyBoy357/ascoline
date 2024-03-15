@@ -4,6 +4,7 @@ import { PackageType } from "./PackageCard";
 import { MeasureUnit } from "./UnitCard";
 import CustomLoader from "@/components/CustomLoader";
 import { GET } from "@/constants/fetchConfig";
+import { PaginationElement } from "@/components/dashboard_components/PaginationElement";
 
 export interface TransportType {
   _id: string;
@@ -34,34 +35,30 @@ export const TransportCard: React.FC<TransportCardProps> = ({
     [],
   );
 
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [total, setTotal] = useState(0);
+
   // Function to fetch transport types data
   const fetchTransportData = useCallback(async () => {
     try {
-      /*            const response = await fetch(`/transportTypes${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });*/
-
       const response = await GET(
-        `/transportTypes${
-          searchText.length > 0 ? `?search=${searchText}` : ""
+        `/transportTypes?page=${page}${
+          searchText.length > 0 ? `&search=${searchText}` : ""
         }`,
       );
 
-      /*           if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }*/
-
-      const data: TransportType[] = response;
+      const data: TransportType[] = response.transportTypes;
       // Set the fetched data into state
       setTransportTypesData(data);
+      setPage(response.currentPage);
+      setPages(response.totalPages);
+      setTotal(response.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors
     }
-  }, [searchText]);
+  }, [searchText, page]);
 
   useEffect(() => {
     setLoading(true);
@@ -99,8 +96,8 @@ export const TransportCard: React.FC<TransportCardProps> = ({
         {loading ? (
           <CustomLoader />
         ) : (
-          <div className="inline-flex flex-col items-start gap-[16px]">
-            <div className="container mx-auto mt-8">
+          <div className="inline-flex flex-col items-start gap-[16px] min-w-full overflow-auto">
+            <div className="container mx-auto mt-8 h-[40vh]">
               <table className="min-w-full">
                 <thead>
                   <tr className="text-gray-500 text-sm">
@@ -111,7 +108,7 @@ export const TransportCard: React.FC<TransportCardProps> = ({
                 </thead>
                 <tbody>
                   {transportTypesData.map((item) => (
-                    <tr key={item._id} className="text-sm">
+                    <tr key={item._id} className="text-sm text-center">
                       <td className="py-2 px-4 border-b">{item.label}</td>
                       <td className="py-2 px-4 border-b">{item.description}</td>
                       <td className="py-2 px-4 border-b">
@@ -149,6 +146,12 @@ export const TransportCard: React.FC<TransportCardProps> = ({
         )}
 
         {/* Footer */}
+        <PaginationElement
+          page={page}
+          setPage={setPage}
+          pages={pages}
+          total={total}
+        />
       </div>
     </div>
   );

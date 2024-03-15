@@ -1,6 +1,6 @@
 import { ADD_TRANSPORT_INPUTS } from "@/constants/templates";
 import { renderInputField } from "@/components/signup";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { MeasureUnit } from "../UnitCard";
 import { TransportType } from "../TransportCard";
 import { Country } from "../CountryCard";
@@ -24,8 +24,6 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({
   isModify,
   selectedItem,
 }) => {
-  if (!isVisible) return null;
-
   const router = useRouter();
 
   const handleClose = (e: any) => {
@@ -45,11 +43,11 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({
       setLabel(selectedItem.label);
       setDescription(selectedItem.description);
     }
-  }, []);
+  }, [isModify, selectedItem]);
 
   const [isChanged, setIsChanged] = useState(false);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       label !== selectedItem.label ||
       description !== selectedItem.description
@@ -58,13 +56,13 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({
     } else {
       setIsChanged(false);
     }
-  };
+  }, [description, label, selectedItem]);
 
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [label, description]);
+  }, [label, description, isModify, wasChanged]);
 
   // Function to add unit
   const addUnit = async () => {
@@ -128,6 +126,8 @@ export const AddUnitModal: React.FC<AddUnitModalProps> = ({
       // Handle errors
     }
   };
+
+  if (!isVisible) return null;
 
   return (
     <div

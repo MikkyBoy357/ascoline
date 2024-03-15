@@ -16,8 +16,6 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({
   text,
   onClose,
 }) => {
-  if (!isVisible) return null;
-
   const router = useRouter();
   const handleClose = (e: any) => {
     if (e.target.id === "wrapper") {
@@ -42,19 +40,7 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({
         return;
       }
 
-      // const response = await fetch(`/packageTypes`, {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(newPackage),
-      // });
-
       const response = await POST(`/packageTypes`, newPackage);
-
-      /*            if (!response.ok) {
-                throw new Error('Failed to add Package Type');
-            }*/
 
       console.log("Package Type added successfully!");
       onClose();
@@ -74,6 +60,8 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
@@ -91,7 +79,7 @@ export const AddPackageModal: React.FC<AddPackageModalProps> = ({
             <div className="w-[1104px] bg-white rounded-[12px]">
               {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
               <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                Enregistrement d'un type de colis
+                {"Enregistrement d'un type de colis"}
               </div>
               <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                 <div className="flex flex-col items-start gap-[12px] flex-[0_0_auto]">

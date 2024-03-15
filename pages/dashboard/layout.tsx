@@ -13,9 +13,10 @@ import {
   PackageSearch,
   PieChart,
   Settings,
+  SquareGanttIcon,
   Users,
 } from "lucide-react";
-import { User } from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
+import { User } from "@/components/dashboard_components/usersPermissions/UsersPermissionsList";
 
 interface Props {
   children: React.ReactNode;
@@ -46,25 +47,18 @@ export const SIDEBAR_ITEMS: any = [
     permissions: [{ name: "commande", action: "read" }],
   },
   {
-    id: "collaborateurs",
-    label: "Collaborateurs",
-    url: "/dashboard/partners",
-    icon: BookUser,
-    permissions: [{ name: "employee", action: "read" }],
-  },
-  {
-    id: "tarification",
-    label: "Tarification",
-    url: "/dashboard/tarification",
-    icon: Coins,
-    permissions: [{ name: "pricing", action: "read" }],
-  },
-  {
     id: "product",
     label: "Produits",
     url: "/dashboard/product",
     icon: PackageSearch,
     permissions: [{ name: "product", action: "read" }],
+  },
+  {
+    id: "productOrders",
+    label: "Commandes de produit",
+    url: "/dashboard/productOrders",
+    icon: SquareGanttIcon,
+    permissions: [{ name: "commande", action: "read" }],
   },
   {
     id: "transaction",
@@ -74,11 +68,25 @@ export const SIDEBAR_ITEMS: any = [
     permissions: [{ name: "transaction", action: "read" }],
   },
   {
+    id: "collaborateurs",
+    label: "Collaborateurs",
+    url: "/dashboard/partners",
+    icon: BookUser,
+    permissions: [{ name: "employee", action: "read" }],
+  },
+  {
     id: "setting",
     label: "Permissions",
     url: "/dashboard/permissions",
     icon: AsteriskSquare,
     permissions: [{ name: "user", action: "read" }],
+  },
+  {
+    id: "tarification",
+    label: "Tarification",
+    url: "/dashboard/tarification",
+    icon: Coins,
+    permissions: [{ name: "pricing", action: "read" }],
   },
   {
     id: "setting",
@@ -105,13 +113,13 @@ const DashboardLayout = ({ children }: any) => {
   return (
     <Fragment>
       <div className="min-h-screen bg-white relative w-full md:flex md:flex-row">
-        <div className="md:hidden z-10 fixed left-0 top-0 h-full">
+        <div className="md:hidden z-10 fixed left-0 top-0 h-full ">
           <Sidebar onShowPopup={handlePopup} items={SIDEBAR_ITEMS} />
         </div>
-        <div className="hidden md:block md:relative ">
+        <div className="hidden md:block min-[50vh] w-80   ">
           <Sidebar onShowPopup={handlePopup} items={SIDEBAR_ITEMS} />
         </div>
-        <main className="w-full md:flex-grow bg-gray-50">
+        <main className=" w-full md:flex-grow bg-gray-50">
           {/* {title && <h1 className="text-black text-2xl font-bold mb-4 mt-10 pr-4 pl-4 pt-4">{title}</h1>} */}
           {children}
         </main>

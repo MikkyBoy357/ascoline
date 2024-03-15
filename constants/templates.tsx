@@ -3,7 +3,7 @@ import {
   Permission,
   PermissionName,
   User,
-} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
+} from "@/components/dashboard_components/usersPermissions/UsersPermissionsList";
 
 export type TemplateInput = {
   id: string;
@@ -156,6 +156,51 @@ export const ADD_ORDER_INPUTS: TemplateInput[] = [
     id: "ville",
     label: "Ville",
     placeholder: "Cotonou",
+    type: "text",
+  },
+  {
+    id: "status",
+    label: "Statut",
+    placeholder: "Actif",
+    type: "select",
+  },
+  {
+    id: "specialNote",
+    label: "Note Spéciale",
+    placeholder: "Don't get in the mix",
+    type: "text",
+  },
+];
+
+export const ADD_PRODUCT_ORDER_INPUTS: TemplateInput[] = [
+  {
+    id: "client-product-order",
+    label: "Client",
+    placeholder: "Didier",
+    type: "select",
+  },
+  {
+    id: "product",
+    label: "Produit",
+    placeholder: "2cran plat",
+    type: "select",
+  },
+  {
+    id: "quantity",
+    label: "Quantité",
+    placeholder: "10",
+    type: "text",
+  },
+  {
+    id: "price",
+    label: "Prix du produit",
+    placeholder: "10",
+    type: "text",
+  },
+  {
+    id: "total",
+    label: "Total",
+    placeholder: "10",
     type: "text",
   },
   {

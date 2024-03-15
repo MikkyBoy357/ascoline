@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { AddClientModal } from "../AddClientModal";
+import { AddClientModal } from "../clients/AddClientModal";
 import {
   checkPermissionActionToDisplay,
   checkPermissionNameToDisplay,
@@ -8,9 +8,10 @@ import {
 import DeleteCountryModal from "../SettingComponents/SettingPopups/DeleteCountryModal";
 import { useRouter } from "next/router";
 import Modal from "@/components/Modal";
-import { UpdateUserPermissionModal } from "@/components/dashboard_components/users-permissions/UpdateUserPermissionModal";
+import { UpdateUserPermissionModal } from "@/components/dashboard_components/usersPermissions/UpdateUserPermissionModal";
 import { GET } from "@/constants/fetchConfig";
 import CustomLoader from "@/components/CustomLoader";
+import { PaginationElement } from "@/components/dashboard_components/PaginationElement";
 
 export type PermissionName = (typeof validPermissionNames)[number];
 export interface Permission {
@@ -66,7 +67,7 @@ function PermissionsModal({
                   ))}
                 </>
               ) : (
-                <span className="text-black">{`Pas de permissions ${permissions.length}`}</span>
+                <span className="text-black">{`Pas de permissions`}</span>
               )
             ) : (
               <span className="text-black">{`Pas de permissions`}</span>
@@ -106,24 +107,31 @@ export const UsersPermissionsListComponent = () => {
 
   const [employeesData, setEmployeesData] = useState<User[]>([]);
 
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [total, setTotal] = useState(0);
+
   // Function to fetch employees data
 
   const fetchEmployeesData = useCallback(async () => {
     try {
       const response = await GET(
-        `/users?type=employee${
+        `/users?type=employee&page=${page}${
           searchText.length > 0 ? `&search=${searchText}` : ""
         }`,
       );
 
-      const data: User[] = response;
+      const data: User[] = response.users;
       // Set the fetched data into state
       setEmployeesData(data);
+      setPage(response.currentPage);
+      setPages(response.totalPages);
+      setTotal(response.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors
     }
-  }, [searchText]);
+  }, [searchText, page]);
 
   useEffect(() => {
     setLoading(true);
@@ -149,35 +157,28 @@ export const UsersPermissionsListComponent = () => {
           Changer permissions des collaborateurs
         </p>
 
-        <div className="relative mb-4">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Recherche ..."
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-          />
-        </div>
+        <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
+          <div className="rounded-[12px] border-blue-600">
+            <div className="relative mb-4">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+                placeholder="Recherche ..."
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+              />
+            </div>
 
-        {/*                <div onClick={toggleShowModal} className="mb-4 inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
-                    <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
-                        Ajouter un collaborateur
-                    </div>
-                    <i className="fa-solid fa-plus ml-1 text-white"></i>
-                </div>*/}
-
-        {loading ? (
-          <CustomLoader />
-        ) : (
-          <div className="mr-10 px-4 pb-10 bg-white rounded-[12px]">
-            <div className="flex flex-col rounded-[12px] border-blue-600">
-              <div className="inline-flex flex-col items-start gap-[16px]">
-                <div className="container mx-auto mt-8">
+            {loading ? (
+              <CustomLoader />
+            ) : (
+              <div className="inline-flex flex-col items-start gap-[16px] min-w-full max-w-6xl overflow-auto">
+                <div className="container mx-auto mt-8 h-[60vh]">
                   <table className="min-w-full">
                     <thead>
                       <tr className="text-gray-500">
@@ -234,9 +235,17 @@ export const UsersPermissionsListComponent = () => {
                   </table>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Footer */}
+            <PaginationElement
+              page={page}
+              setPage={setPage}
+              pages={pages}
+              total={total}
+            />
           </div>
-        )}
+        </div>
       </div>
 
       <UpdateUserPermissionModal

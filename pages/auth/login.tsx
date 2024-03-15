@@ -125,7 +125,7 @@ export const SignupComponent = () => {
                     className="flex w-[520px] items-center justify-center gap-[8px] p-[20px] bg-[#4763e4] rounded-[12px]"
                   >
                     <div className="w-fit mt-[-28.00px] mb-[-26.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
-                      S'inscrire
+                      {"S'inscrire"}
                     </div>
                     <i className="fa-solid fa-arrow-right-long"></i>
                   </button>

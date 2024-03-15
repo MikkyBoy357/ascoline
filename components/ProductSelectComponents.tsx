@@ -1,5 +1,6 @@
 import React from "react";
 import { Client } from "./dashboard_components/clients/ClientList";
+import { Product } from "@/components/dashboard_components/products/ProductsList";
 
 // export interface Unit {
 //     _id: string;
@@ -10,10 +11,10 @@ interface SelectProps {
   id: string;
   value: string;
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectList: Client[];
+  selectList: Product[];
 }
 
-const ClientSelectComponent: React.FC<SelectProps> = ({
+const ProductSelectComponent: React.FC<SelectProps> = ({
   id,
   value,
   handleSelect,
@@ -32,11 +33,11 @@ const ClientSelectComponent: React.FC<SelectProps> = ({
       </option>
       {selectList.map((item) => (
         <option key={item._id} value={item._id}>
-          {`${item.lastName} ${item.firstName}`}
+          {`${item.name} - ${item.price}`}
         </option>
       ))}
     </select>
   );
 };
 
-export default ClientSelectComponent;
+export default ProductSelectComponent;

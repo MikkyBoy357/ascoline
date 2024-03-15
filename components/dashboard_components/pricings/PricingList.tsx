@@ -1,25 +1,37 @@
 import { useCallback, useEffect, useState } from "react";
-import { AddOrderModal } from "./AddOrderModal";
+import { AddOrderModal } from "../orders/AddOrderModal";
 import { AddPricingModal } from "./AddPricingModal";
-import { PackageType } from "./SettingComponents/PackageCard";
-import { TransportType } from "./SettingComponents/TransportCard";
-import { MeasureUnit } from "./SettingComponents/UnitCard";
+import { PackageType } from "../SettingComponents/PackageCard";
+import { TransportType } from "../SettingComponents/TransportCard";
+import { MeasureUnit } from "../SettingComponents/UnitCard";
 
-import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import DeleteCountryModal from "../SettingComponents/SettingPopups/DeleteCountryModal";
 import { useRouter } from "next/router";
-import { AddProductModal } from "@/components/dashboard_components/AddProductModal";
 import CustomLoader from "@/components/CustomLoader";
 import { DELETE, GET } from "@/constants/fetchConfig";
+import { PaginationElement } from "@/components/dashboard_components/PaginationElement";
 
-export interface Product {
+export interface Pricing {
   _id: string;
   price: number;
+  typeColis: {
+    _id: string;
+    label: string;
+  };
+  transportType: {
+    _id: string;
+    label: string;
+  };
+  unit: {
+    _id: string;
+    label: string;
+  };
   description: string;
-  name: string;
   quantity: number;
+  status: string;
 }
 
-export const ProductListComponent = () => {
+export const PricingListComponent = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -33,8 +45,12 @@ export const ProductListComponent = () => {
 
   const [modify, setModify] = useState(false);
 
-  const [selectedItem, setSelectedItem] = useState<Product>();
+  const [selectedItem, setSelectedItem] = useState<Pricing>();
   const [showModal, setShowModal] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const toggleShowModal = () => {
     setShowModal(!showModal);
@@ -43,7 +59,7 @@ export const ProductListComponent = () => {
     }
   };
 
-  const handleModify = (item: Product) => {
+  const handleModify = (item: Pricing) => {
     setModify(true);
     setSelectedItem(item);
     toggleShowModal();
@@ -51,38 +67,35 @@ export const ProductListComponent = () => {
 
   // Function to fetch pricings data
 
-  const fetchProductData = useCallback(async () => {
+  const fetchPricingsData = useCallback(async () => {
     try {
-      /*            const response = await fetch(`/products${searchText.length > 0 ? `?search=${searchText}` : ""}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });*/
-
       const response = await GET(
-        `/products${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+        `/pricings?page=${page}${
+          searchText.length > 0 ? `&search=${searchText}` : ""
+        }`,
       );
 
-      /*            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }*/
-
-      const data: Product[] = response;
+      const data: Pricing[] = response.pricings;
       // Set the fetched data into state
       setPricingsData(data);
+      setPage(response.currentPage);
+      setPages(response.totalPages);
+      setTotal(response.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors
     }
-  }, [searchText]);
+  }, [searchText, page]);
 
   useEffect(() => {
     setLoading(true);
-    fetchProductData().finally(() => setLoading(false));
-  }, [fetchProductData, setLoading]);
+    fetchPricingsData().finally(() => setLoading(false));
+    fetchPackageData();
+    fetchTransportData();
+    fetchUnitData();
+  }, [fetchPricingsData, setLoading]);
 
-  const [pricingsData, setPricingsData] = useState<Product[]>([]);
+  const [pricingsData, setPricingsData] = useState<Pricing[]>([]);
 
   const [packageTypesData, setPackageTypesData] = useState<PackageType[]>([]);
   const [transportTypesData, setTransportTypesData] = useState<TransportType[]>(
@@ -90,17 +103,53 @@ export const ProductListComponent = () => {
   );
   const [measureUnitsData, setMeasureUnitsData] = useState<MeasureUnit[]>([]);
 
+  // Function to fetch package types data
+  const fetchPackageData = async () => {
+    try {
+      const response = await GET(`/packageTypes?limit=0`);
+
+      const data: PackageType[] = response.packageTypes;
+      // Set the fetched data into state
+      setPackageTypesData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle errors
+    }
+  };
+
+  // Function to fetch transport types data
+  const fetchTransportData = async () => {
+    try {
+      const response = await GET(`/transportTypes?limit=0`);
+
+      const data: TransportType[] = response.transportTypes;
+      // Set the fetched data into state
+      setTransportTypesData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle errors
+    }
+  };
+
+  // Function to fetch measure units data
+  const fetchUnitData = async () => {
+    try {
+      const response = await GET(`/measureUnits?limit=0`);
+
+      const data: MeasureUnit[] = response.measureUnits;
+      // Set the fetched data into state
+      setMeasureUnitsData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Handle errors
+    }
+  };
+
   const handleDeleteItem = async () => {
     try {
-      console.log(`Deleting product with ID: ${itemId}`);
-      /*            const response = await fetch(`/products/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });*/
+      console.log(`Deleting client with ID: ${itemId}`);
 
-      const response = await DELETE(`/products/${itemId}`);
+      const response = await DELETE(`/pricings/${itemId}`);
 
       /*            if (!response.ok) {
                 const errorData = await response.json()
@@ -108,6 +157,7 @@ export const ProductListComponent = () => {
                 throw new Error(`Failed to delete`);
             }*/
 
+      //alert(`deleted successfully!`);
       router.reload(); // Show success alert
       // window.location.reload(); // Refresh the page
     } catch (error) {
@@ -119,11 +169,11 @@ export const ProductListComponent = () => {
   return (
     <div className="flex flex-col justify-center text-black">
       <div className="pl-4 pt-4">
-        <p className="mb-3 font-semibold text-2xl">Produits Disponibles</p>
+        <p className="mb-3 font-semibold text-2xl">Tarifications</p>
         <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
           <div className="rounded-[12px] border-blue-600">
             <div className="mb-3 flex justify-between top-[31px] [font-family:'Inter-Regular',Helvetica] font-normal text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-              Liste des produits
+              Liste des tarifications
               <button
                 onClick={toggleShowModal}
                 className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
@@ -150,30 +200,30 @@ export const ProductListComponent = () => {
             {loading ? (
               <CustomLoader />
             ) : (
-              <div className="inline-flex flex-col items-start gap-[16px]">
-                <div className="container mx-auto mt-8">
+              <div className="inline-flex flex-col items-start gap-[16px] min-w-full max-w-6xl overflow-auto">
+                <div className="container mx-auto mt-8 h-[60vh]">
                   <table className="min-w-full">
                     <thead>
                       <tr className="text-gray-500 text-sm">
-                        <th className="py-2 px-4 border-b">Nom</th>
-                        <th className="py-2 px-4 border-b">Description</th>
-                        <th className="py-2 px-4 border-b">Prix</th>
-                        <th className="py-2 px-4 border-b">Quantité</th>
+                        <th className="py-2 px-4 border-b">
+                          Type de transport
+                        </th>
+                        <th className="py-2 px-4 border-b">Type de colis</th>
+                        <th className="py-2 px-4 border-b">Prix / Unité</th>
                         <th className="py-2 px-4 border-b">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {pricingsData.map((item) => (
-                        <tr key={item._id} className="text-sm">
-                          <td className="py-2 px-4 border-b">{item.name}</td>
+                        <tr key={item._id} className="text-sm text-center">
                           <td className="py-2 px-4 border-b">
-                            {item.description}
+                            {item.transportType.label}
                           </td>
                           <td className="py-2 px-4 border-b">
-                            {item.price} F CFA
+                            {item.typeColis.label}
                           </td>
                           <td className="py-2 px-4 border-b">
-                            {item.quantity}
+                            {item.price}/{item.unit.label}
                           </td>
                           <td className="py-2 px-4 border-b">
                             {/* Add your action buttons or links here */}
@@ -204,12 +254,19 @@ export const ProductListComponent = () => {
                 </div>
               </div>
             )}
+
             {/* Footer */}
+            <PaginationElement
+              page={page}
+              setPage={setPage}
+              pages={pages}
+              total={total}
+            />
           </div>
         </div>
       </div>
 
-      <AddProductModal
+      <AddPricingModal
         isVisible={showModal}
         onClose={toggleShowModal}
         text="Loading Content Summary"

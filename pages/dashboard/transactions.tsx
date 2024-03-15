@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import DashboardLayout from "./layout";
-import { TransactionListComponent } from "@/components/dashboard_components/TransactionList";
+import { TransactionListComponent } from "@/components/dashboard_components/transactions/TransactionList";
 
 const TransactionsPage = () => {
   return <TransactionListComponent />;

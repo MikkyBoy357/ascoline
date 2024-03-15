@@ -1,11 +1,24 @@
 import { USER_CONFIG_INPUTS } from "@/constants/templates";
 import { renderInputField } from "@/components/signup";
-import React, { useEffect, useState } from "react";
+import React, {
+  ElementType,
+  forwardRef,
+  LegacyRef,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { Client } from "./ClientList";
 import { Employee } from "./EmployeeList";
 import { Toast } from "@/constants/toastConfig";
 import { useRouter } from "next/router";
 import { POST, PUT } from "@/constants/fetchConfig";
+import "react-phone-number-input/style.css";
+import PhoneInput, {
+  DefaultInputComponentProps,
+  isPossiblePhoneNumber,
+} from "react-phone-number-input";
+import { E164Number } from "libphonenumber-js";
 
 export interface AddClientModalProps {
   isVisible: Boolean;
@@ -15,6 +28,19 @@ export interface AddClientModalProps {
   selectedUser: Client | Employee;
 }
 
+const CustomInput = forwardRef(
+  (
+    inputProps: DefaultInputComponentProps,
+    ref: LegacyRef<HTMLInputElement>,
+  ) => {
+    return (
+      <input ref={ref} {...inputProps} className="focus:outline-none w-full" />
+    );
+  },
+);
+
+CustomInput.displayName = "CustomInput";
+
 export const AddClientModal: React.FC<AddClientModalProps> = ({
   isVisible,
   type,
@@ -22,8 +48,6 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
   isModify,
   selectedUser,
 }) => {
-  if (!isVisible) return null;
-
   const handleClose = (e: any) => {
     if (e.target.id === "wrapper") {
       onClose();
@@ -32,12 +56,14 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
 
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState<E164Number | undefined>("");
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+
+  const [value, setValue] = useState<E164Number | undefined>("+22967662166");
 
   // auto fill text field when user is editing an order
   useEffect(() => {
@@ -51,11 +77,11 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
       setAddress(selectedUser.address ?? "");
       setPassword("");
     }
-  }, []);
+  }, [isModify, selectedUser]);
 
   const [isChanged, setIsChanged] = useState(false);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       email !== selectedUser.email ||
       phone !== selectedUser.phone ||
@@ -68,13 +94,22 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
     } else {
       setIsChanged(false);
     }
-  };
+  }, [address, email, firstName, lastName, password, phone, selectedUser]);
 
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [email, phone, lastName, firstName, address, password]);
+  }, [
+    email,
+    phone,
+    lastName,
+    firstName,
+    address,
+    password,
+    isModify,
+    wasChanged,
+  ]);
 
   const getEndpoint = () => {
     if (type == "client") {
@@ -106,13 +141,14 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
       // Perform validation to check if all variables are not empty
       if (
         email.trim() === "" ||
-        phone.trim() === "" ||
+        phone?.trim() === "" ||
+        !isPossiblePhoneNumber(phone ?? "") ||
         lastName.trim() === "" ||
         firstName.trim() === "" ||
         address.trim() === ""
         // || password.trim() === ''
       ) {
-        alert("Please fill in all fields.");
+        alert("Veuillez rensigner tous les champs");
         return;
       }
 
@@ -173,6 +209,8 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
@@ -197,10 +235,21 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({
                   {renderInputField(USER_CONFIG_INPUTS[0], email, (e) =>
                     setEmail(e.target.value),
                   )}
-                  {renderInputField(USER_CONFIG_INPUTS[1], phone, (e) =>
-                    setPhone(e.target.value),
-                  )}
+                  <div className="inline-flex flex-col items-start gap-[8px] relative flex-[0_0_auto]">
+                    <div className="w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
+                      {"Téléphone"}
+                    </div>
+                    <PhoneInput
+                      defaultCountry={"BJ"}
+                      placeholder="Entrer votre numéro"
+                      value={phone}
+                      onChange={setPhone}
+                      className="w-[520px] p-2 text-gray-900 bg-white border border-gray-200 rounded-lg"
+                      inputComponent={CustomInput}
+                    />
+                  </div>
                 </div>
+
                 <div className="flex w-[1040px] items-start gap-[12px] relative flex-[0_0_auto]">
                   {renderInputField(USER_CONFIG_INPUTS[2], lastName, (e) =>
                     setLastName(e.target.value),

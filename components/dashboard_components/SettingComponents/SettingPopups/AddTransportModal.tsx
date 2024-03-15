@@ -16,8 +16,6 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({
   text,
   onClose,
 }) => {
-  if (!isVisible) return null;
-
   const router = useRouter();
 
   const handleClose = (e: any) => {
@@ -43,19 +41,7 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({
         return;
       }
 
-      /*            const response = await fetch(`/transportTypes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newTransport),
-            });*/
-
       const response = await POST(`/transportTypes`, newTransport);
-
-      /*            if (!response.ok) {
-                throw new Error('Failed to add Transport');
-            }*/
 
       console.log("Transport added successfully!");
       onClose();
@@ -75,6 +61,8 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
@@ -92,7 +80,7 @@ export const AddTransportModal: React.FC<AddTransportModalProps> = ({
             <div className="w-[1104px] bg-white rounded-[12px]">
               {/* <div className="w-[1104px] h-px top-[415px] left-0 bg-gray-50" /> */}
               <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                Enregistrement d'un type de transport
+                {"Enregistrement d'un type de transport"}
               </div>
               <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                 <div className="flex flex-col items-start gap-[12px] flex-[0_0_auto]">

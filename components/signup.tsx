@@ -22,6 +22,7 @@ export const renderInputField = (
   selectList?: any[],
   showPass?: boolean,
   setShowPass?: (value: boolean) => void,
+  readOnly?: boolean,
 ) => {
   return (
     <div className="inline-flex flex-col items-start gap-[8px] relative flex-[0_0_auto]">
@@ -33,6 +34,7 @@ export const renderInputField = (
           <input
             maxLength={300}
             type="text"
+            readOnly={readOnly}
             id={input.id}
             value={value}
             onChange={handleChange}
@@ -45,6 +47,7 @@ export const renderInputField = (
             type={showPass ? "text" : "password"}
             id={input.id}
             value={value}
+            readOnly={readOnly}
             onChange={handleChange}
             className="w-[520px] p-2 text-gray-900 bg-white border border-gray-200 rounded-lg"
             placeholder={input.placeholder}

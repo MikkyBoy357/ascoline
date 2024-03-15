@@ -3,15 +3,15 @@ import {
   renderInputField,
   RenderInputFieldComponent,
 } from "@/components/signup";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Commande } from "./OrderList";
-import { Client } from "./ClientList";
+import { Client } from "../clients/ClientList";
 // import ClientSelectComponent, { Unit } from '../MyInputFieldComponents';
-import UnitSelectComponent from "../MyUnitSelectComponent";
-import ClientSelectComponent from "../MyInputFieldComponents";
-import { MeasureUnit } from "./SettingComponents/UnitCard";
-import { PackageType } from "./SettingComponents/PackageCard";
-import { TransportType } from "./SettingComponents/TransportCard";
+import UnitSelectComponent from "../../MyUnitSelectComponent";
+import ClientSelectComponent from "../../MyInputFieldComponents";
+import { MeasureUnit } from "../SettingComponents/UnitCard";
+import { PackageType } from "../SettingComponents/PackageCard";
+import { TransportType } from "../SettingComponents/TransportCard";
 import { Toast } from "@/constants/toastConfig";
 import { useRouter } from "next/router";
 import { POST, PUT } from "@/constants/fetchConfig";
@@ -54,11 +54,12 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
   const [quantity, setQuantity] = useState("");
   const [ville, setVille] = useState("");
   const [status, setStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
   const [specialNote, setSpecialNote] = useState("");
 
   const [isChanged, setIsChanged] = useState(false);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       trackingId !== selectedOrder.trackingId ||
       typeColis !== selectedOrder.typeColis ||
@@ -70,13 +71,28 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
       quantity !== selectedOrder.quantity.toString() ||
       ville !== selectedOrder.ville ||
       status !== selectedOrder.status ||
+      paymentStatus !== selectedOrder.paymentStatus ||
       specialNote !== selectedOrder.specialNote
     ) {
       setIsChanged(true);
     } else {
       setIsChanged(false);
     }
-  };
+  }, [
+    client,
+    description,
+    paymentStatus,
+    pays,
+    quantity,
+    selectedOrder,
+    specialNote,
+    status,
+    trackingId,
+    transportType,
+    typeColis,
+    unit,
+    ville,
+  ]);
 
   // auto fill text field when user is editing an order
   useEffect(() => {
@@ -92,6 +108,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
       setQuantity(selectedOrder.quantity.toString());
       setVille(selectedOrder.ville);
       setStatus(selectedOrder.status);
+      setPaymentStatus(selectedOrder.paymentStatus);
       setSpecialNote(selectedOrder.specialNote);
     } else {
       setTrackingId("");
@@ -104,30 +121,17 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
       setQuantity("");
       setVille("");
       setStatus("");
+      setPaymentStatus("");
       setSpecialNote("");
     }
-  }, [
-    isModify,
-    selectedOrder,
-    setTrackingId,
-    setTypeColis,
-    setTransportType,
-    setClient,
-    setDescription,
-    setUnit,
-    setPays,
-    setQuantity,
-    setVille,
-    setStatus,
-    setSpecialNote,
-  ]);
+  }, [isModify, selectedOrder, unit]);
 
   // Call the `wasChanged` function whenever the state values change
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [wasChanged]);
+  }, [isModify, wasChanged]);
 
   const handleClose = (e: any) => {
     if (e.target.id === "wrapper") {
@@ -185,12 +189,15 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
 
   // Order Status enums
   const statusEnum = [
-    "En attente de confirmation",
-    "Confirmation de réception",
+    "En attente",
+    "Réceptionée",
     "En transit",
-    "Commande arrivée",
-    "Commande livré",
+    "Arrivée",
+    "Livrée",
   ];
+
+  //  Order Payment Status enums
+  const paymentStatusEnum = ["unpaid", "paid"];
 
   // Function to add pricing
   const addOrder = async () => {
@@ -206,6 +213,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
         quantity: Number(quantity),
         ville: ville,
         status: status,
+        paymentStatus,
         specialNote: specialNote,
       };
 
@@ -290,7 +298,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
           <div className="flex flex-col items-center">
             <div className="w-[1104px] bg-white rounded-[12px]">
               <div className="mt-3[font-family:'Inter-Regular',Helvetica] font-medium text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-                {isModify ? "Edit" : "Enregistrement"} d'une commande
+                {isModify ? "Edit" : "Enregistrement"} {"d'une commande"}
               </div>
               <div className="mt-4 flex flex-col items-start gap-[16px] top-[94px] left-[32px]">
                 <div className="flex w-[1040px] items-start gap-[12px] flex-[0_0_auto]">
@@ -381,6 +389,29 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                   {renderInputField(ADD_ORDER_INPUTS[10], specialNote, (e) =>
                     setSpecialNote(e.target.value),
                   )}
+                  <div className="inline-flex flex-col items-start gap-[8px] relative flex-[0_0_auto]">
+                    <div className="w-fit mt-[-1.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-black text-[16px] tracking-[0] leading-[normal] whitespace-nowrap">
+                      {"Statut du paiement"}
+                    </div>
+                    <select
+                      id={"payment-status"}
+                      onChange={(e) => {
+                        setPaymentStatus(e.target.value);
+                      }}
+                      value={paymentStatus}
+                      className="w-[520px] p-2 pb-[10px] text-gray-900 bg-white border border-gray-200 rounded-lg"
+                    >
+                      <option disabled selected value="">
+                        {" "}
+                        -- Sélectionnez une valeur --
+                      </option>
+                      {paymentStatusEnum?.map((item, index) => (
+                        <option key={`${item}-${index}`} value={item}>
+                          {item === "unpaid" ? "Non payée" : "Payée"}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
               <div className="mt-5 flex flex-row">

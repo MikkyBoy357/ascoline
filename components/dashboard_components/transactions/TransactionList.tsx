@@ -6,13 +6,14 @@ import {
 } from "@/constants/templates";
 import { useRouter } from "next/router";
 import Modal from "@/components/Modal";
-import { UpdateUserPermissionModal } from "@/components/dashboard_components/users-permissions/UpdateUserPermissionModal";
+import { UpdateUserPermissionModal } from "@/components/dashboard_components/usersPermissions/UpdateUserPermissionModal";
 import { GET } from "@/constants/fetchConfig";
 import CustomLoader from "@/components/CustomLoader";
-import { Product } from "@/components/dashboard_components/ProductsList";
-import { Commande } from "@/components/dashboard_components/OrderList";
-import { Client } from "@/components/dashboard_components/ClientList";
+import { Product } from "@/components/dashboard_components/products/ProductsList";
+import { Commande } from "@/components/dashboard_components/orders/OrderList";
+import { Client } from "@/components/dashboard_components/clients/ClientList";
 import clsx from "clsx";
+import { PaginationElement } from "@/components/dashboard_components/PaginationElement";
 
 export interface Transaction {
   _id: string;
@@ -38,22 +39,31 @@ export const TransactionListComponent = () => {
 
   const [transactionsData, setTransactionsData] = useState<Transaction[]>([]);
 
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [total, setTotal] = useState(0);
+
   // Function to fetch employees data
 
   const fetchTransactionsData = useCallback(async () => {
     try {
       const response = await GET(
-        `/transactions${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+        `/transactions?page${page}${
+          searchText.length > 0 ? `&search=${searchText}` : ""
+        }`,
       );
 
-      const data: Transaction[] = response;
+      const data: Transaction[] = response.transactions;
       // Set the fetched data into state
       setTransactionsData(data);
+      setPage(response.currentPage);
+      setPages(response.totalPages);
+      setTotal(response.total);
     } catch (error) {
       console.error("Error fetching data:", error);
       // Handle errors
     }
-  }, [searchText]);
+  }, [searchText, page]);
 
   useEffect(() => {
     setLoading(true);
@@ -64,29 +74,28 @@ export const TransactionListComponent = () => {
     <div className="bg-gray-50 flex flex-col justify-center text-black">
       <div className="px-4 pt-4">
         <p className="mb-3 font-semibold text-2xl">Voir les transactions</p>
+        <div className="mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
+          <div className="rounded-[12px] border-blue-600 ">
+            <div className="relative mb-4">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+                placeholder="Recherche ..."
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+              />
+            </div>
 
-        <div className="relative mb-4">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Recherche ..."
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-          />
-        </div>
-
-        {loading ? (
-          <CustomLoader />
-        ) : (
-          <div className="mr-5 px-4 pb-10 bg-white rounded-[12px] overflow-auto">
-            <div className="flex flex-col rounded-[12px] border-blue-600 w-full">
-              <div className="inline-flex flex-col items-start gap-[16px]">
-                <div className="container mx-auto mt-8">
+            {loading ? (
+              <CustomLoader />
+            ) : (
+              <div className="inline-flex flex-col items-start gap-[16px] min-w-full max-w-6xl overflow-auto">
+                <div className="container mx-auto mt-8 h-[60vh]">
                   <table className="min-w-fit w-fit">
                     <thead>
                       <tr className="text-gray-500">
@@ -207,9 +216,17 @@ export const TransactionListComponent = () => {
                   </table>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Footer */}
+            <PaginationElement
+              page={page}
+              setPage={setPage}
+              pages={pages}
+              total={total}
+            />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import { ADD_ORDER_INPUTS, ADD_PRICING_INPUTS } from "@/constants/templates";
 import { renderInputField } from "@/components/signup";
-import React, { useEffect, useState } from "react";
-import { PackageType } from "./SettingComponents/PackageCard";
-import { TransportType } from "./SettingComponents/TransportCard";
-import { MeasureUnit } from "./SettingComponents/UnitCard";
-import UnitSelectComponent from "../MyUnitSelectComponent";
+import React, { useCallback, useEffect, useState } from "react";
+import { PackageType } from "../SettingComponents/PackageCard";
+import { TransportType } from "../SettingComponents/TransportCard";
+import { MeasureUnit } from "../SettingComponents/UnitCard";
+import UnitSelectComponent from "../../MyUnitSelectComponent";
 import { Pricing } from "./PricingList";
 import { useRouter } from "next/router";
 import { Toast } from "@/constants/toastConfig";
@@ -23,7 +23,6 @@ export interface AddPricingModalProps {
 
 export const AddPricingModal: React.FC<AddPricingModalProps> = ({
   isVisible,
-  text,
   onClose,
   isModify,
   selectedItem,
@@ -31,8 +30,6 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
   transportTypesData,
   measureUnitsData,
 }) => {
-  if (!isVisible) return null;
-
   const router = useRouter();
 
   const handleClose = (e: any) => {
@@ -107,11 +104,17 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
       setDescription(selectedItem.description);
       setQuantity(selectedItem.quantity.toString());
     }
-  }, []);
+  }, [
+    isModify,
+    measureUnitsData,
+    packageTypesData,
+    selectedItem,
+    transportTypesData,
+  ]);
 
   const [isChanged, setIsChanged] = useState(false);
 
-  const wasChanged = () => {
+  const wasChanged = useCallback(() => {
     if (
       price !== selectedItem.price.toString() ||
       typeColis?._id !== selectedItem.typeColis._id ||
@@ -124,14 +127,22 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
     } else {
       setIsChanged(false);
     }
-  };
+  }, [
+    description,
+    price,
+    quantity,
+    selectedItem,
+    transportType,
+    typeColis,
+    unit,
+  ]);
 
   // Call the `wasChanged` function whenever the state values change
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
-  }, [price, typeColis, transportType, unit, description, quantity]);
+  }, [isModify, wasChanged]);
 
   // Function to add pricing
   const addPricing = async () => {
@@ -161,26 +172,11 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
 
       var response;
       if (!isModify) {
-        /*                response = await fetch(`/pricings`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newPricing),
-                });*/
-
         response = await POST(`/pricings`, newPricing);
       } else {
         if (!isChanged) {
           return alert("Values were not changed");
         }
-        /*                response = await fetch(`/pricings/${selectedItem._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newPricing),
-                });*/
 
         response = await PUT(`/pricings/${selectedItem._id}`, newPricing);
       }
@@ -209,6 +205,8 @@ export const AddPricingModal: React.FC<AddPricingModalProps> = ({
       // Handle errors
     }
   };
+
+  if (!isVisible) return null;
 
   return (
     <div

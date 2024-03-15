@@ -1,22 +1,15 @@
-import { ClientListComponent } from '@/components/dashboard_components/ClientList'
-import React, { ReactElement } from 'react'
-import DashboardLayout from './layout'
-import { PricingListComponent } from '@/components/dashboard_components/PricingList'
-import {ProductListComponent} from "@/components/dashboard_components/ProductsList";
-
+import { ClientListComponent } from "@/components/dashboard_components/clients/ClientList";
+import React, { ReactElement } from "react";
+import DashboardLayout from "./layout";
+import { PricingListComponent } from "@/components/dashboard_components/pricings/PricingList";
+import { ProductListComponent } from "@/components/dashboard_components/products/ProductsList";
 
 const ProductPage = () => {
-  return (
-    <ProductListComponent />
-  )
-}
+  return <ProductListComponent />;
+};
 
 ProductPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DashboardLayout>
-      {page}
-    </DashboardLayout>
-  )
-}
+  return <DashboardLayout>{page}</DashboardLayout>;
+};
 
-export default ProductPage
+export default ProductPage;
