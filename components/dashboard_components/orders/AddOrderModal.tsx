@@ -190,7 +190,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
   // Order Status enums
   const statusEnum = [
     "En attente",
-    "Réceptionée",
+    "Réceptionnée",
     "En transit",
     "Arrivée",
     "Livrée",
