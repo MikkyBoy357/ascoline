@@ -12,9 +12,11 @@ import { FiltersType } from "@/components/dashboard_components/productOrders/Pro
 export default function ResetFilter({
   filters,
   setFilters,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const checkIfDisabled = useMemo(() => {
     return (
@@ -40,6 +42,7 @@ export default function ResetFilter({
             products: [],
             date: undefined,
           });
+          setPage(1);
         }}
         className="group inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
       >

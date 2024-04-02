@@ -66,9 +66,11 @@ function Calendar({
 export default function DateRangeFilter({
   filters,
   setFilters,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const selectedDate = useMemo(() => {
     return filters.date;
@@ -124,6 +126,7 @@ export default function DateRangeFilter({
                         setFilters((prevState) => {
                           return { ...prevState, date: select };
                         });
+                        setPage(1);
                       }}
                       numberOfMonths={2}
                     />

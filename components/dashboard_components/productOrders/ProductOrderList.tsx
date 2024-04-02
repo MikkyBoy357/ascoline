@@ -219,20 +219,31 @@ export const ProductOrderListComponent = () => {
                 filters={filters}
                 setFilters={setFilters}
                 allStatus={["Enregistrée", "Livrée"]}
+                setPage={setPage}
               />
               <ClientFilter
                 filters={filters}
                 setFilters={setFilters}
                 clientsData={clientsData}
+                setPage={setPage}
               />
               <ProductFilter
                 filters={filters}
                 setFilters={setFilters}
                 productsData={productsData}
+                setPage={setPage}
               />
-              <DateRangeFilter filters={filters} setFilters={setFilters} />
+              <DateRangeFilter
+                filters={filters}
+                setFilters={setFilters}
+                setPage={setPage}
+              />
 
-              <ResetFilter filters={filters} setFilters={setFilters} />
+              <ResetFilter
+                filters={filters}
+                setFilters={setFilters}
+                setPage={setPage}
+              />
             </div>
 
             {loading ? (

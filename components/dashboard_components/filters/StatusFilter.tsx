@@ -18,10 +18,12 @@ export default function StatusFilter({
   filters,
   setFilters,
   allStatus = ["En attente", "Réceptionnée", "En transit", "Arrivée", "Livrée"],
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
   allStatus?: string[];
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const selectedStatus = useMemo(() => {
     return filters.status;
@@ -47,6 +49,7 @@ export default function StatusFilter({
           setFilters((prevState) => {
             return { ...prevState, status: value };
           });
+          setPage(1);
         }}
       >
         <div className="relative mt-1">

@@ -11,10 +11,12 @@ export default function PackageTypeFilter({
   filters,
   setFilters,
   packageTypeData,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
   packageTypeData: PackageType[];
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const [query, setQuery] = useState("");
 
@@ -51,6 +53,7 @@ export default function PackageTypeFilter({
           setFilters((prevState) => {
             return { ...prevState, packageTypes: value };
           });
+          setPage(1);
         }}
       >
         <div className="relative mt-1">

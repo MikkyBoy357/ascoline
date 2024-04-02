@@ -265,25 +265,40 @@ export const OrderListComponent = () => {
             </div>
 
             <div className=" grid grid-cols-5 items-center gap-4  text-sm">
-              <StatusFilter filters={filters} setFilters={setFilters} />
+              <StatusFilter
+                filters={filters}
+                setFilters={setFilters}
+                setPage={setPage}
+              />
               <ClientFilter
                 filters={filters}
                 setFilters={setFilters}
                 clientsData={clientsData}
+                setPage={setPage}
               />
               <PackageTypeFilter
                 filters={filters}
                 setFilters={setFilters}
                 packageTypeData={packageTypesData}
+                setPage={setPage}
               />
               <TransportTypeFilter
                 filters={filters}
                 setFilters={setFilters}
                 transportTypeData={transportTypesData}
+                setPage={setPage}
               />
-              <DateRangeFilter filters={filters} setFilters={setFilters} />
+              <DateRangeFilter
+                filters={filters}
+                setFilters={setFilters}
+                setPage={setPage}
+              />
 
-              <ResetFilter filters={filters} setFilters={setFilters} />
+              <ResetFilter
+                filters={filters}
+                setFilters={setFilters}
+                setPage={setPage}
+              />
             </div>
 
             {loading ? (

@@ -11,10 +11,12 @@ export default function ProductFilter({
   filters,
   setFilters,
   productsData,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
   productsData: Product[];
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const [query, setQuery] = useState("");
 
@@ -52,6 +54,7 @@ export default function ProductFilter({
           setFilters((prevState) => {
             return { ...prevState, products: value };
           });
+          setPage(1);
         }}
       >
         <div className="relative mt-1">

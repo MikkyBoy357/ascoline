@@ -12,10 +12,12 @@ export default function TransportTypeFilter({
   filters,
   setFilters,
   transportTypeData,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
   transportTypeData: TransportType[];
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const [query, setQuery] = useState("");
 
@@ -52,6 +54,7 @@ export default function TransportTypeFilter({
           setFilters((prevState) => {
             return { ...prevState, transportTypes: value };
           });
+          setPage(1);
         }}
       >
         <div className="relative mt-1 ">

@@ -10,10 +10,12 @@ export default function ClientFilter({
   filters,
   setFilters,
   clientsData,
+  setPage,
 }: {
   filters: FiltersType;
   setFilters: Dispatch<SetStateAction<FiltersType>>;
   clientsData: Client[];
+  setPage: Dispatch<SetStateAction<number>>;
 }) {
   const [query, setQuery] = useState("");
 
@@ -57,6 +59,7 @@ export default function ClientFilter({
           setFilters((prevState) => {
             return { ...prevState, clients: value };
           });
+          setPage(1);
         }}
       >
         <div className="relative mt-1">
