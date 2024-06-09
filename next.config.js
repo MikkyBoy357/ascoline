@@ -5,18 +5,19 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ascoline-files.s3.amazonaws.com",
+        hostname: "cashless-files.ams3.cdn.digitaloceanspaces.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "cashless-files.ams3.digitaloceanspaces.com",
         pathname: "**",
       },
     ],
   },
   experimental: {
     serverActions: {
-      allowedOrigins: [
-        "13.41.57.233:3001",
-        "localhost:3001",
-        "13.41.57.233:3000",
-      ],
+      allowedOrigins: ["api.ascolines.com"],
     },
   },
 };
